@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -23,6 +24,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "citizen")
 @XmlRootElement
 @Named
-@RequestScoped
+@SessionScoped
 @NamedQueries({
     @NamedQuery(name = "Citizen.findAll", query = "SELECT c FROM Citizen c")
     , @NamedQuery(name = "Citizen.findById", query = "SELECT c FROM Citizen c WHERE c.id = :id")
@@ -93,6 +95,16 @@ public class Citizen implements Serializable {
     @JoinColumn(name = "headquarter_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Headquarters headquarterId;
+    @Transient
+    private boolean logged;
+
+    public boolean isLogged() {
+        return logged;
+    }
+
+    public void setLogged(boolean logged) {
+        this.logged = logged;
+    }
 
     public Citizen() {
     }
@@ -227,3 +239,4 @@ public class Citizen implements Serializable {
     }
     
 }
+

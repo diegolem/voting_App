@@ -11,7 +11,7 @@ import sv.edu.udb.www.Entities.CitizenVotes;
 import sv.edu.udb.www.Entities.Headquarters;
 import sv.edu.udb.www.Entities.JrvCitizen;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-09-16T12:19:05")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-09-16T18:07:56")
 @StaticMetamodel(Citizen.class)
 public class Citizen_ { 
 

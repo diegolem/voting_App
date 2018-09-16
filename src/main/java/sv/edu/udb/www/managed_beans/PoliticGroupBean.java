@@ -5,6 +5,7 @@
  */
 package sv.edu.udb.www.managed_beans;
 
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
 
@@ -14,7 +15,7 @@ import javax.faces.view.ViewScoped;
  */
 @ManagedBean(name = "politicGroupBean")
 @ViewScoped
-public class PoliticGroupBean {
+public class PoliticGroupBean  implements Serializable {
 
     /**
      * Creates a new instance of PoliticGroupBean

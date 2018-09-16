@@ -5,8 +5,14 @@
  */
 package sv.edu.udb.www.managed_beans;
 
+import java.io.Serializable;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.servlet.http.HttpSession;
+import sv.edu.udb.www.Entities.Citizen;
+import sv.edu.udb.www.Model.CitizenModel;
 
 /**
  *
@@ -14,9 +20,10 @@ import javax.faces.view.ViewScoped;
  */
 @ManagedBean(name = "citizenBean")
 @ViewScoped
-public class CitizenBean {
+public class CitizenBean  implements Serializable {
 
-    public CitizenBean() {
-    }
+    @EJB
+    private CitizenModel citizenModel;
     
+    public CitizenBean() {}
 }

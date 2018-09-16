@@ -71,4 +71,13 @@ public class CitizenModel {
             return false;
         }
     }
+    public boolean exists (Citizen citizen){
+        try {
+            Query query = em.createQuery("SELECT count(c) FROM Citizen c where c.dui = :dui");
+            query.setParameter("dui", citizen.getDui());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
+            return false;
+        }
+    }
 }
