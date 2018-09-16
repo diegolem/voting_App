@@ -55,6 +55,7 @@
                 <version>2.3</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <includeEmptyDirectories>true</includeEmptyDirectories>
                 </configuration>
             </plugin>
             <plugin>

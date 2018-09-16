@@ -6,11 +6,13 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import sv.edu.udb.www.Entities.Cities;
 import sv.edu.udb.www.Entities.Citizen;
+import sv.edu.udb.www.Entities.Jrv;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-09-15T09:44:28")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-09-16T12:19:05")
 @StaticMetamodel(Headquarters.class)
 public class Headquarters_ { 
 
+    public static volatile CollectionAttribute<Headquarters, Jrv> jrvCollection;
     public static volatile SingularAttribute<Headquarters, String> name;
     public static volatile SingularAttribute<Headquarters, String> x;
     public static volatile SingularAttribute<Headquarters, String> y;

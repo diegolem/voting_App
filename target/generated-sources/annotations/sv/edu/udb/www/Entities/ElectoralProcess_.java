@@ -2,15 +2,18 @@ package sv.edu.udb.www.Entities;
 
 import java.util.Date;
 import javax.annotation.Generated;
+import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import sv.edu.udb.www.Entities.ElectoralProcessStatus;
 import sv.edu.udb.www.Entities.ElectoralProcessTypes;
+import sv.edu.udb.www.Entities.PresidencialCandidates;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-09-15T09:44:28")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-09-16T12:19:05")
 @StaticMetamodel(ElectoralProcess.class)
 public class ElectoralProcess_ { 
 
+    public static volatile CollectionAttribute<ElectoralProcess, PresidencialCandidates> presidencialCandidatesCollection;
     public static volatile SingularAttribute<ElectoralProcess, String> code;
     public static volatile SingularAttribute<ElectoralProcess, String> year;
     public static volatile SingularAttribute<ElectoralProcess, Date> endDate;
