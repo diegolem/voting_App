@@ -49,6 +49,15 @@ import javax.xml.bind.annotation.XmlTransient;
 public class ElectoralProcess implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
+    private Collection<PoliticGroupVotes> politicGroupVotesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
+    private Collection<CandidatesForCities> candidatesForCitiesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
+    private Collection<CitizenVotes> citizenVotesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
+    private Collection<Jrv> jrvCollection;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
     private Collection<PresidencialCandidates> presidencialCandidatesCollection;
 
     private static final long serialVersionUID = 1L;
@@ -215,6 +224,42 @@ public class ElectoralProcess implements Serializable {
 
     public void setPresidencialCandidatesCollection(Collection<PresidencialCandidates> presidencialCandidatesCollection) {
         this.presidencialCandidatesCollection = presidencialCandidatesCollection;
+    }
+
+    @XmlTransient
+    public Collection<PoliticGroupVotes> getPoliticGroupVotesCollection() {
+        return politicGroupVotesCollection;
+    }
+
+    public void setPoliticGroupVotesCollection(Collection<PoliticGroupVotes> politicGroupVotesCollection) {
+        this.politicGroupVotesCollection = politicGroupVotesCollection;
+    }
+
+    @XmlTransient
+    public Collection<CandidatesForCities> getCandidatesForCitiesCollection() {
+        return candidatesForCitiesCollection;
+    }
+
+    public void setCandidatesForCitiesCollection(Collection<CandidatesForCities> candidatesForCitiesCollection) {
+        this.candidatesForCitiesCollection = candidatesForCitiesCollection;
+    }
+
+    @XmlTransient
+    public Collection<CitizenVotes> getCitizenVotesCollection() {
+        return citizenVotesCollection;
+    }
+
+    public void setCitizenVotesCollection(Collection<CitizenVotes> citizenVotesCollection) {
+        this.citizenVotesCollection = citizenVotesCollection;
+    }
+
+    @XmlTransient
+    public Collection<Jrv> getJrvCollection() {
+        return jrvCollection;
+    }
+
+    public void setJrvCollection(Collection<Jrv> jrvCollection) {
+        this.jrvCollection = jrvCollection;
     }
     
 }

@@ -1,4 +1,5 @@
 sv\edu\udb\www\Entities\Citizen_.class
+sv\edu\udb\www\managed_beans\Auth.class
 sv\edu\udb\www\Entities\ElectoralProcess.class
 sv\edu\udb\www\Entities\Headquarters_.class
 sv\edu\udb\www\Model\JrvCitizenTypesModel.class

@@ -61,7 +61,7 @@ public class Candidates implements Serializable {
     private String photo;
     @JoinColumn(name = "citizen_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Citizen citizenId;
+    private Citizens citizenId;
     @JoinColumn(name = "politic_group_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private PoliticGroups politicGroupId;
@@ -94,11 +94,11 @@ public class Candidates implements Serializable {
         this.photo = photo;
     }
 
-    public Citizen getCitizenId() {
+    public Citizens getCitizenId() {
         return citizenId;
     }
 
-    public void setCitizenId(Citizen citizenId) {
+    public void setCitizenId(Citizens citizenId) {
         this.citizenId = citizenId;
     }
 

@@ -10,7 +10,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import sv.edu.udb.www.Entities.Citizen;
+import sv.edu.udb.www.Entities.Citizens;
 /**
  *
  * @author Diego Lemus
@@ -20,11 +20,11 @@ public class CitizenModel {
     @PersistenceContext(unitName = "voting_AppPU")
     private EntityManager em;
     
-    public List<Citizen> listCitizen(){
+    public List<Citizens> listCitizen(){
         Query query = em.createQuery("SELECT c FROM Citizen c");
         return query.getResultList();
     }
-    public boolean insertCitizen(Citizen citizen){
+    public boolean insertCitizen(Citizens citizen){
         try{
             em.persist(citizen);
             em.flush();
@@ -33,9 +33,9 @@ public class CitizenModel {
             return false;
         }
     }
-    public Citizen getCitizen(int id){
+    public Citizens getCitizen(int id){
         try{
-            Citizen enti = em.find(Citizen.class, id);
+            Citizens enti = em.find(Citizens.class, id);
             if(enti != null){
                 return enti;
             }
@@ -44,9 +44,9 @@ public class CitizenModel {
             return null;
         }
     }
-    public boolean editCitizen(Citizen citizen){
+    public boolean editCitizen(Citizens citizen){
         try{
-            Citizen enti = em.find(Citizen.class, citizen.getId());
+            Citizens enti = em.find(Citizens.class, citizen.getId());
             if(enti != null){
                 enti = citizen;
                 em.merge(enti);
@@ -60,7 +60,7 @@ public class CitizenModel {
     }
     public boolean deleteCitizen(int id){
         try{
-            Citizen enti = em.find(Citizen.class, id);
+            Citizens enti = em.find(Citizens.class, id);
             if(enti != null){
                 em.remove(enti);
                 em.flush();
@@ -71,7 +71,7 @@ public class CitizenModel {
             return false;
         }
     }
-    public boolean exists (Citizen citizen){
+    public boolean exists (Citizens citizen){
         try {
             Query query = em.createQuery("SELECT count(c) FROM Citizen c where c.dui = :dui");
             query.setParameter("dui", citizen.getDui());

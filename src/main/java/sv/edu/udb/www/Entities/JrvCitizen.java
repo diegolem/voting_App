@@ -42,7 +42,7 @@ public class JrvCitizen implements Serializable {
     private Integer id;
     @JoinColumn(name = "citizen_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Citizen citizenId;
+    private Citizens citizenId;
     @JoinColumn(name = "jrv_citizen_type_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private JrvCitizenTypes jrvCitizenTypeId;
@@ -65,11 +65,11 @@ public class JrvCitizen implements Serializable {
         this.id = id;
     }
 
-    public Citizen getCitizenId() {
+    public Citizens getCitizenId() {
         return citizenId;
     }
 
-    public void setCitizenId(Citizen citizenId) {
+    public void setCitizenId(Citizens citizenId) {
         this.citizenId = citizenId;
     }
 

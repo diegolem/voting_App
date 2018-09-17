@@ -39,7 +39,10 @@ import javax.xml.bind.annotation.XmlTransient;
 public class CitizenTypes implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "citizenTypeId")
-    private Collection<Citizen> citizenCollection;
+    private Collection<Citizens> citizensCollection;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "citizenTypeId")
+    private Collection<Citizens> citizenCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -108,12 +111,12 @@ public class CitizenTypes implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Citizen> getCitizenCollection() {
-        return citizenCollection;
+    public Collection<Citizens> getCitizensCollection() {
+        return citizensCollection;
     }
 
-    public void setCitizenCollection(Collection<Citizen> citizenCollection) {
-        this.citizenCollection = citizenCollection;
+    public void setCitizensCollection(Collection<Citizens> citizensCollection) {
+        this.citizensCollection = citizensCollection;
     }
     
 }

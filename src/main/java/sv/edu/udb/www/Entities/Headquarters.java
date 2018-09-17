@@ -43,10 +43,13 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Headquarters implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "headquarterId")
+    private Collection<Citizens> citizensCollection;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "headquarterId")
     private Collection<Jrv> jrvCollection;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "headquarterId")
-    private Collection<Citizen> citizenCollection;
+    private Collection<Citizens> citizenCollection;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "headquarterId")
 
@@ -155,11 +158,11 @@ public class Headquarters implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Citizen> getCitizenCollection() {
+    public Collection<Citizens> getCitizenCollection() {
         return citizenCollection;
     }
 
-    public void setCitizenCollection(Collection<Citizen> citizenCollection) {
+    public void setCitizenCollection(Collection<Citizens> citizenCollection) {
         this.citizenCollection = citizenCollection;
     }
 
@@ -170,6 +173,15 @@ public class Headquarters implements Serializable {
 
     public void setJrvCollection(Collection<Jrv> jrvCollection) {
         this.jrvCollection = jrvCollection;
+    }
+
+    @XmlTransient
+    public Collection<Citizens> getCitizensCollection() {
+        return citizensCollection;
+    }
+
+    public void setCitizensCollection(Collection<Citizens> citizensCollection) {
+        this.citizensCollection = citizensCollection;
     }
     
 }

@@ -38,6 +38,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Departments.findByName", query = "SELECT d FROM Departments d WHERE d.name = :name")})
 public class Departments implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentId")
+    private Collection<CitiesAdmins> citiesAdminsCollection;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -112,6 +115,15 @@ public class Departments implements Serializable {
     @Override
     public String toString() {
         return "sv.edu.udb.www.Entities.Departments[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Collection<CitiesAdmins> getCitiesAdminsCollection() {
+        return citiesAdminsCollection;
+    }
+
+    public void setCitiesAdminsCollection(Collection<CitiesAdmins> citiesAdminsCollection) {
+        this.citiesAdminsCollection = citiesAdminsCollection;
     }
     
 }

@@ -14,7 +14,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-import sv.edu.udb.www.Entities.Citizen;
+import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Model.CitizenModel;
 
 /**
@@ -28,7 +28,7 @@ public class Auth implements Serializable {
     @EJB
     private CitizenModel citizenModel;
     
-    private Citizen citizen = new Citizen();
+    private Citizens citizen = new Citizens();
     
     public Auth() { }
     
@@ -43,11 +43,11 @@ public class Auth implements Serializable {
     
     @Produces
     @Named("attrname")
-    public Citizen getCitizen() {
+    public Citizens getCitizen() {
         return citizen;
     }
 
-    public void setCitizen(Citizen auth) {
+    public void setCitizen(Citizens auth) {
         this.citizen = auth;
     }
     

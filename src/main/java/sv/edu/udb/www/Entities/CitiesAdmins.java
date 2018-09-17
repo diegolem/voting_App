@@ -6,8 +6,6 @@
 package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,15 +23,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Diego Lemus
  */
 @Entity
-@Table(name = "citizen_votes")
+@Table(name = "cities_admins")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
-    @NamedQuery(name = "CitizenVotes.findAll", query = "SELECT c FROM CitizenVotes c")
-    , @NamedQuery(name = "CitizenVotes.findById", query = "SELECT c FROM CitizenVotes c WHERE c.id = :id")
-    , @NamedQuery(name = "CitizenVotes.findByStatus", query = "SELECT c FROM CitizenVotes c WHERE c.status = :status")})
-public class CitizenVotes implements Serializable {
+    @NamedQuery(name = "CitiesAdmins.findAll", query = "SELECT c FROM CitiesAdmins c")
+    , @NamedQuery(name = "CitiesAdmins.findById", query = "SELECT c FROM CitiesAdmins c WHERE c.id = :id")})
+public class CitiesAdmins implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,22 +36,17 @@ public class CitizenVotes implements Serializable {
     @NotNull
     @Column(name = "id")
     private Integer id;
-    @Column(name = "status")
-    private Short status;
     @JoinColumn(name = "citizen_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Citizens citizenId;
-    @JoinColumn(name = "electoral_process_id", referencedColumnName = "id")
+    @JoinColumn(name = "department_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private ElectoralProcess electoralProcessId;
-    @JoinColumn(name = "jrv_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Jrv jrvId;
+    private Departments departmentId;
 
-    public CitizenVotes() {
+    public CitiesAdmins() {
     }
 
-    public CitizenVotes(Integer id) {
+    public CitiesAdmins(Integer id) {
         this.id = id;
     }
 
@@ -68,14 +58,6 @@ public class CitizenVotes implements Serializable {
         this.id = id;
     }
 
-    public Short getStatus() {
-        return status;
-    }
-
-    public void setStatus(Short status) {
-        this.status = status;
-    }
-
     public Citizens getCitizenId() {
         return citizenId;
     }
@@ -84,20 +66,12 @@ public class CitizenVotes implements Serializable {
         this.citizenId = citizenId;
     }
 
-    public ElectoralProcess getElectoralProcessId() {
-        return electoralProcessId;
+    public Departments getDepartmentId() {
+        return departmentId;
     }
 
-    public void setElectoralProcessId(ElectoralProcess electoralProcessId) {
-        this.electoralProcessId = electoralProcessId;
-    }
-
-    public Jrv getJrvId() {
-        return jrvId;
-    }
-
-    public void setJrvId(Jrv jrvId) {
-        this.jrvId = jrvId;
+    public void setDepartmentId(Departments departmentId) {
+        this.departmentId = departmentId;
     }
 
     @Override
@@ -110,10 +84,10 @@ public class CitizenVotes implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CitizenVotes)) {
+        if (!(object instanceof CitiesAdmins)) {
             return false;
         }
-        CitizenVotes other = (CitizenVotes) object;
+        CitiesAdmins other = (CitiesAdmins) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -122,7 +96,7 @@ public class CitizenVotes implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.edu.udb.www.Entities.CitizenVotes[ id=" + id + " ]";
+        return "sv.edu.udb.www.Entities.CitiesAdmins[ id=" + id + " ]";
     }
     
 }
