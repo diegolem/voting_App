@@ -11,7 +11,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpSession;
-import sv.edu.udb.www.Entities.Citizen;
+import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Model.CitizenModel;
 
 /**

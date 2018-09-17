@@ -21,7 +21,7 @@ public class CitizenModel {
     private EntityManager em;
     
     public List<Citizens> listCitizen(){
-        Query query = em.createQuery("SELECT c FROM Citizen c");
+        Query query = em.createQuery("SELECT c FROM Citizens c");
         return query.getResultList();
     }
     public boolean insertCitizen(Citizens citizen){
@@ -73,7 +73,7 @@ public class CitizenModel {
     }
     public boolean exists (Citizens citizen){
         try {
-            Query query = em.createQuery("SELECT count(c) FROM Citizen c where c.dui = :dui");
+            Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui");
             query.setParameter("dui", citizen.getDui());
             return ((long)query.getSingleResult())== 1l;
         } catch(Exception error){
