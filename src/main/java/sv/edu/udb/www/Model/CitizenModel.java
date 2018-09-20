@@ -44,6 +44,33 @@ public class CitizenModel {
             return null;
         }
     }
+    public void pullForDui(Citizens citizen){
+        try {
+            Query query = em.createQuery("SELECT c FROM Citizens c where c.dui = :dui AND c.password = :pass");
+            query.setParameter("dui", citizen.getDui());
+            query.setParameter("pass", citizen.getPassword());
+            
+            Citizens origin = (Citizens)query.getResultList().get(0);
+            
+            citizen.setName(origin.getName());
+            citizen.setLastname(origin.getLastname());
+            citizen.setAdress(origin.getAdress());
+            citizen.setBirthdate(origin.getBirthdate());
+            citizen.setDui(origin.getDui());
+            citizen.setId(origin.getId());
+            citizen.setPassword(citizen.getPassword());
+            
+            citizen.setCandidatesCollection(origin.getCandidatesCollection());
+            citizen.setCitiesAdminsCollection(origin.getCitiesAdminsCollection());
+            citizen.setCitizenTypeId(origin.getCitizenTypeId());
+            citizen.setCitizenVotesCollection(origin.getCitizenVotesCollection());
+            citizen.setHeadquarterId(origin.getHeadquarterId());
+            citizen.setJrvCitizenCollection(origin.getJrvCitizenCollection());
+            
+        } catch(Exception error){
+            System.out.println("Error: " + error.getMessage());
+        }
+    }
     public boolean editCitizen(Citizens citizen){
         try{
             Citizens enti = em.find(Citizens.class, citizen.getId());
@@ -73,8 +100,9 @@ public class CitizenModel {
     }
     public boolean exists (Citizens citizen){
         try {
-            Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui");
+            Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui AND c.password = :pass");
             query.setParameter("dui", citizen.getDui());
+            query.setParameter("pass", citizen.getPassword());
             return ((long)query.getSingleResult())== 1l;
         } catch(Exception error){
             return false;

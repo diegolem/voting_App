@@ -7,7 +7,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 import sv.edu.udb.www.Entities.Cities;
 import sv.edu.udb.www.Entities.CitiesAdmins;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-09-16T20:17:30")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-09-16T23:57:40")
 @StaticMetamodel(Departments.class)
 public class Departments_ { 
 

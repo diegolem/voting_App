@@ -10,12 +10,15 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Model.CitizenModel;
+import sv.edu.udb.www.Utilities;
+import sv.edu.udb.www.Validacion;
 
 /**
  *
@@ -33,9 +36,19 @@ public class Auth implements Serializable {
     public Auth() { }
     
     public String login(){
-        if (this.citizenModel.exists(this.citizen)) {
-            this.citizen.setLogged(true);
-            return "faces/home.xhtml";
+        
+        if (Validacion.isEmpty(this.citizen.getDui()) || Validacion.isEmpty(this.citizen.getPassword()))
+            Utilities.addMessageError("Error_Login_Empty", "Ambos campos son obligatorios");
+        else {
+            if (Validacion.esDui(this.citizen.getDui())) {
+                if (this.citizenModel.exists(this.citizen)) {
+                    this.citizenModel.pullForDui(this.citizen);
+                    this.citizen.setLogged(true);
+                    return "faces/home.xhtml";
+                } else
+                    Utilities.addMessageError("Error_Login", "Las credenciales no son correctas");
+            } else
+                Utilities.addMessageError("Error_Login_Dui", "Debe ingresar un dui valido");
         }
         
         return "faces/login.xhtml";
@@ -54,4 +67,9 @@ public class Auth implements Serializable {
     public boolean isLogged(){
         return this.citizen.isLogged();
     }
+    
+    public boolean isGeneralAdministration(){
+        return (this.citizen.isEmpty())? false : this.citizen.getCitizenTypeId().getId().equals("1");
+    }
+
 }

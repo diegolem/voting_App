@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import sv.edu.udb.www.Entities.ElectoralProcess;
+import sv.edu.udb.www.Utilities;
 
 /**
  *
@@ -31,6 +32,7 @@ public class ElectoralProcessModel {
             em.flush();
             return true;
         }catch(Exception e){
+            Utilities.addMessageError("Error", e.getMessage()); 
             return false;
         }
     }
@@ -56,6 +58,7 @@ public class ElectoralProcessModel {
             }
             return false;
         }catch(Exception e){
+            Utilities.addMessageError("Error_login", "Error: " + e.getMessage());
             return false;
         }
     }
@@ -69,6 +72,27 @@ public class ElectoralProcessModel {
             }
             return false;
         }catch(Exception e){
+            return false;
+        }
+    }
+    
+    public boolean existsCode (ElectoralProcess electoral){
+        try {
+            Query query = em.createQuery("SELECT count(e) FROM ElectoralProcess e where e.code = :code");
+            query.setParameter("code", electoral.getCode());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
+            return false;
+        }
+    }
+    
+    public boolean existsCodeWithId (ElectoralProcess electoral){
+        try {
+            Query query = em.createQuery("SELECT count(e) FROM ElectoralProcess e where e.code = :code AND e.id != :id");
+            query.setParameter("code", electoral.getCode());
+            query.setParameter("id", electoral.getId());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
             return false;
         }
     }

@@ -91,10 +91,10 @@ public class Citizens implements Serializable {
     @JoinColumn(name = "headquarter_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Headquarters headquarterId;
-    
     @Transient
     private boolean logged;
-     public boolean isLogged() {
+    
+    public boolean isLogged() {
         return logged;
     }
      public void setLogged(boolean logged) {
@@ -249,5 +249,15 @@ public class Citizens implements Serializable {
     public String toString() {
         return "sv.edu.udb.www.Entities.Citizens[ id=" + id + " ]";
     }
-    
+ 
+    public boolean isEmpty(){
+        boolean result = (this.adress == null || this.adress.isEmpty());
+        result &= (this.dui == null || this.dui.isEmpty());
+        result &= (this.id == null || this.id == 0);
+        result &= (this.lastname == null || this.lastname.isEmpty());
+        result &= (this.name == null || this.name.isEmpty());
+        result &= (this.password == null || this.password.isEmpty());
+        
+        return result;
+    }
 }

@@ -6,14 +6,18 @@
 package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Locale;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -65,6 +69,7 @@ public class ElectoralProcess implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @Basic(optional = false)
     @NotNull
@@ -262,4 +267,15 @@ public class ElectoralProcess implements Serializable {
         this.jrvCollection = jrvCollection;
     }
     
+    public String initDateFormat(){
+        return new SimpleDateFormat("MM-dd-yyyy").format(this.initDate);
+    }
+    
+    public String endDateFormat(){
+        return new SimpleDateFormat("MM-dd-yyyy").format(this.endDate);
+    }
+    
+    public String processDateFormat(){
+        return new SimpleDateFormat("MM-dd-yyyy").format(this.processDate);
+    }
 }

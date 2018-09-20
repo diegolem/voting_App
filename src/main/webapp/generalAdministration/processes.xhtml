@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Proceso Electoral
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                    <div id="test-list">
+                        <div class="form-group">
+                            <label for="filter">Buscar</label>
+                            <input id="filter" type="text" class="form-control search" />
+                        </div>
+
+                        <div class="row list" style="display: flex; justify-content: space-between;" >
+                            <p:repeat value="#{ electoralProcessBean.all() }" var="electoral">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <div class="x_panel tile fixed_height_320">
+                                        <div class="x_title">
+                                            <h2 class="name">#{ electoral.name }</h2>
+                                            <ul class="nav navbar-right panel_toolbox">
+                                                <li>
+                                                    <a class="btn btn-success" href="#{ request.contextPath }/faces/generalAdministration/editProcess.xhtml?id=#{electoral.id}" style="color: white" >Modificar</a>
+                                                </li>
+                                            </ul>
+
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="x_content">
+                                            <div class="dashboard-widget-content">
+                                                <ul class="quick-list">
+                                                    <li><i class="fa fa-calendar"></i>Inicio: #{ electoral.initDateFormat() }</li>
+                                                    <li><i class="fa fa-calendar"></i>Finalizacion: #{ electoral.endDateFormat() }</li>
+                                                    <li><i class="fa fa-calendar"></i>Proceso #{ electoral.processDateFormat() }</li>
+                                                    <li><i class="fa fa-calendar-o"></i>Año: #{ electoral.year }</li>
+                                                    <li><i class="fa fa-university"></i>Tipo: #{ electoral.electoralProcessTypesId.description }</li>
+                                                </ul>
+
+                                                <div class="sidebar-widget">
+                                                    <h4>Profile Completion</h4>
+                                                    <canvas width="150" height="80" id="chart_gauge_01" class="" style="width: 160px; height: 100px;"></canvas>
+                                                    <div class="goal-wrapper">
+                                                        <span id="gauge-text" class="gauge-value pull-left">0</span>
+                                                        <span class="gauge-value pull-left">%</span>
+                                                        <span id="goal-text" class="goal-value pull-right">100%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:repeat>
+                        </div>
+
+                        <ul class="pagination"></ul>
+                    </div>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="body_scripts">
+                <script>
+                    var monkeyList = new List('test-list', {
+                        valueNames: ['name'],
+                        page: 3,
+                        pagination: true
+                    });
+                </script>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

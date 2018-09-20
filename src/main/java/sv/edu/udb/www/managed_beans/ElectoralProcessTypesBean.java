@@ -6,8 +6,12 @@
 package sv.edu.udb.www.managed_beans;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
+import sv.edu.udb.www.Entities.ElectoralProcessTypes;
+import sv.edu.udb.www.Model.ElectoralProcessTypesModel;
 
 /**
  *
@@ -17,10 +21,17 @@ import javax.faces.view.ViewScoped;
 @ViewScoped
 public class ElectoralProcessTypesBean  implements Serializable {
 
+    @EJB
+    private ElectoralProcessTypesModel electoralProcessTypesModel;
+
+    
     /**
      * Creates a new instance of ElectoralProcessTypesBean
      */
     public ElectoralProcessTypesBean() {
     }
     
+    public List<ElectoralProcessTypes> allElectoralProcessTypes(){
+        return electoralProcessTypesModel.listElectoralProcessTypes();
+    }
 }

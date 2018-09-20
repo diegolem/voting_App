@@ -31,14 +31,14 @@
                 <div class="animate form login_form">
                     <section class="login_content">
                         <h:form>
-                            <h1>Login Form</h1>
+                            <h1>Login!</h1>
                             <div>
                                 <h:outputLabel for="dui" value="DUI:" />
-                                <h:inputText id="dui" class="form-control" required="true" requiredMessage="Is /Requerid" value="#{ Auth.citizen.dui }" />
+                                <h:inputText id="dui" class="form-control" required="true" requiredMessage="El dui es obligatorio" value="#{ Auth.citizen.dui }" />
                             </div>
                             <div>
                                 <h:outputLabel for="password" value="Password" />
-                                <h:inputSecret id="password" class="form-control" required="true" requiredMessage="Is /Requerid" />
+                                <h:inputSecret id="password" class="form-control" required="true" requiredMessage="La clave es obligatoria" value="#{ Auth.citizen.password }" />
                             </div>
                             <div>
                                 <h:commandButton value="Log In" class="btn btn-primary" action="#{ Auth.login }" />
@@ -49,11 +49,15 @@
 
                             <div class="separator">
                                 <div>
-                                    <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
+                                    <i class="fa fa-university"></i> <span>Voting App</span>
                                     <p>©2016 All Rights /Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
                                 </div>
                             </div>
                         </h:form>
+                        
+                        <h:messages class="alert alert-danger">
+                            
+                        </h:messages>
                     </section>
                 </div>
             </div>
