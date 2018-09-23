@@ -10,6 +10,7 @@ sv\edu\udb\www\Entities\PoliticGroups.class
 sv\edu\udb\www\managed_beans\CitiesBean.class
 sv\edu\udb\www\Model\CitizenModel.class
 sv\edu\udb\www\Entities\PoliticGroupVotes.class
+sv\edu\udb\www\Validacion.class
 sv\edu\udb\www\Entities\CitizenVotes.class
 sv\edu\udb\www\Model\ElectoralProcessTypesModel.class
 sv\edu\udb\www\Entities\Cities.class
@@ -33,6 +34,8 @@ sv\edu\udb\www\Entities\JrvCitizenTypes.class
 sv\edu\udb\www\Entities\CitiesAdmins_.class
 sv\edu\udb\www\managed_beans\CandidatesForCitiesBean.class
 sv\edu\udb\www\Entities\ElectoralProcessTypes_.class
+sv\edu\udb\www\Utilities.class
+sv\edu\udb\www\Formatos.class
 sv\edu\udb\www\Model\PresidencialCandidatesModel.class
 sv\edu\udb\www\Model\CitizenVotesModel.class
 sv\edu\udb\www\Entities\CandidatesForCities.class
@@ -68,5 +71,6 @@ sv\edu\udb\www\Model\PoliticGroupsModel.class
 sv\edu\udb\www\Entities\CitizenTypes.class
 sv\edu\udb\www\managed_beans\HeadquartersBean.class
 sv\edu\udb\www\Entities\ElectoralProcess_.class
+sv\edu\udb\www\Fechas.class
 sv\edu\udb\www\managed_beans\ElectoralProcessStatusBean.class
 sv\edu\udb\www\Model\ElectoralProcessModel.class

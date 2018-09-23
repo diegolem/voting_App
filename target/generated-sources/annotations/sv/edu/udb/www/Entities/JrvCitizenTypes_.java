@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import sv.edu.udb.www.Entities.JrvCitizen;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-09-16T23:57:40")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-09-22T16:31:24")
 @StaticMetamodel(JrvCitizenTypes.class)
 public class JrvCitizenTypes_ { 
 

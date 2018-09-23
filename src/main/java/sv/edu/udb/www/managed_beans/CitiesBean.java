@@ -6,8 +6,12 @@
 package sv.edu.udb.www.managed_beans;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import sv.edu.udb.www.Entities.Cities;
 import javax.faces.view.ViewScoped;
+import sv.edu.udb.www.Model.CitiesModel;
 
 /**
  *
@@ -17,10 +21,14 @@ import javax.faces.view.ViewScoped;
 @ViewScoped
 public class CitiesBean  implements Serializable {
 
+    @EJB 
+    private CitiesModel citiesModel;
     /**
      * Creates a new instance of CitiesBean
      */
     public CitiesBean() {
     }
-    
+    public List<Cities> listCitiesForDepartment(int idDepartment){
+        return citiesModel.listCitiesforDepartment(idDepartment);
+    }
 }

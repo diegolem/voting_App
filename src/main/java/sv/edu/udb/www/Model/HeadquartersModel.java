@@ -25,6 +25,15 @@ public class HeadquartersModel {
         Query query = em.createQuery("SELECT h FROM Headquarters h");
         return query.getResultList();
     }
+    public List<Headquarters> listHeadquartersForCity(int idCity){
+        try{
+            Query query = em.createQuery("SELECT h FROM Headquarters h WHERE h.cityId = :id_city");
+            query.setParameter("id_city", idCity);
+            return query.getResultList();
+        }catch(Exception ex){
+            return null;
+        }
+    }
     public boolean insertHeadquarter(Headquarters headquarter){
         try{
             em.persist(headquarter);

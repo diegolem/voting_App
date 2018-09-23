@@ -9,7 +9,7 @@
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         
-        <title>Voting_App | <ui:insert name="tittle">Dashboard</ui:insert></title>
+        <title>Voting_App | <ui:insert name="tittle">Inicio</ui:insert></title>
 
         <!-- Bootstrap -->
         <h:outputStylesheet name="css/bootstrap.min.css" />
@@ -48,7 +48,7 @@
                                 <img src="../resources/images/img.jpg" alt="..." class="img-circle profile_img" />
                             </div>
                             <div class="profile_info">
-                                <span>#{ Auth.citizen.citizenTypeId.description }</span>
+                                <span><!--#{ Auth.citizen.citizenTypeId.description }--></span>
                                 <h2>#{ Auth.citizen.name } #{ Auth.citizen.lastname }</h2>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                         <!-- sidebar menu -->
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <div class="menu_section">
-                                <h3>General</h3>
+                                <h3>#{ Auth.citizen.citizenTypeId.description}</h3>
                                 <ul class="nav side-menu">
                                     <h:panelGroup rendered="#{ Auth.generalAdministration }">
                                         <li><a><i class="fa fa-flag-o"></i>Partidos<span class="fa fa-chevron-down"></span></a>
@@ -86,10 +86,18 @@
                                                 <li><a href="index2.html">Buscar</a></li>
                                             </ul>
                                         </li>
-                                        <li><a><i class="fa fa-newspaper-o"></i> Proceso electorar <span class="fa fa-chevron-down"></span></a>
+                                        <li><a><i class="fa fa-newspaper-o"></i> Proceso electoral <span class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
                                                 <li><a href="#{ request.contextPath }/faces/generalAdministration/addProcess.xhtml">Añadir</a></li>
                                                 <li><a href="#{ request.contextPath }/faces/generalAdministration/processes.xhtml">Buscar</a></li>
+                                            </ul>
+                                        </li>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{ Auth.employeeRnpn }">
+                                        <li><a><i class="fa fa-users"></i>Ciudadanos<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li><a href="#{ request.contextPath }/faces/employeeRnpn/addCitizens.xhtml">Registrar</a></li>
+                                                <li><a href="#{ request.contextPath }/faces/employeeRnpn/Citizens.xhtml">Buscar</a></li>
                                             </ul>
                                         </li>
                                     </h:panelGroup>
@@ -120,7 +128,7 @@
                                                 <span>Settings</span>
                                             </a>
                                         </li>
-                                        <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i>Log Out</a></li>
+                                        <li><a href="login.xhtml"><i class="fa fa-sign-out pull-right"></i>Log Out</a></li>
                                     </ul>
                                 </li>
 
@@ -202,7 +210,7 @@
                 <!-- footer content -->
                 <footer>
                     <div class="pull-right">
-                        Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                        Tribunal Supremo Electoral (TSE) 2018
                     </div>
                     <div class="clearfix"></div>
                 </footer>

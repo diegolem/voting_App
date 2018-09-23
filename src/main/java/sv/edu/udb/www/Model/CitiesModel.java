@@ -34,6 +34,15 @@ public class CitiesModel {
             return false;
         }
     }
+    public List<Cities> listCitiesforDepartment(int id){
+        try{
+            Query query = em.createQuery("SELECT c FROM Cities c WHERE c.deparmentId = :id");
+            query.setParameter("id", id);
+            return query.getResultList();
+        }catch(Exception ex){
+            return null;
+        }
+    }
     public Cities getCities(int id){
         try{
             Cities enti = em.find(Cities.class, id);

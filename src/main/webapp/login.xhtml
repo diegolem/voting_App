@@ -31,7 +31,7 @@
                 <div class="animate form login_form">
                     <section class="login_content">
                         <h:form>
-                            <h1>Login!</h1>
+                            <h1>Inicia Sesión</h1>
                             <div>
                                 <h:outputLabel for="dui" value="DUI:" />
                                 <h:inputText id="dui" class="form-control" required="true" requiredMessage="El dui es obligatorio" value="#{ Auth.citizen.dui }" />
@@ -41,8 +41,8 @@
                                 <h:inputSecret id="password" class="form-control" required="true" requiredMessage="La clave es obligatoria" value="#{ Auth.citizen.password }" />
                             </div>
                             <div>
-                                <h:commandButton value="Log In" class="btn btn-primary" action="#{ Auth.login }" />
-                                <h:commandLink class="reset_pass" value="Lost Your Password?" />
+                                <h:commandButton value="Ingresar" class="btn btn-primary" action="#{ Auth.login }" />
+                                <h:commandLink class="reset_pass" value="Perdiste tu contraseña?" />
                             </div>
 
                             <div class="clearfix"></div>
@@ -50,7 +50,7 @@
                             <div class="separator">
                                 <div>
                                     <i class="fa fa-university"></i> <span>Voting App</span>
-                                    <p>©2016 All Rights /Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
+                                    <p>©2018 Tribunal Supremo Electoral</p>
                                 </div>
                             </div>
                         </h:form>

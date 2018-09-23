@@ -69,7 +69,16 @@ public class Auth implements Serializable {
     }
     
     public boolean isGeneralAdministration(){
-        return (this.citizen.isEmpty())? false : this.citizen.getCitizenTypeId().getId().equals("1");
+        return (this.citizen.isEmpty())? false : this.citizen.getCitizenTypeId().getId().equals("ADMGEN");
     }
-
+    public boolean isDepartmentAdministration(){
+        return (this.citizen.isEmpty())? false : this.citizen.getCitizenTypeId().getId().equals("ADMDEP");
+    }
+    public boolean isEmployeeRnpn(){
+        return (this.citizen.isEmpty()) ? false : this.citizen.getCitizenTypeId().getId().equals("EMRNPN");
+    }
+    public boolean isPresidentJrv(){
+        return (this.citizen.isEmpty()) ? false : this.citizen.getCitizenTypeId().getId().equals("PREJRV");
+    }
+    
 }
