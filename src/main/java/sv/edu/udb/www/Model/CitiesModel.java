@@ -36,8 +36,8 @@ public class CitiesModel {
     }
     public List<Cities> listCitiesforDepartment(int id){
         try{
-            Query query = em.createQuery("SELECT c FROM Cities c WHERE c.deparmentId = :id");
-            query.setParameter("id", id);
+            Query query = em.createQuery("SELECT c FROM Cities c WHERE c.deparmentId.id = :ids");
+            query.setParameter("ids", id);
             return query.getResultList();
         }catch(Exception ex){
             return null;

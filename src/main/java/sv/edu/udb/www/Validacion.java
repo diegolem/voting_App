@@ -5,6 +5,7 @@
  */
 package sv.edu.udb.www;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
@@ -32,7 +33,19 @@ public class Validacion {
         }
         return response;
     }
-    
+
+    public static boolean isValidDate(Date fechaN) throws ParseException{
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaInicial = dateFormat.parse("2000-01-01");
+        Date fechaFinal = dateFormat.parse(fechaN.toString());
+        
+        int dias = (int) ((fechaFinal.getTime()-fechaInicial.getTime())/86400000);
+        boolean difdias = false;
+        if(dias >= 18){
+            difdias = true;
+        }
+        return difdias;
+    }
     public static boolean esEntero(String campo){
         try {
             entero = Integer.parseInt(cadena.trim());

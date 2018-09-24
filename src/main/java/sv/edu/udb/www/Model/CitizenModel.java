@@ -24,6 +24,11 @@ public class CitizenModel {
         Query query = em.createQuery("SELECT c FROM Citizens c");
         return query.getResultList();
     }
+    public List<Citizens> listCitizenNormal(String id){
+        Query query = em.createQuery("SELECT c FROM Citizens c WHERE c.citizenTypeId.id = :id");
+        query.setParameter("id", id);
+        return query.getResultList();
+    }
     public boolean insertCitizen(Citizens citizen){
         try{
             em.persist(citizen);
@@ -95,6 +100,15 @@ public class CitizenModel {
             }
             return false;
         }catch(Exception e){
+            return false;
+        }
+    }
+    public boolean existsDui (Citizens citizen){
+        try {
+            Query query = em.createQuery("SELECT count(c) FROM Citizens c WHERE c.dui = :dui");
+            query.setParameter("dui", citizen.getDui());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
             return false;
         }
     }

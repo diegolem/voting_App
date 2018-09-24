@@ -40,7 +40,7 @@
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="direccion" value="Dirección"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <p:inputText id="dui" requiredMessage="La dirección es requerida" required="true" value="#{citizenBean.citizen.adress}" styleClass="form-control col-md-7 col-xs-12" />
+                            <p:inputText id="direccion" requiredMessage="La dirección es requerida" required="true" value="#{citizenBean.citizen.adress}" styleClass="form-control col-md-7 col-xs-12" />
                         </div>
                     </div>
                     
@@ -56,8 +56,9 @@
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="department" value="Departamento"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <h:selectOneMenu rendered="true" requiredMessage="El departamento es requerido" id="department" value="#{ citizenBean.department.id }" class="form-control col-md-7 col-xs-12" >
-                                <f:selectItems value="#{departmentsBean.listAllDepartments}" var="depart" itemValue="#{ depart.id }" itemLabel="#{ depart.name }" />
+                            <h:selectOneMenu rendered="true" requiredMessage="El departamento es requerido" id="department" value="#{ citizenBean.idDepartment }" class="form-control col-md-7 col-xs-12" >
+                                <f:selectItems value="#{citizenBean.depar}" var="depart" itemValue="#{ depart.id }" itemLabel="#{ depart.name }" />
+                                <f:ajax execute="@this" render="city" event="change" listener="#{citizenBean.selectDepartment(citizenBean.idDepartment)}" />
                             </h:selectOneMenu>
                         </div>
                     </div>
@@ -65,8 +66,9 @@
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="city" value="Municipio"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <h:selectOneMenu rendered="#{citizenBean.department.id != null}" requiredMessage="El municipio es requerido" id="city" value="#{ citizenBean.city.id }" class="form-control col-md-7 col-xs-12" >
-                                <f:selectItems value="#{citiesBean.listCitiesForDepartment(citizenBean.department.id)}" var="city" itemValue="#{ city.id }" itemLabel="#{ city.name }" />
+                            <h:selectOneMenu rendered="true" requiredMessage="El municipio es requerido" id="city" value="#{ citizenBean.idCity }" class="form-control col-md-7 col-xs-12" >
+                                <f:selectItems value="#{citizenBean.citiesForDepartment(citizenBean.idDepartment)}" var="city" itemValue="#{ city.id }" itemLabel="#{ city.name }" />
+                                <f:ajax execute="@this" render="headquarter" event="change" listener="#{citizenBean.selectCity(citizenBean.idCity)}" />
                             </h:selectOneMenu>
                         </div>
                     </div>
@@ -74,8 +76,8 @@
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="headquarter" value="Sede de votación"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <h:selectOneMenu rendered="#{citizenBean.city.id != null}" requiredMessage="La sede es requerida" id="headquarter" value="#{ citizenBean.city.id }" class="form-control col-md-7 col-xs-12" >
-                                <f:selectItems value="#{headquartersBean.listHeadquarterForCity(citizenBean.city.id)}" var="head" itemValue="#{ head.id }" itemLabel="#{ head.name }" />
+                            <h:selectOneMenu rendered="true" requiredMessage="La sede es requerida" id="headquarter" value="#{ citizenBean.citizen.headquarterId }" class="form-control col-md-7 col-xs-12" >
+                                <f:selectItems value="#{citizenBean.headquartersForCities()}" var="head" itemValue="#{ head.id }" itemLabel="#{ head.name }" />
                             </h:selectOneMenu>
                         </div>
                     </div>

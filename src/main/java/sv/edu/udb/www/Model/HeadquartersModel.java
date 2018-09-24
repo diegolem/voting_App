@@ -25,10 +25,10 @@ public class HeadquartersModel {
         Query query = em.createQuery("SELECT h FROM Headquarters h");
         return query.getResultList();
     }
-    public List<Headquarters> listHeadquartersForCity(int idCity){
+    public List<Headquarters> listHeadquartersForCity(int id){
         try{
-            Query query = em.createQuery("SELECT h FROM Headquarters h WHERE h.cityId = :id_city");
-            query.setParameter("id_city", idCity);
+            Query query = em.createQuery("SELECT h FROM Headquarters h WHERE h.cityId.id = :id");
+            query.setParameter("id", id);
             return query.getResultList();
         }catch(Exception ex){
             return null;
