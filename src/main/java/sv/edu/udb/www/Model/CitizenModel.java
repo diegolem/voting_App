@@ -25,7 +25,7 @@ public class CitizenModel {
         return query.getResultList();
     }
     public List<Citizens> listCitizenNormal(String id){
-        Query query = em.createQuery("SELECT c FROM Citizens c WHERE c.citizenTypeId.id = :id");
+        Query query = em.createQuery("SELECT c FROM Citizens c WHERE c.citizenTypeId.id = :id AND c.state = 1");
         query.setParameter("id", id);
         return query.getResultList();
     }
@@ -90,11 +90,12 @@ public class CitizenModel {
             return false;
         }
     }
-    public boolean deleteCitizen(int id){
+    public boolean enableCitizen(Citizens citizen){
         try{
-            Citizens enti = em.find(Citizens.class, id);
+            Citizens enti = em.find(Citizens.class, citizen.getId());
             if(enti != null){
-                em.remove(enti);
+                enti = citizen;
+                em.merge(enti);
                 em.flush();
                 return true;
             }

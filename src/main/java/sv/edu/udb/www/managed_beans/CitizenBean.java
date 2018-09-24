@@ -7,19 +7,13 @@ package sv.edu.udb.www.managed_beans;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.servlet.http.HttpSession;
+import javax.faces.bean.ViewScoped;
 import sv.edu.udb.www.Entities.Cities;
 import sv.edu.udb.www.Entities.CitizenTypes;
 import sv.edu.udb.www.Entities.Citizens;
-import static sv.edu.udb.www.Entities.Citizens_.citizenTypeId;
 import sv.edu.udb.www.Entities.Departments;
 import sv.edu.udb.www.Entities.Headquarters;
 import sv.edu.udb.www.Model.CitiesModel;
@@ -29,13 +23,16 @@ import sv.edu.udb.www.Model.DepartmentsModel;
 import sv.edu.udb.www.Model.HeadquartersModel;
 import sv.edu.udb.www.Utilities;
 import sv.edu.udb.www.Validacion;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import org.primefaces.event.CloseEvent;
 
 /**
  *
  * @author Diego Lemus
  */
 @ManagedBean(name = "citizenBean")
-@RequestScoped
+@ViewScoped
 public class CitizenBean implements Serializable {
 
     //Properties and EJB
@@ -50,15 +47,12 @@ public class CitizenBean implements Serializable {
     @EJB
     private HeadquartersModel headquarterModel;
 
-    private Citizens citizen;
-
-    @ManagedProperty("#{param.id}")
-    private int idRequest;
+    private Citizens citizen;    
 
     private int idDepartment;
 
     private int idCity;
-
+    
     public int getIdDepartment() {
         return idDepartment;
     }
@@ -75,42 +69,29 @@ public class CitizenBean implements Serializable {
         this.idCity = idCity;
     }
 
-    public int getIdRequest() {
-        return idRequest;
-    }
-
-    public void setIdRequest(int idRequest) {
-        this.idRequest = idRequest;
-    }
-
     public Citizens getCitizen() {
         return citizen;
     }
 
     public void setCitizen(Citizens citizen) {
         this.citizen = citizen;
+        this.citizen.getCitizenTypeId().setId("CITIZN");
+        this.citizen.setPassword("votante");
     }
 
     //Process & new Instance of the Bean
     public CitizenBean() {
         this.citizen = new Citizens();
         this.citizen.setCitizenTypeId(new CitizenTypes());
-    }
-
-    public void selectDepartment(int id) {
-        this.idDepartment = id;
-    }
-
-    public void selectCity(int ids) {
-        this.idCity = ids;
+        this.citizen.setHeadquarterId(new Headquarters());
     }
 
     public List<Departments> getDepar() {
         return departmentModel.getDepartments();
     }
 
-    public List<Cities> citiesForDepartment(int idDep) {
-        return citiesModel.listCitiesforDepartment(idDep);
+    public List<Cities> citiesForDepartment() {
+        return citiesModel.listCitiesforDepartment(this.idDepartment);
     }
 
     public List<Headquarters> headquartersForCities() {
@@ -124,7 +105,6 @@ public class CitizenBean implements Serializable {
                     if (Validacion.esDireccion(citizen.getAdress())) {
                         if (Validacion.isValidDate(citizen.getBirthdate())) {
                             this.citizen.setPassword(null);
-                            this.citizen.setCitizenTypeId(citizenTypesModel.getCitizenTypes("CITIZN"));
                             //insertando
                             if (!this.citizenModel.insertCitizen(citizen)) {
                                 Utilities.addMessageError("Error_Insert", "No se ha podido registrar al ciudadano");
@@ -135,16 +115,16 @@ public class CitizenBean implements Serializable {
                             Utilities.addMessageError("Error_Fecha", "El usuario debe ser mayor de edad");
                         }
                     } else {
-                        Utilities.addMessageError("Error_Direccion", "Algunos caracteres son invalidos de la direccion");
+                        Utilities.addMessageError("Error_Fecha", "Algunos caracteres son invalidos de la direccion");
                     }
                 } else {
-                    Utilities.addMessageError("Error_Nombre", "Por favor ingrese un nombre o apellido correcto");
+                    Utilities.addMessageError("Error_Fecha", "Por favor ingrese un nombre o apellido correcto");
                 }
             } else {
-                Utilities.addMessageError("Error_DUI", "El DUI no posee un formato correcto");
+                Utilities.addMessageError("Error_Fecha", "El DUI no posee un formato correcto");
             }
         } else {
-            Utilities.addMessageError("Error_DUI", "El DUI ingresado ya existe");
+            Utilities.addMessageError("Error_Fecha", "El DUI ingresado ya existe");
         }
     }
 
@@ -155,8 +135,22 @@ public class CitizenBean implements Serializable {
     public void update(int id, String type) {
 
     }
-
-    public boolean delete(int id) {
-        return this.citizenModel.deleteCitizen(id);
+    public void enabledCitizens(Citizens citizen) {
+        addMessage("Empleado RNPN", "Ciudadano Inhabilitado");
+        this.executeEnable(citizen);
+    }
+     
+    public void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    public List<Citizens> executeEnable(Citizens citizen){
+        byte state = 0;
+        this.citizen = citizen;
+        this.citizen.setState(Short.valueOf(state));
+        if(this.citizenModel.enableCitizen(this.citizen)){
+            return this.citizenModel.listCitizenNormal("CITIZN");
+        }
+        return null;
     }
 }

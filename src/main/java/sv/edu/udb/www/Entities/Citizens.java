@@ -43,6 +43,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Citizens.findById", query = "SELECT c FROM Citizens c WHERE c.id = :id")})
 public class Citizens implements Serializable {
 
+    @Column(name = "state")
+    private Short state;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -259,5 +262,13 @@ public class Citizens implements Serializable {
         result &= (this.password == null || this.password.isEmpty());
         
         return result;
+    }
+
+    public Short getState() {
+        return state;
+    }
+
+    public void setState(Short state) {
+        this.state = state;
     }
 }
