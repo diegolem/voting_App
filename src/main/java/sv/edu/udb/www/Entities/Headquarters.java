@@ -57,10 +57,10 @@ public class Headquarters implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @NotNull
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @Basic(optional = false)
     @NotNull

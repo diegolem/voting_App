@@ -8,6 +8,7 @@ package sv.edu.udb.www.managed_beans;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -24,6 +25,7 @@ import sv.edu.udb.www.Model.HeadquartersModel;
 import sv.edu.udb.www.Utilities;
 import sv.edu.udb.www.Validacion;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 
 /**
@@ -51,6 +53,16 @@ public class CitizenBean implements Serializable {
     private int idDepartment;
 
     private int idCity;
+    
+    private int idRequest;
+
+    public int getIdRequest() {
+        return idRequest;
+    }
+
+    public void setIdRequest(int idRequest) {
+        this.idRequest = idRequest;
+    }
 
     public int getIdDepartment() {
         return idDepartment;
@@ -96,23 +108,34 @@ public class CitizenBean implements Serializable {
     public List<Headquarters> headquartersForCities() {
         return headquarterModel.listHeadquartersForCity(this.idCity);
     }
-
+    public void onloadRequest() {
+        this.citizen = this.citizenModel.getCitizen(this.idRequest);
+        this.idDepartment = this.citizen.getHeadquarterId().getCityId().getDeparmentId().getId();
+        this.idCity = this.citizen.getHeadquarterId().getCityId().getId();
+    }
+    public void redirect(){
+        Utilities.redirect("/faces/employeeRnpn/editCitizens.xhtml");
+    }
+    public void setIdCitizen(){
+        FacesContext facesctx = FacesContext.getCurrentInstance();
+        Map params = facesctx.getExternalContext().getRequestParameterMap();
+        this.idRequest = new Integer((String)params.get("citizenId"));
+    }
     public void save() throws ParseException {
         if (!this.citizenModel.existsDui(citizen)) {
             if (Validacion.esDui(citizen.getDui())) {
                 if (Validacion.esNombrePersona(citizen.getName()) && Validacion.esNombrePersona(citizen.getLastname())) {
                     if (Validacion.esDireccion(citizen.getAdress())) {
-//                        if (Validacion.isValidDate(citizen.getBirthdate())) {
                             this.citizen.setPassword(null);
                             //insertando
+                            this.citizen.setCitizenTypeId(this.citizenTypesModel.getCitizenTypes("CITIZN"));
+                            this.citizen.setHeadquarterId(this.headquarterModel.getHeadquarter(this.citizen.getHeadquarterId().getId()));
+                            this.citizen.setState(Short.parseShort("1"));
                             if (this.citizenModel.insertCitizen(citizen)) {
                                 Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
                                 } else {
                                     Utilities.addMessageError("Error_Insert", "No se ha podido registrar al ciudadano");
                                 }
-//                        } else {
-//                            Utilities.addMessageError("Error_Fecha", "El usuario debe ser mayor de edad");
-//                        }
                     } else {
                         Utilities.addMessageError("Error_Fecha", "Algunos caracteres son invalidos de la direccion");
                     }
@@ -131,9 +154,11 @@ public class CitizenBean implements Serializable {
         return this.citizenModel.listCitizenNormal("CITIZN");
     }
 
-    public void update(int id, String type) {
-
+    
+    public void update() {
+        
     }
+    
     public void enabledCitizens(Citizens citizen) {
         addMessage("Empleado RNPN", "Ciudadano Inhabilitado");
         this.executeEnable(citizen);
