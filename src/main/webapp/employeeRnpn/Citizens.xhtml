@@ -36,22 +36,16 @@
                                                 <a href="#{citizenBean.setCitizen(citizen)}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li>
-                                                        <p:commandButton action="#{citizenBean.redirect()}">
-                                                            <f:param name="citizenId" value="#{citizen.id}" />
-                                                        </p:commandButton>
-                                                        <a href="#{ request.contextPath }/faces/employeeRnpn/editCitizens.xhtml?id=#{citizen.id}">Modificar</a>
+                                                        <p:commandLink class="btn btn-default" value="Editar" action="#{citizenBean.redirect()}">
+                                                            <f:param name="codigo" value="#{citizen.id}" />
+                                                        </p:commandLink>
                                                     </li>
                                                     <li>
                                                         <p:growl id="message" showDetail="true" />
 
-                                                        <p:commandButton value="Deshabilitar" actionListener="#{citizenBean.enabledCitizens(citizen)}" update="message">
-                                                            <p:confirm header="Confirmation" message="¿Estas seguro de inhabilitar a este ciudadano?" icon="ui-icon-alert" />
+                                                        <p:commandButton class="btn btn-dark" value="Deshabilitar" actionListener="#{citizenBean.enabledCitizens(citizen)}" update="message">
                                                         </p:commandButton>
 
-                                                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                                        </p:confirmDialog>
                                                     </li>
                                                 </ul>
                                             </li>

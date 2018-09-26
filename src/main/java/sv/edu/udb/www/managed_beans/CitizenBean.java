@@ -113,14 +113,6 @@ public class CitizenBean implements Serializable {
         this.idDepartment = this.citizen.getHeadquarterId().getCityId().getDeparmentId().getId();
         this.idCity = this.citizen.getHeadquarterId().getCityId().getId();
     }
-    public void redirect(){
-        Utilities.redirect("/faces/employeeRnpn/editCitizens.xhtml");
-    }
-    public void setIdCitizen(){
-        FacesContext facesctx = FacesContext.getCurrentInstance();
-        Map params = facesctx.getExternalContext().getRequestParameterMap();
-        this.idRequest = new Integer((String)params.get("citizenId"));
-    }
     public void save() throws ParseException {
         if (!this.citizenModel.existsDui(citizen)) {
             if (Validacion.esDui(citizen.getDui())) {
@@ -168,13 +160,19 @@ public class CitizenBean implements Serializable {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    public List<Citizens> executeEnable(Citizens citizen){
+    public void redirect(){
+        //String code = Utilities.getParam("codigo");
+        this.idRequest = 1;//Integer.parseInt(Utilities.getParam("codigo"));
+        this.citizen = this.citizenModel.getCitizen(1);
+        Utilities.redirect("/faces/employeeRnpn/editarCitizen.xhtml");
+    }
+    public void executeEnable(Citizens citizen){
         byte state = 0;
         this.citizen = citizen;
         this.citizen.setState(Short.valueOf(state));
         if(this.citizenModel.enableCitizen(this.citizen)){
-            return this.citizenModel.listCitizenNormal("CITIZN");
+            Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
         }
-        return null;
+        Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
     }
 }
