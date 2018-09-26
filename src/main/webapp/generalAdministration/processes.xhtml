@@ -3,7 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
 
@@ -26,13 +28,21 @@
                                 <div class="col-md-4 col-sm-4 col-xs-12">
                                     <div class="x_panel tile fixed_height_320">
                                         <div class="x_title">
-                                            <h2 class="name">#{ electoral.name }</h2>
+                                            <a class="name label label-default" href="#{ request.contextPath }/faces/generalAdministration/editProcess.xhtml?id=#{electoral.id}" style="font-size: 1.5em; margin-top: 2px" >#{ electoral.name }</a>
+                                            
+                                            <h:panelGroup rendered="#{ electoral.avalible() }">
                                             <ul class="nav navbar-right panel_toolbox">
                                                 <li>
-                                                    <a class="btn btn-success" href="#{ request.contextPath }/faces/generalAdministration/editProcess.xhtml?id=#{electoral.id}" style="color: white" >Modificar</a>
+                                                    <p:commandButton value="eliminar" onclick="PF('dialog_eliminar').show()" />
+                                                    <p:dialog widgetVar="dialog_eliminar" header="Proceso electoral" closeOnEscape="true" resizable="false" modal="true">
+                                                        <P> ¿Esta seguro que desea elimar el proceso #{ electoral.name }? </P>
+                                                        <p:commandButton styleClass="btn btn-danger" style="color: white" value="Eliminar" actionListener="#{ electoralProcessBean.delete(electoral.id) }" update="@form" onclick="PF('dialog_eliminar').hide()" />
+                                                        <p:commandButton styleClass="btn btn-success" style="color: white" value="Cancelar" onclick="PF('dialog_eliminar').hide()" />
+                                                     </p:dialog>
                                                 </li>
                                             </ul>
-
+                                            </h:panelGroup>
+                                                
                                             <div class="clearfix"></div>
                                         </div>
                                         <div class="x_content">

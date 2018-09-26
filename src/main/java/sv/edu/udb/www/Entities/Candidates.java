@@ -13,6 +13,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -53,6 +55,7 @@ public class Candidates implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @Basic(optional = false)
     @NotNull
@@ -66,6 +69,10 @@ public class Candidates implements Serializable {
     @ManyToOne(optional = false)
     private PoliticGroups politicGroupId;
 
+    public boolean avalible(){
+        return true;
+    }
+    
     public Candidates() {
     }
 

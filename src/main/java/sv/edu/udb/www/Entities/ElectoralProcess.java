@@ -31,6 +31,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import sv.edu.udb.www.Utilities;
 
 /**
  *
@@ -268,14 +269,18 @@ public class ElectoralProcess implements Serializable {
     }
     
     public String initDateFormat(){
-        return new SimpleDateFormat("MM-dd-yyyy").format(this.initDate);
+        return new SimpleDateFormat("dd-MM-yyyy").format(this.initDate);
     }
     
     public String endDateFormat(){
-        return new SimpleDateFormat("MM-dd-yyyy").format(this.endDate);
+        return new SimpleDateFormat("dd-MM-yyyy").format(this.endDate);
     }
     
     public String processDateFormat(){
-        return new SimpleDateFormat("MM-dd-yyyy").format(this.processDate);
+        return new SimpleDateFormat("dd-MM-yyyy").format(this.processDate);
+    }
+
+    public boolean avalible(){
+        return Utilities.isEquealOrAfterNow(this.processDate);
     }
 }

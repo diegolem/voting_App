@@ -29,6 +29,7 @@ public class CandidatesModel {
         try{
             em.persist(candidates);
             em.flush();
+            System.out.println("Id: " + candidates.getId());
             return true;
         }catch(Exception e){
             return false;
@@ -56,6 +57,7 @@ public class CandidatesModel {
             }
             return false;
         }catch(Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -69,6 +71,7 @@ public class CandidatesModel {
             }
             return false;
         }catch(Exception e){
+            e.printStackTrace();
             return false;
         }
     }

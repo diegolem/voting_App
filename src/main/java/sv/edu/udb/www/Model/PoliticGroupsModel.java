@@ -25,6 +25,10 @@ public class PoliticGroupsModel {
         Query query = em.createQuery("SELECT p FROM PoliticGroups p");
         return query.getResultList();
     }
+    public List<PoliticGroups> listPoliticGroupsWithCandidates(){
+        Query query = em.createNamedQuery("PoliticGroups.findAllWithCandidates");
+        return query.getResultList();
+    }
     public boolean insertPoliticGroup(PoliticGroups politicGroups){
         try{
             em.persist(politicGroups);

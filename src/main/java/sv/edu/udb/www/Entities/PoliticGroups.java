@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @RequestScoped
 @NamedQueries({
     @NamedQuery(name = "PoliticGroups.findAll", query = "SELECT p FROM PoliticGroups p")
+    , @NamedQuery(name = "PoliticGroups.findAllWithCandidates", query = "SELECT DISTINCT p FROM PoliticGroups p INNER JOIN p.candidatesCollection c")
     , @NamedQuery(name = "PoliticGroups.findById", query = "SELECT p FROM PoliticGroups p WHERE p.id = :id")
     , @NamedQuery(name = "PoliticGroups.findByName", query = "SELECT p FROM PoliticGroups p WHERE p.name = :name")
     , @NamedQuery(name = "PoliticGroups.findByAcronym", query = "SELECT p FROM PoliticGroups p WHERE p.acronym = :acronym")
@@ -171,5 +172,5 @@ public class PoliticGroups implements Serializable {
     public void setPoliticGroupVotesCollection(Collection<PoliticGroupVotes> politicGroupVotesCollection) {
         this.politicGroupVotesCollection = politicGroupVotesCollection;
     }
-    
+
 }

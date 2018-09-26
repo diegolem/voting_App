@@ -19,7 +19,7 @@ import sv.edu.udb.www.Entities.ElectoralProcessTypes;
 import sv.edu.udb.www.Model.ElectoralProcessModel;
 import sv.edu.udb.www.Model.ElectoralProcessStatusModel;
 import sv.edu.udb.www.Utilities;
-
+import org.primefaces.event.CloseEvent;
 /**
  *
  * @author Diego Lemus
@@ -145,5 +145,13 @@ public class ElectoralProcessBean implements Serializable {
             Utilities.addMessageError("Error_Fecha", "El codigo ya existe");
         }
 
+    }
+    
+     public void delete(int id) {
+        ElectoralProcess electoral = this.electoralProcessModel.getElectoralProcess(id);
+        
+        if (electoral != null & electoral.avalible()) {
+             this.electoralProcessModel.deleteElectoralProcess(id);
+        }
     }
 }

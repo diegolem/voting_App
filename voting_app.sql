@@ -18,12 +18,16 @@
 --
 -- Table structure for table `candidates`
 --
+drop database if exists voting_app;
+create DATABASE voting_app;
+
+use voting_app;
 
 DROP TABLE IF EXISTS `candidates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `candidates` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `photo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `politic_group_id` int(11) NOT NULL,
   `citizen_id` int(11) NOT NULL,
@@ -194,7 +198,7 @@ DROP TABLE IF EXISTS `citizens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `citizens` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `lastname` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `password` varchar(64) COLLATE utf8_spanish2_ci DEFAULT NULL,

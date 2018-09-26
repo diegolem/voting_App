@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Candidates
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                    <div id="test-list">
+                        <div class="form-group">
+                            <label for="filter">Buscar: </label>
+                            <input id="filter" type="text" class="form-control search" />
+                        </div>
+
+                        <ul class="list list-group">
+                            <p:repeat value="#{ politicGroupBean.allPositicGroupWithCandidates() }" var="group">
+                                <li class="list-group-item panel panel-primary" style="padding: 0; background-color: gainsboro">
+
+                                    <div class="name panel-heading" style="margin: 0">#{ group.name } [ #{ group.acronym } ]</div>
+                                    <div class="panel-body">
+
+                                        <div style="padding: 10px;">
+                                            <div class="lazy" style=" width: 100%" >
+                                                <p:repeat value="#{ group.candidatesCollection }" var="candidate">
+
+
+                                                    <div class="thumbnail" style="background-color:  transparent;">
+                                                        <center><span class="label label-default">#{ candidate.citizenId.name } #{ candidate.citizenId.lastname }</span></center>
+                                                        <img class="img-thumbnail" src="#{request.contextPath}/faces/resources/images/#{ candidate.photo }" style="width: 160px; height: 160px;" />
+                                                        <div class="caption" style="background-color: transparent; display: flex; justify-content: center;">
+                                                            <p>
+                                                                <a href="#{request.contextPath}/faces/generalAdministration/editCandidate.xhtml?id=#{ candidate.id }" style="font-size: 2em;"><i class="fa fa-edit"></i></a>
+                                                                
+                                                                
+                                                                <h:commandLink onclick="bootbox.alert('¿Desea eliminar el candidato #{ candidate.citizenId.name } #{ candidate.citizenId.lastname }?');" style="margin-left: 2px; font-size: 2em;" >
+                                                                    <i class="fa fa-eraser"></i>
+                                                                    <f:ajax listener="#{ candidatesBean.saveId(candidate.id) }" />
+                                                                </h:commandLink>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                </p:repeat>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </li>
+                            </p:repeat>
+                        </ul>
+
+                        <ul class="pagination"></ul>
+                    </div>
+
+                    <!-- set up the modal to start hidden and fade in and out -->
+                    <div id="myModal" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- dialog body -->
+                                <div class="modal-body">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    Esta seguro que desea eliminar el candidato?
+                                </div>
+                                <!-- dialog buttons -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- sometime later, probably inside your on load event callback -->
+                    <script>
+                        $("#myModal").on("show", function () {    // wire up the OK button to dismiss the modal when shown
+                            $("#myModal a.btn").on("click", function (e) {
+                                console.log("button pressed");   // just as an example...
+                                $("#myModal").modal('hide');     // dismiss the dialog
+                            });
+                        });
+                        $("#myModal").on("hide", function () {    // remove the event listeners when the dialog is dismissed
+                            $("#myModal a.btn").off("click");
+                        });
+
+                        $("#myModal").on("hidden", function () {  // remove the actual elements from the DOM when fully hidden
+                            $("#myModal").remove();
+                        });
+
+                        $("#myModal").modal({// wire up the actual modal functionality and show the dialog
+                            "backdrop": "static",
+                            "keyboard": true,
+                            "show": true                     // ensure the modal is shown immediately
+                        });
+                    </script>
+
+                    <script>
+
+                        $('.lazy').slick({
+                            dots: true,
+                            infinite: false,
+                            speed: 300,
+                            slidesToShow: 4,
+                            slidesToScroll: 4,
+                            responsive: [
+                                {
+                                    breakpoint: 1024,
+                                    settings: {
+                                        slidesToShow: 3,
+                                        slidesToScroll: 3,
+                                        infinite: true,
+                                        dots: true
+                                    }
+                                },
+                                {
+                                    breakpoint: 600,
+                                    settings: {
+                                        slidesToShow: 2,
+                                        slidesToScroll: 2
+                                    }
+                                },
+                                {
+                                    breakpoint: 480,
+                                    settings: {
+                                        slidesToShow: 1,
+                                        slidesToScroll: 1
+                                    }
+                                }
+                                // You can unslick at a given breakpoint now by adding:
+                                // settings: "unslick"
+                                // instead of a settings object
+                            ]
+                        });
+
+                    </script>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="body_scripts">
+                <script>
+                    var monkeyList = new List('test-list', {
+                        valueNames: ['name'],
+                        page: 3,
+                        pagination: true
+                    });
+                </script>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

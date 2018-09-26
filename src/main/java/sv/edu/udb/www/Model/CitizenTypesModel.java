@@ -34,7 +34,7 @@ public class CitizenTypesModel {
             return false;
         }
     }
-    public CitizenTypes getCitizenTypes(int id){
+    public CitizenTypes getCitizenTypes(String id){
         try{
             CitizenTypes enti = em.find(CitizenTypes.class, id);
             if(enti != null){

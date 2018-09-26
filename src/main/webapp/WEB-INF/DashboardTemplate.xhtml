@@ -2,8 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
 
 
     <h:head>
@@ -25,8 +24,22 @@
         <h:outputStylesheet name="css/jqvmap.min.css" />
         <!-- bootstrap-daterangepicker -->
         <h:outputStylesheet name="css/daterangepicker.css" />
+        
+        
+        <h:outputStylesheet name="css/batman.css" />
+        
         <!-- Custom Theme Style -->
         <h:outputStylesheet name="css/custom.min.css" />
+        
+        <h:outputStylesheet name="css/slick.css" />
+        <h:outputStylesheet name="css/slick-theme.css" />
+        
+        <!-- jQuery -->
+        <h:outputScript name="js/jquery.min.js" />
+        
+        <h:outputScript name="js/bootbox.min.js" />
+        
+        <h:outputScript name="js/slick.min.js" />
         
         <ui:insert name="head_link"></ui:insert>
     </h:head>
@@ -90,6 +103,12 @@
                                             <ul class="nav child_menu">
                                                 <li><a href="#{ request.contextPath }/faces/generalAdministration/addProcess.xhtml">Añadir</a></li>
                                                 <li><a href="#{ request.contextPath }/faces/generalAdministration/processes.xhtml">Buscar</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a><i class="fa fa-child"></i>candidatos<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/addCandidates.xhtml">Registrar</a></li>
+                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/candidates.xhtml">Buscar</a></li>
                                             </ul>
                                         </li>
                                     </h:panelGroup>
@@ -220,8 +239,6 @@
 
         <!-- Scripts -->
 
-        <!-- jQuery -->
-        <h:outputScript name="js/jquery.min.js" />
         <!-- Bootstrap -->
         <h:outputScript name="js/bootstrap.min.js" />
         <!-- FastClick -->
@@ -257,10 +274,14 @@
         <!-- bootstrap-daterangepicker -->
         <h:outputScript name="js/moment.min.js" />
         <h:outputScript name="js/daterangepicker.js" />
+        
+        <h:outputScript name="js/jquery.knob.min.js" />
+        
         <!-- Custom Theme Scripts -->
         <h:outputScript name="js/custom.min.js" />
     
         <h:outputScript name="js/list.js" />
+        
         
         <ui:insert name="body_scripts"></ui:insert>
     </h:body>

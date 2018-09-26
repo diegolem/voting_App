@@ -28,8 +28,10 @@ public class CitizenModel {
         try{
             em.persist(citizen);
             em.flush();
+            System.out.println("Id: " + citizen.getId());
             return true;
         }catch(Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -82,6 +84,7 @@ public class CitizenModel {
             }
             return false;
         }catch(Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -103,6 +106,25 @@ public class CitizenModel {
             Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui AND c.password = :pass");
             query.setParameter("dui", citizen.getDui());
             query.setParameter("pass", citizen.getPassword());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
+            return false;
+        }
+    }
+    public boolean existsWithDui (Citizens citizen){
+        try {
+            Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui");
+            query.setParameter("dui", citizen.getDui());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
+            return false;
+        }
+    }
+    public boolean existsWithOtherDui (Citizens citizen){
+        try {
+            Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui AND c.id != :id");
+            query.setParameter("id",  citizen.getId());
+            query.setParameter("dui", citizen.getDui());
             return ((long)query.getSingleResult())== 1l;
         } catch(Exception error){
             return false;

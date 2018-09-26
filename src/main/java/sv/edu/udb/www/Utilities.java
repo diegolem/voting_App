@@ -5,15 +5,23 @@
  */
 package sv.edu.udb.www;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import static javax.servlet.SessionTrackingMode.URL;
 
 /**
  *
@@ -31,10 +39,11 @@ public class Utilities {
           .atZone(ZoneId.systemDefault())
           .toLocalDate();
     }
-    
-    public static boolean isEquealOrAfterNow(Date date){
+   
+     public static boolean isEquealOrAfterNow(Date date){
         LocalDate now = LocalDate.now();
-        return (now.isBefore(Utilities.convertToLocalDateViaInstant(date))) || (now.isEqual(Utilities.convertToLocalDateViaInstant(date))); 
+        LocalDate target = convertToLocalDateViaInstant(date);
+        return target.isAfter(now) || target.isEqual(now);
     }
     
     public static boolean isEquealOrBerofeNow(Date date){
@@ -48,6 +57,31 @@ public class Utilities {
             context.redirect(context.getRequestContextPath() + url);
         } catch (IOException ex) {
             Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static String getPath(String folder){
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        return context.getRealPath(folder).replace("\\target\\voting_App-1.0", "\\src\\main\\webapp");
+    }
+    
+     public static int getYears(Date date) {
+        try {
+            
+            Date now = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            
+            Calendar inicio = new GregorianCalendar();
+            Calendar fin = new GregorianCalendar();
+            
+            inicio.setTime(date);
+            fin.setTime(now);
+            
+            int difA = fin.get(Calendar.YEAR) - inicio.get(Calendar.YEAR);
+            
+            return difA;
+        } catch(Exception ex) {
+            System.out.println(ex.getMessage());
+            return 0;
         }
     }
 }
