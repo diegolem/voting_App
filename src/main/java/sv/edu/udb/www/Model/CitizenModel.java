@@ -7,6 +7,8 @@ package sv.edu.udb.www.Model;
 
 import javax.ejb.Stateless;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -35,6 +37,7 @@ public class CitizenModel {
             em.flush();
             return true;
         }catch(Exception e){
+            Logger.getLogger(CitizenModel.class.getName()).log(Level.SEVERE, null, e);
             return false;
         }
     }

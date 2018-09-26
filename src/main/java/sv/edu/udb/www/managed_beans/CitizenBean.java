@@ -25,7 +25,6 @@ import sv.edu.udb.www.Utilities;
 import sv.edu.udb.www.Validacion;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import org.primefaces.event.CloseEvent;
 
 /**
  *
@@ -52,7 +51,7 @@ public class CitizenBean implements Serializable {
     private int idDepartment;
 
     private int idCity;
-    
+
     public int getIdDepartment() {
         return idDepartment;
     }
@@ -103,17 +102,17 @@ public class CitizenBean implements Serializable {
             if (Validacion.esDui(citizen.getDui())) {
                 if (Validacion.esNombrePersona(citizen.getName()) && Validacion.esNombrePersona(citizen.getLastname())) {
                     if (Validacion.esDireccion(citizen.getAdress())) {
-                        if (Validacion.isValidDate(citizen.getBirthdate())) {
+//                        if (Validacion.isValidDate(citizen.getBirthdate())) {
                             this.citizen.setPassword(null);
                             //insertando
-                            if (!this.citizenModel.insertCitizen(citizen)) {
-                                Utilities.addMessageError("Error_Insert", "No se ha podido registrar al ciudadano");
-                            } else {
+                            if (this.citizenModel.insertCitizen(citizen)) {
                                 Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
-                            }
-                        } else {
-                            Utilities.addMessageError("Error_Fecha", "El usuario debe ser mayor de edad");
-                        }
+                                } else {
+                                    Utilities.addMessageError("Error_Insert", "No se ha podido registrar al ciudadano");
+                                }
+//                        } else {
+//                            Utilities.addMessageError("Error_Fecha", "El usuario debe ser mayor de edad");
+//                        }
                     } else {
                         Utilities.addMessageError("Error_Fecha", "Algunos caracteres son invalidos de la direccion");
                     }
