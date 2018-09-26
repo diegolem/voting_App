@@ -6,8 +6,6 @@
 package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -29,8 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "candidates_for_cities")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
     @NamedQuery(name = "CandidatesForCities.findAll", query = "SELECT c FROM CandidatesForCities c")
     , @NamedQuery(name = "CandidatesForCities.findById", query = "SELECT c FROM CandidatesForCities c WHERE c.id = :id")})
@@ -38,10 +33,9 @@ public class CandidatesForCities implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @JoinColumn(name = "candidate_id", referencedColumnName = "id")
     @ManyToOne(optional = false)

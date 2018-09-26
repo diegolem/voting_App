@@ -7,8 +7,6 @@ package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -34,34 +32,27 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "candidates")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
     @NamedQuery(name = "Candidates.findAll", query = "SELECT c FROM Candidates c")
     , @NamedQuery(name = "Candidates.findById", query = "SELECT c FROM Candidates c WHERE c.id = :id")
     , @NamedQuery(name = "Candidates.findByPhoto", query = "SELECT c FROM Candidates c WHERE c.photo = :photo")})
 public class Candidates implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidateId")
-    private Collection<CandidatesForCities> candidatesForCitiesCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidatesId")
-    private Collection<PresidencialCandidates> presidencialCandidatesCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidatesId")
-
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "photo")
     private String photo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidateId")
+    private Collection<CandidatesForCities> candidatesForCitiesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidatesId")
+    private Collection<PresidencialCandidates> presidencialCandidatesCollection;
     @JoinColumn(name = "citizen_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Citizens citizenId;
@@ -95,6 +86,24 @@ public class Candidates implements Serializable {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    @XmlTransient
+    public Collection<CandidatesForCities> getCandidatesForCitiesCollection() {
+        return candidatesForCitiesCollection;
+    }
+
+    public void setCandidatesForCitiesCollection(Collection<CandidatesForCities> candidatesForCitiesCollection) {
+        this.candidatesForCitiesCollection = candidatesForCitiesCollection;
+    }
+
+    @XmlTransient
+    public Collection<PresidencialCandidates> getPresidencialCandidatesCollection() {
+        return presidencialCandidatesCollection;
+    }
+
+    public void setPresidencialCandidatesCollection(Collection<PresidencialCandidates> presidencialCandidatesCollection) {
+        this.presidencialCandidatesCollection = presidencialCandidatesCollection;
     }
 
     public Citizens getCitizenId() {
@@ -137,24 +146,5 @@ public class Candidates implements Serializable {
     public String toString() {
         return "sv.edu.udb.www.Entities.Candidates[ id=" + id + " ]";
     }
-
-    @XmlTransient
-    public Collection<PresidencialCandidates> getPresidencialCandidatesCollection() {
-        return presidencialCandidatesCollection;
-    }
-
-    public void setPresidencialCandidatesCollection(Collection<PresidencialCandidates> presidencialCandidatesCollection) {
-        this.presidencialCandidatesCollection = presidencialCandidatesCollection;
-    }
-
-    @XmlTransient
-    public Collection<CandidatesForCities> getCandidatesForCitiesCollection() {
-        return candidatesForCitiesCollection;
-    }
-
-    public void setCandidatesForCitiesCollection(Collection<CandidatesForCities> candidatesForCitiesCollection) {
-        this.candidatesForCitiesCollection = candidatesForCitiesCollection;
-    }
-
     
 }

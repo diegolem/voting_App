@@ -7,8 +7,6 @@ package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,29 +30,25 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "departments")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
     @NamedQuery(name = "Departments.findAll", query = "SELECT d FROM Departments d")
     , @NamedQuery(name = "Departments.findById", query = "SELECT d FROM Departments d WHERE d.id = :id")
     , @NamedQuery(name = "Departments.findByName", query = "SELECT d FROM Departments d WHERE d.name = :name")})
 public class Departments implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentId")
-    private Collection<CitiesAdmins> citiesAdminsCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "name")
     private String name;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentId")
+    private Collection<CitiesAdmins> citiesAdminsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deparmentId")
     private Collection<Cities> citiesCollection;
 
@@ -84,6 +78,15 @@ public class Departments implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @XmlTransient
+    public Collection<CitiesAdmins> getCitiesAdminsCollection() {
+        return citiesAdminsCollection;
+    }
+
+    public void setCitiesAdminsCollection(Collection<CitiesAdmins> citiesAdminsCollection) {
+        this.citiesAdminsCollection = citiesAdminsCollection;
     }
 
     @XmlTransient
@@ -118,15 +121,6 @@ public class Departments implements Serializable {
     @Override
     public String toString() {
         return "sv.edu.udb.www.Entities.Departments[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public Collection<CitiesAdmins> getCitiesAdminsCollection() {
-        return citiesAdminsCollection;
-    }
-
-    public void setCitiesAdminsCollection(Collection<CitiesAdmins> citiesAdminsCollection) {
-        this.citiesAdminsCollection = citiesAdminsCollection;
     }
     
 }

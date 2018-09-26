@@ -7,8 +7,6 @@ package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -34,34 +32,30 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "cities")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
     @NamedQuery(name = "Cities.findAll", query = "SELECT c FROM Cities c")
     , @NamedQuery(name = "Cities.findById", query = "SELECT c FROM Cities c WHERE c.id = :id")
     , @NamedQuery(name = "Cities.findByName", query = "SELECT c FROM Cities c WHERE c.name = :name")})
 public class Cities implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cityId")
-    private Collection<CandidatesForCities> candidatesForCitiesCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "name")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cityId")
-    private Collection<Headquarters> headquartersCollection;
     @JoinColumn(name = "deparment_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Departments deparmentId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cityId")
+    private Collection<CandidatesForCities> candidatesForCitiesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cityId")
+    private Collection<Headquarters> headquartersCollection;
 
     public Cities() {
     }
@@ -91,6 +85,23 @@ public class Cities implements Serializable {
         this.name = name;
     }
 
+    public Departments getDeparmentId() {
+        return deparmentId;
+    }
+
+    public void setDeparmentId(Departments deparmentId) {
+        this.deparmentId = deparmentId;
+    }
+
+    @XmlTransient
+    public Collection<CandidatesForCities> getCandidatesForCitiesCollection() {
+        return candidatesForCitiesCollection;
+    }
+
+    public void setCandidatesForCitiesCollection(Collection<CandidatesForCities> candidatesForCitiesCollection) {
+        this.candidatesForCitiesCollection = candidatesForCitiesCollection;
+    }
+
     @XmlTransient
     public Collection<Headquarters> getHeadquartersCollection() {
         return headquartersCollection;
@@ -98,14 +109,6 @@ public class Cities implements Serializable {
 
     public void setHeadquartersCollection(Collection<Headquarters> headquartersCollection) {
         this.headquartersCollection = headquartersCollection;
-    }
-
-    public Departments getDeparmentId() {
-        return deparmentId;
-    }
-
-    public void setDeparmentId(Departments deparmentId) {
-        this.deparmentId = deparmentId;
     }
 
     @Override
@@ -131,15 +134,6 @@ public class Cities implements Serializable {
     @Override
     public String toString() {
         return "sv.edu.udb.www.Entities.Cities[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public Collection<CandidatesForCities> getCandidatesForCitiesCollection() {
-        return candidatesForCitiesCollection;
-    }
-
-    public void setCandidatesForCitiesCollection(Collection<CandidatesForCities> candidatesForCitiesCollection) {
-        this.candidatesForCitiesCollection = candidatesForCitiesCollection;
     }
     
 }

@@ -6,12 +6,8 @@
 package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Locale;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -39,8 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "electoral_process")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
     @NamedQuery(name = "ElectoralProcess.findAll", query = "SELECT e FROM ElectoralProcess e")
     , @NamedQuery(name = "ElectoralProcess.findById", query = "SELECT e FROM ElectoralProcess e WHERE e.id = :id")
@@ -52,24 +46,11 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "ElectoralProcess.findByProcessDate", query = "SELECT e FROM ElectoralProcess e WHERE e.processDate = :processDate")})
 public class ElectoralProcess implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
-    private Collection<PoliticGroupVotes> politicGroupVotesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
-    private Collection<CandidatesForCities> candidatesForCitiesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
-    private Collection<CitizenVotes> citizenVotesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
-    private Collection<Jrv> jrvCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
-    private Collection<PresidencialCandidates> presidencialCandidatesCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @Basic(optional = false)
     @NotNull
@@ -101,6 +82,16 @@ public class ElectoralProcess implements Serializable {
     @Column(name = "process_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date processDate;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
+    private Collection<PoliticGroupVotes> politicGroupVotesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
+    private Collection<CandidatesForCities> candidatesForCitiesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
+    private Collection<CitizenVotes> citizenVotesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
+    private Collection<Jrv> jrvCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electoralProcessId")
+    private Collection<PresidencialCandidates> presidencialCandidatesCollection;
     @JoinColumn(name = "electoral_process_status_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private ElectoralProcessStatus electoralProcessStatusId;
@@ -181,6 +172,51 @@ public class ElectoralProcess implements Serializable {
         this.processDate = processDate;
     }
 
+    @XmlTransient
+    public Collection<PoliticGroupVotes> getPoliticGroupVotesCollection() {
+        return politicGroupVotesCollection;
+    }
+
+    public void setPoliticGroupVotesCollection(Collection<PoliticGroupVotes> politicGroupVotesCollection) {
+        this.politicGroupVotesCollection = politicGroupVotesCollection;
+    }
+
+    @XmlTransient
+    public Collection<CandidatesForCities> getCandidatesForCitiesCollection() {
+        return candidatesForCitiesCollection;
+    }
+
+    public void setCandidatesForCitiesCollection(Collection<CandidatesForCities> candidatesForCitiesCollection) {
+        this.candidatesForCitiesCollection = candidatesForCitiesCollection;
+    }
+
+    @XmlTransient
+    public Collection<CitizenVotes> getCitizenVotesCollection() {
+        return citizenVotesCollection;
+    }
+
+    public void setCitizenVotesCollection(Collection<CitizenVotes> citizenVotesCollection) {
+        this.citizenVotesCollection = citizenVotesCollection;
+    }
+
+    @XmlTransient
+    public Collection<Jrv> getJrvCollection() {
+        return jrvCollection;
+    }
+
+    public void setJrvCollection(Collection<Jrv> jrvCollection) {
+        this.jrvCollection = jrvCollection;
+    }
+
+    @XmlTransient
+    public Collection<PresidencialCandidates> getPresidencialCandidatesCollection() {
+        return presidencialCandidatesCollection;
+    }
+
+    public void setPresidencialCandidatesCollection(Collection<PresidencialCandidates> presidencialCandidatesCollection) {
+        this.presidencialCandidatesCollection = presidencialCandidatesCollection;
+    }
+
     public ElectoralProcessStatus getElectoralProcessStatusId() {
         return electoralProcessStatusId;
     }
@@ -221,61 +257,5 @@ public class ElectoralProcess implements Serializable {
     public String toString() {
         return "sv.edu.udb.www.Entities.ElectoralProcess[ id=" + id + " ]";
     }
-
-    @XmlTransient
-    public Collection<PresidencialCandidates> getPresidencialCandidatesCollection() {
-        return presidencialCandidatesCollection;
-    }
-
-    public void setPresidencialCandidatesCollection(Collection<PresidencialCandidates> presidencialCandidatesCollection) {
-        this.presidencialCandidatesCollection = presidencialCandidatesCollection;
-    }
-
-    @XmlTransient
-    public Collection<PoliticGroupVotes> getPoliticGroupVotesCollection() {
-        return politicGroupVotesCollection;
-    }
-
-    public void setPoliticGroupVotesCollection(Collection<PoliticGroupVotes> politicGroupVotesCollection) {
-        this.politicGroupVotesCollection = politicGroupVotesCollection;
-    }
-
-    @XmlTransient
-    public Collection<CandidatesForCities> getCandidatesForCitiesCollection() {
-        return candidatesForCitiesCollection;
-    }
-
-    public void setCandidatesForCitiesCollection(Collection<CandidatesForCities> candidatesForCitiesCollection) {
-        this.candidatesForCitiesCollection = candidatesForCitiesCollection;
-    }
-
-    @XmlTransient
-    public Collection<CitizenVotes> getCitizenVotesCollection() {
-        return citizenVotesCollection;
-    }
-
-    public void setCitizenVotesCollection(Collection<CitizenVotes> citizenVotesCollection) {
-        this.citizenVotesCollection = citizenVotesCollection;
-    }
-
-    @XmlTransient
-    public Collection<Jrv> getJrvCollection() {
-        return jrvCollection;
-    }
-
-    public void setJrvCollection(Collection<Jrv> jrvCollection) {
-        this.jrvCollection = jrvCollection;
-    }
     
-    public String initDateFormat(){
-        return new SimpleDateFormat("MM-dd-yyyy").format(this.initDate);
-    }
-    
-    public String endDateFormat(){
-        return new SimpleDateFormat("MM-dd-yyyy").format(this.endDate);
-    }
-    
-    public String processDateFormat(){
-        return new SimpleDateFormat("MM-dd-yyyy").format(this.processDate);
-    }
 }

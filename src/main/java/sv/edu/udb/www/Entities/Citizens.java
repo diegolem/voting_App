@@ -19,15 +19,15 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Transient;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -42,18 +42,21 @@ import javax.xml.bind.annotation.XmlTransient;
 @SessionScoped
 @NamedQueries({
     @NamedQuery(name = "Citizens.findAll", query = "SELECT c FROM Citizens c")
-    , @NamedQuery(name = "Citizens.findById", query = "SELECT c FROM Citizens c WHERE c.id = :id")})
+    , @NamedQuery(name = "Citizens.findById", query = "SELECT c FROM Citizens c WHERE c.id = :id")
+    , @NamedQuery(name = "Citizens.findByName", query = "SELECT c FROM Citizens c WHERE c.name = :name")
+    , @NamedQuery(name = "Citizens.findByLastname", query = "SELECT c FROM Citizens c WHERE c.lastname = :lastname")
+    , @NamedQuery(name = "Citizens.findByPassword", query = "SELECT c FROM Citizens c WHERE c.password = :password")
+    , @NamedQuery(name = "Citizens.findByDui", query = "SELECT c FROM Citizens c WHERE c.dui = :dui")
+    , @NamedQuery(name = "Citizens.findByAdress", query = "SELECT c FROM Citizens c WHERE c.adress = :adress")
+    , @NamedQuery(name = "Citizens.findByBirthdate", query = "SELECT c FROM Citizens c WHERE c.birthdate = :birthdate")
+    , @NamedQuery(name = "Citizens.findByState", query = "SELECT c FROM Citizens c WHERE c.state = :state")})
 public class Citizens implements Serializable {
-
-    @Column(name = "state")
-    private Short state;
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @Basic(optional = false)
     @NotNull
@@ -83,6 +86,8 @@ public class Citizens implements Serializable {
     @Column(name = "birthdate")
     @Temporal(TemporalType.DATE)
     private Date birthdate;
+    @Column(name = "state")
+    private Short state;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "citizenId")
     private Collection<CitiesAdmins> citiesAdminsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "citizenId")
@@ -97,6 +102,7 @@ public class Citizens implements Serializable {
     @JoinColumn(name = "headquarter_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Headquarters headquarterId;
+    
     @Transient
     private boolean logged;
     
@@ -179,6 +185,14 @@ public class Citizens implements Serializable {
         this.birthdate = birthdate;
     }
 
+    public Short getState() {
+        return state;
+    }
+
+    public void setState(Short state) {
+        this.state = state;
+    }
+
     @XmlTransient
     public Collection<CitiesAdmins> getCitiesAdminsCollection() {
         return citiesAdminsCollection;
@@ -255,7 +269,7 @@ public class Citizens implements Serializable {
     public String toString() {
         return "sv.edu.udb.www.Entities.Citizens[ id=" + id + " ]";
     }
- 
+    
     public boolean isEmpty(){
         boolean result = (this.adress == null || this.adress.isEmpty());
         result &= (this.dui == null || this.dui.isEmpty());
@@ -265,13 +279,5 @@ public class Citizens implements Serializable {
         result &= (this.password == null || this.password.isEmpty());
         
         return result;
-    }
-
-    public Short getState() {
-        return state;
-    }
-
-    public void setState(Short state) {
-        this.state = state;
     }
 }

@@ -7,8 +7,6 @@ package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,8 +30,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "electoral_process_status")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
     @NamedQuery(name = "ElectoralProcessStatus.findAll", query = "SELECT e FROM ElectoralProcessStatus e")
     , @NamedQuery(name = "ElectoralProcessStatus.findById", query = "SELECT e FROM ElectoralProcessStatus e WHERE e.id = :id")
@@ -42,10 +38,9 @@ public class ElectoralProcessStatus implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @Basic(optional = false)
     @NotNull
