@@ -24,6 +24,7 @@ import sv.edu.udb.www.Entities.Candidates;
 import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Entities.Headquarters;
 import sv.edu.udb.www.Entities.PoliticGroups;
+import sv.edu.udb.www.Model.CandidatesForCitiesModel;
 import sv.edu.udb.www.Model.CandidatesModel;
 import sv.edu.udb.www.Model.CitizenModel;
 import sv.edu.udb.www.Model.CitizenTypesModel;
@@ -31,6 +32,7 @@ import sv.edu.udb.www.Model.HeadquartersModel;
 import sv.edu.udb.www.Model.PoliticGroupsModel;
 import sv.edu.udb.www.Utilities;
 import sv.edu.udb.www.Validacion;
+import sv.edu.udb.www.Entities.CandidatesForCities;
 
 /**
  *
@@ -41,6 +43,14 @@ import sv.edu.udb.www.Validacion;
 public class CandidatesBean implements Serializable {
 
     @EJB
+    private CandidatesForCitiesModel candidatesForCitiesModel;
+
+    // ///////////////////////
+    private int idPoliticGroup;
+    private CandidatesForCities candidatesForCities;
+    // /////////////////////////////////////////
+    
+    @EJB
     private CitizenTypesModel citizenTypesModel;
 
     @EJB
@@ -49,6 +59,8 @@ public class CandidatesBean implements Serializable {
     @EJB
     private HeadquartersModel headquartersModel;
 
+    private int idCandidate;
+    
     private Citizens citizens;
     private Candidates candidates;
 
@@ -80,8 +92,23 @@ public class CandidatesBean implements Serializable {
         this.citizens.setHeadquarterId(new Headquarters());
         this.candidates = new Candidates();
         this.candidates.setPoliticGroupId(new PoliticGroups());
+        
+        this.candidatesForCities = new CandidatesForCities();
     }
 
+    // ////////////////////////////
+    
+    public List<Candidates> allCandidatesForGroupId(){
+        return this.candidatesModel.listCandidatesForPoiliticGroup(this.idPoliticGroup);
+    }
+    
+    public void candidateForId(int id){
+        this.idCandidate = id;
+        this.candidates = this.candidatesModel.getCandidates(id);
+    }
+    
+    // ///////////////////////////////////
+    
     public Citizens getCitizens() {
         return citizens;
     }
@@ -98,15 +125,15 @@ public class CandidatesBean implements Serializable {
     }
 
     public void delete() {
-        Candidates candidates = this.candidatesModel.getCandidates(this.idRequest);
+        Candidates candidate = this.candidatesModel.getCandidates(this.idCandidate);
 
-        if (candidates != null & candidates.avalible()) {
-            this.candidatesModel.deleteCandidates(this.idRequest);
+        if (candidate != null) {
+            this.candidatesModel.deleteCandidates(this.idCandidate);
         }
     }
     
     public void saveId(int id){
-        this.idRequest = id;
+        this.idCandidate = id;
     }
 
     public void update() {
@@ -274,4 +301,32 @@ public class CandidatesBean implements Serializable {
         this.idRequestCitizens = idRequestCitizens;
     }
 
+    public int getIdCandidate() {
+        return idCandidate;
+    }
+
+    public void setIdCandidate(int idCandidate) {
+        this.idCandidate = idCandidate;
+    }
+
+    public int getIdPoliticGroup() {
+        return idPoliticGroup;
+    }
+
+    public void setIdPoliticGroup(int idPoliticGroup) {
+        this.idPoliticGroup = idPoliticGroup;
+    }
+
+    public CandidatesForCities getCandidatesForCities() {
+        return candidatesForCities;
+    }
+
+    public void setCandidatesForCities(CandidatesForCities candidatesForCities) {
+        this.candidatesForCities = candidatesForCities;
+    }
+
+    public void saveCadidateProcesses(){
+        this.candidatesForCities.setCandidateId(this.candidatesModel.getCandidates(idCandidate));
+        this.candidatesForCitiesModel.insertCandidatesCities(candidatesForCities);
+    }
 }

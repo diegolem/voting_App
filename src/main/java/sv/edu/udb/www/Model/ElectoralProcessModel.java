@@ -26,6 +26,10 @@ public class ElectoralProcessModel {
         Query query = em.createQuery("SELECT e FROM ElectoralProcess e");
         return query.getResultList();
     }
+    public List<ElectoralProcess> listElectoralProcessByEndDate(){
+        Query query = em.createNamedQuery("ElectoralProcess.findAllByEndDateNow");
+        return query.getResultList();
+    }
     public boolean insertElectoralProcess(ElectoralProcess electoralpro){
         try{
             em.persist(electoralpro);

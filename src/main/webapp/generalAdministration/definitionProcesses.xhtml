@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Procesos
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="frm">
+                    <h:inputHidden id="idCandidate" value="#{ candidatesBean.idCandidate }" />
+                    
+                    <div class="row" style="margin-bottom: 1em;">
+
+                        <div class="col-sm-12 col-md-6">
+                            <h:selectOneMenu id="politicGroup" value="#{ candidatesBean.idPoliticGroup }" class="form-control" >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione algun partido" />
+                                <f:selectItems value="#{ politicGroupBean.allPositicGroupWithCandidates() }" var="politicGroup" itemValue="#{ politicGroup.id }" itemLabel="#{ politicGroup.name } [#{ politicGroup.acronym }] " />
+                                <p:ajax event="change" update="candidatesRows" />
+                            </h:selectOneMenu>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Candidatos <small>Segun partidos politicos</small></h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content">
+                                <h:panelGroup id="candidatesRows">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped jambo_table">
+                                            <thead>
+                                                <tr class="headings">
+                                                    <th>
+                                                        ID
+                                                    </th>
+                                                    <th class="column-title">Nombre</th>
+                                                    <th class="column-title">Apellido</th>
+                                                    <th class="column-title">Dui</th>
+                                                    <th class="column-title">Direccion</th>
+                                                    <th class="column-title">Proceso activo</th>
+                                                    <th class="column-title">Opciones</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <p:repeat value="#{ candidatesBean.allCandidatesForGroupId() }" var="candidate">
+
+                                                    <tr class="even pointer">
+                                                        <td class="a-center ">
+                                                            #{ candidate.id }
+                                                        </td>
+                                                        <td class=" ">#{ candidate.citizenId.name }</td>
+                                                        <td class=" ">#{ candidate.citizenId.lastname }</td>
+                                                        <td class=" ">#{ candidate.citizenId.dui }</td>
+                                                        <td class=" ">#{ candidate.citizenId.adress }</td>
+                                                        <td class=" ">No hay ningun proceso prendiente</td>
+                                                        <td class=" last">
+                                                            <h:commandLink style="font-size: 1.5em;" onclick="$('#mdlAddEdit').modal('show');" >
+                                                                <i class="fa fa-plus-circle"></i>
+                                                                <p:ajax update=":frm:pnlModals :frm:idCandidate" listener="#{ candidatesBean.candidateForId(candidate.id) }" />
+                                                            </h:commandLink>
+
+                                                            <a href="#" style="font-size: 1.5em;"><i class="fa fa-minus-circle"></i></a>
+                                                            <a href="#" style="font-size: 1.5em;"><i class="fa fa-pencil-square-o"></i></a>
+
+                                                            <a href="#" style="font-size: 1.5em;"><i class="fa fa-history"></i></a>
+                                                        </td>
+                                                    </tr>
+
+                                                </p:repeat>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </h:panelGroup>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- set up the modal to start hidden and fade in and out -->
+
+                    <div id="mdlAddEdit" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <h:panelGroup id="pnlModals" >
+                                    <!-- dialog body -->
+                                    <div class="modal-body">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        Candidato: #{ candidatesBean.candidates.citizenId.name } #{ candidatesBean.candidates.citizenId.lastname }
+
+                                        <div class="row">
+                                            <div class="col">
+                                                <h:selectOneMenu id="process" value="#{ candidatesBean.candidatesForCities.electoralProcessId.id }" class="form-control" >
+                                                    <f:selectItems value="#{ electoralProcessBean.allElectoralProcessByEndDate() }" var="process" itemValue="#{ process.id }" itemLabel="#{ process.name}" />
+                                                </h:selectOneMenu>
+                                            </div>
+                                        </div>
+
+                                        <p></p>
+                                        
+                                        <div class="row">
+                                            <div class="col">
+                                                <h:selectOneMenu id="cities" value="#{ candidatesBean.candidatesForCities.cityId.id }" class="form-control" >
+                                                    <f:selectItems value="#{ citiesBean.listCities() }" var="city" itemValue="#{ city.id }" itemLabel="#{ city.name}" />
+                                                </h:selectOneMenu>
+                                            </div>
+                                        </div>
+                                        
+
+                                    </div>
+                                    <!-- dialog buttons -->
+                                    <div class="modal-footer">
+                                        <h:commandButton type="submit" class="btn btn-primary" value="Establecer proceso" actionListener="#{ candidatesBean.saveCadidateProcesses() }">
+                                           
+                                        </h:commandButton>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- sometime later, probably inside your on load event callback -->
+                    <script>
+                        $("#mdlAddEdit").on("show", function () {    // wire up the OK button to dismiss the modal when shown
+                            $("#mdlAddEdit a.btn").on("click", function (e) {
+                                console.log("button pressed");   // just as an example...
+                                $("#mdlAddEdit").modal('hide');     // dismiss the dialog
+                            });
+                        });
+                        $("#mdlAddEdit").on("hide", function () {    // remove the event listeners when the dialog is dismissed
+                            $("#mdlAddEdit a.btn").off("click");
+                        });
+
+                        $("#mdlAddEdit").on("hidden", function () {  // remove the actual elements from the DOM when fully hidden
+                            $("#mdlAddEdit").remove();
+                        });
+
+                        $("#mdlAddEdit").modal({// wire up the actual modal functionality and show the dialog
+                            "backdrop": "static",
+                            "keyboard": true,
+                            "show": true                     // ensure the modal is shown immediately
+                        });
+                    </script>
+
+                </h:form>
+            </ui:define>
+
+            <ui:define name="body_scripts">
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

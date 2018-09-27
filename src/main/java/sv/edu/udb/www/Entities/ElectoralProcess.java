@@ -50,6 +50,7 @@ import sv.edu.udb.www.Utilities;
     , @NamedQuery(name = "ElectoralProcess.findByYear", query = "SELECT e FROM ElectoralProcess e WHERE e.year = :year")
     , @NamedQuery(name = "ElectoralProcess.findByInitDate", query = "SELECT e FROM ElectoralProcess e WHERE e.initDate = :initDate")
     , @NamedQuery(name = "ElectoralProcess.findByEndDate", query = "SELECT e FROM ElectoralProcess e WHERE e.endDate = :endDate")
+    , @NamedQuery(name = "ElectoralProcess.findAllByEndDateNow", query = "SELECT e FROM ElectoralProcess e WHERE e.endDate > CURRENT_TIMESTAMP")
     , @NamedQuery(name = "ElectoralProcess.findByProcessDate", query = "SELECT e FROM ElectoralProcess e WHERE e.processDate = :processDate")})
 public class ElectoralProcess implements Serializable {
 
@@ -70,7 +71,7 @@ public class ElectoralProcess implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @Basic(optional = false)
     @NotNull
@@ -267,20 +268,20 @@ public class ElectoralProcess implements Serializable {
     public void setJrvCollection(Collection<Jrv> jrvCollection) {
         this.jrvCollection = jrvCollection;
     }
-    
-    public String initDateFormat(){
+
+    public String initDateFormat() {
         return new SimpleDateFormat("dd-MM-yyyy").format(this.initDate);
     }
-    
-    public String endDateFormat(){
+
+    public String endDateFormat() {
         return new SimpleDateFormat("dd-MM-yyyy").format(this.endDate);
     }
-    
-    public String processDateFormat(){
+
+    public String processDateFormat() {
         return new SimpleDateFormat("dd-MM-yyyy").format(this.processDate);
     }
 
-    public boolean avalible(){
+    public boolean avalible() {
         return Utilities.isEquealOrAfterNow(this.processDate);
     }
 }

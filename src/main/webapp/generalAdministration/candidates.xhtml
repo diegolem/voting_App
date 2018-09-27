@@ -16,13 +16,15 @@
             </ui:define>
 
             <ui:define name="content">
-                <h:form>
+                <h:form  prependId="false">
+                    <h:inputHidden id="idCandidate" value="#{ candidatesBean.idCandidate }" /> 
+                    
                     <div id="test-list">
                         <div class="form-group">
                             <label for="filter">Buscar: </label>
                             <input id="filter" type="text" class="form-control search" />
                         </div>
-
+                        
                         <ul class="list list-group">
                             <p:repeat value="#{ politicGroupBean.allPositicGroupWithCandidates() }" var="group">
                                 <li class="list-group-item panel panel-primary" style="padding: 0; background-color: gainsboro">
@@ -42,10 +44,9 @@
                                                             <p>
                                                                 <a href="#{request.contextPath}/faces/generalAdministration/editCandidate.xhtml?id=#{ candidate.id }" style="font-size: 2em;"><i class="fa fa-edit"></i></a>
                                                                 
-                                                                
-                                                                <h:commandLink onclick="bootbox.alert('¿Desea eliminar el candidato #{ candidate.citizenId.name } #{ candidate.citizenId.lastname }?');" style="margin-left: 2px; font-size: 2em;" >
+                                                                <h:commandLink onclick="$('#myModal').modal('show');" style="margin-left: 2px; font-size: 2em;" >
                                                                     <i class="fa fa-eraser"></i>
-                                                                    <f:ajax listener="#{ candidatesBean.saveId(candidate.id) }" />
+                                                                    <p:ajax event="click" update="idCandidate" listener="#{ candidatesBean.saveId(candidate.id) }" />
                                                                 </h:commandLink>
                                                             </p>
                                                         </div>
@@ -70,18 +71,18 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <!-- dialog body -->
-                                <div class="modal-body">
+                                <div class="modal-body bg-primary text-info">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     Esta seguro que desea eliminar el candidato?
                                 </div>
                                 <!-- dialog buttons -->
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">OK</button>
+                                    <h:commandButton value="Eliminar" class="btn btn-primary" type="submit" actionListener="#{ candidatesBean.delete() }" />
                                 </div>
                             </div>
                         </div>
-                    </div>
-
+                    </div> 
+                    
                     <!-- sometime later, probably inside your on load event callback -->
                     <script>
                         $("#myModal").on("show", function () {    // wire up the OK button to dismiss the modal when shown

@@ -19,6 +19,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import sv.edu.udb.www.Entities.Candidates;
+import sv.edu.udb.www.Entities.Cities;
+import sv.edu.udb.www.Entities.ElectoralProcess;
 
 /**
  *
@@ -50,11 +53,19 @@ public class CandidatesForCities implements Serializable {
     @ManyToOne(optional = false)
     private ElectoralProcess electoralProcessId;
 
+    public void defaultCandidate(){
+        this.setCandidateId(new Candidates());
+        this.setCityId(new Cities());
+        this.setElectoralProcessId(new ElectoralProcess());
+    }
+    
     public CandidatesForCities() {
+        defaultCandidate();
     }
 
     public CandidatesForCities(Integer id) {
         this.id = id;
+        defaultCandidate();
     }
 
     public Integer getId() {

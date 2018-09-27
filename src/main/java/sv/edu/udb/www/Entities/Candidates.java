@@ -39,7 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Candidates.findAll", query = "SELECT c FROM Candidates c")
     , @NamedQuery(name = "Candidates.findById", query = "SELECT c FROM Candidates c WHERE c.id = :id")
-    , @NamedQuery(name = "Candidates.findByPhoto", query = "SELECT c FROM Candidates c WHERE c.photo = :photo")})
+    , @NamedQuery(name = "Candidates.findByPhoto", query = "SELECT c FROM Candidates c WHERE c.photo = :photo")
+    , @NamedQuery(name = "Candidates.findByPoliticGroup", query = "SELECT c FROM Candidates c WHERE c.politicGroupId.id = :id OR :id = 0")})
 public class Candidates implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidateId")
@@ -55,7 +56,7 @@ public class Candidates implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @Basic(optional = false)
     @NotNull
@@ -69,20 +70,29 @@ public class Candidates implements Serializable {
     @ManyToOne(optional = false)
     private PoliticGroups politicGroupId;
 
-    public boolean avalible(){
+    public boolean avalible() {
         return true;
     }
-    
+
+    private void defaultVal() {
+        this.citizenId = new Citizens();
+        this.citizenId.setHeadquarterId(new Headquarters());
+        this.setPoliticGroupId(new PoliticGroups());
+    }
+
     public Candidates() {
+        defaultVal();
     }
 
     public Candidates(Integer id) {
         this.id = id;
+        defaultVal();
     }
 
     public Candidates(Integer id, String photo) {
         this.id = id;
         this.photo = photo;
+        defaultVal();
     }
 
     public Integer getId() {
@@ -160,5 +170,4 @@ public class Candidates implements Serializable {
         this.candidatesForCitiesCollection = candidatesForCitiesCollection;
     }
 
-    
 }

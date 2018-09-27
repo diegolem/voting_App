@@ -31,4 +31,8 @@ public class CitiesBean  implements Serializable {
     public List<Cities> listCitiesForDepartment(int idDepartment){
         return citiesModel.listCitiesforDepartment(idDepartment);
     }
+    
+    public List<Cities> listCities(){
+        return citiesModel.listCities();
+    }
 }

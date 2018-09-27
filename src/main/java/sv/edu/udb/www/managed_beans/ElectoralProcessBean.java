@@ -77,6 +77,10 @@ public class ElectoralProcessBean implements Serializable {
         this.electoralProcess = electoralProcess;
     }
 
+    public List<ElectoralProcess> allElectoralProcessByEndDate(){
+        return this.electoralProcessModel.listElectoralProcessByEndDate();
+    }
+    
     public void save() {
         if (!this.electoralProcessModel.existsCode(electoralProcess)) {
             // Primero revisamos la diferencia entre las fechas

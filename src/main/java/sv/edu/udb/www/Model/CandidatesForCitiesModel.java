@@ -32,6 +32,7 @@ public class CandidatesForCitiesModel {
             em.flush();
             return true;
         }catch(Exception e){
+            e.printStackTrace();
             return false;
         }
     }
