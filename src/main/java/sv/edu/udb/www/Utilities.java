@@ -6,6 +6,8 @@
 package sv.edu.udb.www;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -33,17 +35,17 @@ public class Utilities {
     }
     public static void AddMessage(String name, String message) {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put(name, message);
-        boolean cuenta = false;
-        if(!cuenta){
-            cuenta = true;
-        }else{
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().clear();
-        }
     }
     public static LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
         return dateToConvert.toInstant()
           .atZone(ZoneId.systemDefault())
           .toLocalDate();
+    }
+    public static boolean validateMayorEdad(Date fechaC) throws ParseException{
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        LocalDate now = LocalDate.now();
+        
+        return now.compareTo(convertToLocalDateViaInstant(fechaC)) >= 18 && now.compareTo(convertToLocalDateViaInstant(fechaC)) <= 120;
     }
     
     public static boolean isEquealOrAfterNow(Date date){

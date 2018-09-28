@@ -7,6 +7,7 @@ package sv.edu.udb.www.managed_beans;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
@@ -26,6 +27,7 @@ import sv.edu.udb.www.Utilities;
 import sv.edu.udb.www.Validacion;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 /**
  *
@@ -46,8 +48,8 @@ public class CitizenBean implements Serializable {
     private CitiesModel citiesModel;
     @EJB
     private HeadquartersModel headquarterModel;
-    
-    private Citizens citizen;    
+
+    private Citizens citizen;
 
     private int idDepartment;
 
@@ -97,28 +99,38 @@ public class CitizenBean implements Serializable {
     public List<Headquarters> headquartersForCities() {
         return headquarterModel.listHeadquartersForCity(this.idCity);
     }
+
     public void onloadRequest() {
-        String code = Utilities.getParam("codigo");  
+        String code = Utilities.getParam("codigo");
         this.citizen = this.citizenModel.getCitizen(Integer.parseInt(code));
         this.idDepartment = this.citizen.getHeadquarterId().getCityId().getDeparmentId().getId();
         this.idCity = this.citizen.getHeadquarterId().getCityId().getId();
     }
+
     public void save() throws ParseException {
         if (!this.citizenModel.existsDui(citizen)) {
             if (Validacion.esDui(citizen.getDui())) {
                 if (Validacion.esNombrePersona(citizen.getName()) && Validacion.esNombrePersona(citizen.getLastname())) {
                     if (Validacion.esDireccion(citizen.getAdress())) {
-                            this.citizen.setPassword(null);
-                            //insertando
-                            this.citizen.setCitizenTypeId(this.citizenTypesModel.getCitizenTypes("CITIZN"));
-                            this.citizen.setHeadquarterId(this.headquarterModel.getHeadquarter(this.citizen.getHeadquarterId().getId()));
-                            this.citizen.setState(Short.parseShort("1"));
-                            if (this.citizenModel.insertCitizen(citizen)) {
-                                Utilities.AddMessage("exito", "El Ciudadano fue registrado!!");
-                                Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
+                        this.citizen.setPassword(null);
+                        //insertando
+                        this.citizen.setCitizenTypeId(this.citizenTypesModel.getCitizenTypes("CITIZN"));
+                        this.citizen.setHeadquarterId(this.headquarterModel.getHeadquarter(this.citizen.getHeadquarterId().getId()));
+                        this.citizen.setState(Short.parseShort("1"));
+                        if (!this.citizen.getBirthdate().after(new Date())) {
+                            if (Utilities.validateMayorEdad(this.citizen.getBirthdate())) {
+                                if (this.citizenModel.insertCitizen(citizen)) {
+                                    Utilities.AddMessage("exito", "El Ciudadano fue registrado!!");
+                                    Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
                                 } else {
                                     Utilities.addMessageError("Error_Insert", "No se ha podido registrar al ciudadano");
                                 }
+                            } else {
+                                Utilities.addMessageError("Error_Fecha", "El usuario debe ser mayor de edad");
+                            }
+                        } else {
+                            Utilities.addMessageError("Error_Fecha", "Ingrese una fecha valida");
+                        }
                     } else {
                         Utilities.addMessageError("Error_Fecha", "Algunos caracteres son invalidos de la direccion");
                     }
@@ -137,51 +149,63 @@ public class CitizenBean implements Serializable {
         return this.citizenModel.listCitizenNormal("CITIZN");
     }
 
-    
-    public void update() {
+    public void update() throws ParseException {
         if (Validacion.esDui(citizen.getDui())) {
-                if (Validacion.esNombrePersona(citizen.getName()) && Validacion.esNombrePersona(citizen.getLastname())) {
-                    if (Validacion.esDireccion(citizen.getAdress())) {
-                            this.citizen.setPassword(null);
-                            //modificando
-                            this.citizen.setCitizenTypeId(this.citizenTypesModel.getCitizenTypes("CITIZN"));
-                            this.citizen.setHeadquarterId(this.headquarterModel.getHeadquarter(this.citizen.getHeadquarterId().getId()));
+            if (Validacion.esNombrePersona(citizen.getName()) && Validacion.esNombrePersona(citizen.getLastname())) {
+                if (Validacion.esDireccion(citizen.getAdress())) {
+                    this.citizen.setPassword(null);
+                    //modificando
+                    this.citizen.setCitizenTypeId(this.citizenTypesModel.getCitizenTypes("CITIZN"));
+                    this.citizen.setHeadquarterId(this.headquarterModel.getHeadquarter(this.citizen.getHeadquarterId().getId()));
+                    if (!this.citizen.getBirthdate().after(new Date())) {
+                        if (Utilities.validateMayorEdad(this.citizen.getBirthdate())) {
                             if (this.citizenModel.editCitizen(citizen)) {
                                 Utilities.AddMessage("exito", "El Ciudadano fue modificado!!");
                                 Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
-                                } else {
-                                    Utilities.addMessageError("Error_Insert", "No se ha podido modificar al ciudadano");
-                                }
+                            } else {
+                                Utilities.addMessageError("Error_Insert", "No se ha podido modificar al ciudadano");
+                            }
+                        } else {
+                            Utilities.addMessageError("Error_Fecha", "El usuario debe ser mayor de edad");
+                        }
                     } else {
-                        Utilities.addMessageError("Error_Fecha", "Algunos caracteres son invalidos de la direccion");
+                        Utilities.addMessageError("Error_Fecha", "Ingrese una fecha valida");
                     }
                 } else {
-                    Utilities.addMessageError("Error_Fecha", "Por favor ingrese un nombre o apellido correcto");
+                    Utilities.addMessageError("Error_Fecha", "Algunos caracteres son invalidos de la direccion");
                 }
             } else {
-                Utilities.addMessageError("Error_Fecha", "El DUI no posee un formato correcto");
+                Utilities.addMessageError("Error_Fecha", "Por favor ingrese un nombre o apellido correcto");
             }
+        } else {
+            Utilities.addMessageError("Error_Fecha", "El DUI no posee un formato correcto");
+        }
     }
-    
+
+    public void eliminateFlash() {
+        Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
+        flash.clear();
+    }
+
     public void enabledCitizens(Citizens citizen) {
         addMessage("Empleado RNPN", "Ciudadano Inhabilitado");
         this.executeEnable(citizen);
     }
-     
+
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
-    public String redirect(){    
+
+    public String redirect() {
         return "/employeeRnpn/editarCitizen.xhtml";
     }
-    
-    public void executeEnable(Citizens citizen){
+
+    public void executeEnable(Citizens citizen) {
         byte state = 0;
         this.citizen = citizen;
         this.citizen.setState(Short.valueOf(state));
-        if(this.citizenModel.enableCitizen(this.citizen)){
+        if (this.citizenModel.enableCitizen(this.citizen)) {
             Utilities.AddMessage("exito", "El Ciudadano fue deshabilitado!!");
             Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
         }

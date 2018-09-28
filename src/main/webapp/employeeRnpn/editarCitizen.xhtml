@@ -70,6 +70,7 @@
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="city" value="Municipio"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <h:selectOneMenu rendered="true" requiredMessage="El municipio es requerido" id="city" value="#{ citizenBean.idCity }" class="form-control col-md-7 col-xs-12" >
+                                <f:selectItem itemLabel="Elija un Municipio"/>
                                 <f:selectItems value="#{citizenBean.citiesForDepartment()}" var="city" itemValue="#{ city.id }" itemLabel="#{ city.name }" />
                                 <f:ajax render="headquarter" execute="@this"  />
                             </h:selectOneMenu>
@@ -80,6 +81,7 @@
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="headquarter" value="Sede de votación"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <h:selectOneMenu rendered="true" requiredMessage="La sede es requerida" id="headquarter" value="#{ citizenBean.citizen.headquarterId.id }" class="form-control col-md-7 col-xs-12" >
+                                <f:selectItem itemLabel="Elija la Sede de votación"/>
                                 <f:selectItems value="#{citizenBean.headquartersForCities()}" var="head" itemValue="#{ head.id }" itemLabel="#{ head.name }" />
                             </h:selectOneMenu>
                         </div>

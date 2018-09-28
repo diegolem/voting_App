@@ -96,4 +96,8 @@
         </ui:composition>
 
     </body>
+        <h:outputScript rendered="#{ not empty flash.exito }">
+            alertify.success('#{ flash.exito }');
+        </h:outputScript>
+        #{citizenBean.eliminateFlash()}
 </html>
