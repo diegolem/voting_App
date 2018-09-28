@@ -25,7 +25,6 @@ import sv.edu.udb.www.Model.HeadquartersModel;
 import sv.edu.udb.www.Utilities;
 import sv.edu.udb.www.Validacion;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 
 /**
@@ -47,22 +46,12 @@ public class CitizenBean implements Serializable {
     private CitiesModel citiesModel;
     @EJB
     private HeadquartersModel headquarterModel;
-
+    
     private Citizens citizen;    
 
     private int idDepartment;
 
     private int idCity;
-    
-    private int idRequest;
-
-    public int getIdRequest() {
-        return idRequest;
-    }
-
-    public void setIdRequest(int idRequest) {
-        this.idRequest = idRequest;
-    }
 
     public int getIdDepartment() {
         return idDepartment;
@@ -109,7 +98,8 @@ public class CitizenBean implements Serializable {
         return headquarterModel.listHeadquartersForCity(this.idCity);
     }
     public void onloadRequest() {
-        this.citizen = this.citizenModel.getCitizen(this.idRequest);
+        String code = Utilities.getParam("codigo");  
+        this.citizen = this.citizenModel.getCitizen(Integer.parseInt(code));
         this.idDepartment = this.citizen.getHeadquarterId().getCityId().getDeparmentId().getId();
         this.idCity = this.citizen.getHeadquarterId().getCityId().getId();
     }
@@ -124,6 +114,7 @@ public class CitizenBean implements Serializable {
                             this.citizen.setHeadquarterId(this.headquarterModel.getHeadquarter(this.citizen.getHeadquarterId().getId()));
                             this.citizen.setState(Short.parseShort("1"));
                             if (this.citizenModel.insertCitizen(citizen)) {
+                                Utilities.AddMessage("exito", "El Ciudadano fue registrado!!");
                                 Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
                                 } else {
                                     Utilities.addMessageError("Error_Insert", "No se ha podido registrar al ciudadano");
@@ -148,7 +139,28 @@ public class CitizenBean implements Serializable {
 
     
     public void update() {
-        
+        if (Validacion.esDui(citizen.getDui())) {
+                if (Validacion.esNombrePersona(citizen.getName()) && Validacion.esNombrePersona(citizen.getLastname())) {
+                    if (Validacion.esDireccion(citizen.getAdress())) {
+                            this.citizen.setPassword(null);
+                            //modificando
+                            this.citizen.setCitizenTypeId(this.citizenTypesModel.getCitizenTypes("CITIZN"));
+                            this.citizen.setHeadquarterId(this.headquarterModel.getHeadquarter(this.citizen.getHeadquarterId().getId()));
+                            if (this.citizenModel.editCitizen(citizen)) {
+                                Utilities.AddMessage("exito", "El Ciudadano fue modificado!!");
+                                Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
+                                } else {
+                                    Utilities.addMessageError("Error_Insert", "No se ha podido modificar al ciudadano");
+                                }
+                    } else {
+                        Utilities.addMessageError("Error_Fecha", "Algunos caracteres son invalidos de la direccion");
+                    }
+                } else {
+                    Utilities.addMessageError("Error_Fecha", "Por favor ingrese un nombre o apellido correcto");
+                }
+            } else {
+                Utilities.addMessageError("Error_Fecha", "El DUI no posee un formato correcto");
+            }
     }
     
     public void enabledCitizens(Citizens citizen) {
@@ -160,17 +172,17 @@ public class CitizenBean implements Serializable {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    public void redirect(){
-        //String code = Utilities.getParam("codigo");
-        this.idRequest = 1;//Integer.parseInt(Utilities.getParam("codigo"));
-        this.citizen = this.citizenModel.getCitizen(1);
-        Utilities.redirect("/faces/employeeRnpn/editarCitizen.xhtml");
+    
+    public String redirect(){    
+        return "/employeeRnpn/editarCitizen.xhtml";
     }
+    
     public void executeEnable(Citizens citizen){
         byte state = 0;
         this.citizen = citizen;
         this.citizen.setState(Short.valueOf(state));
         if(this.citizenModel.enableCitizen(this.citizen)){
+            Utilities.AddMessage("exito", "El Ciudadano fue deshabilitado!!");
             Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
         }
         Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");

@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `candidates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `candidates` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `photo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `politic_group_id` int(11) NOT NULL,
   `citizen_id` int(11) NOT NULL,
@@ -52,7 +52,7 @@ DROP TABLE IF EXISTS `candidates_for_cities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `candidates_for_cities` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `candidate_id` int(11) NOT NULL,
   `electoral_process_id` int(11) NOT NULL,
   `city_id` int(11) NOT NULL,
@@ -83,13 +83,13 @@ DROP TABLE IF EXISTS `cities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cities` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `deparment_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `department_city_idx` (`deparment_id`),
   CONSTRAINT `department_city` FOREIGN KEY (`deparment_id`) REFERENCES `departments` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=263 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,7 +110,7 @@ DROP TABLE IF EXISTS `cities_admins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cities_admins` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `department_id` int(11) NOT NULL,
   `citizen_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -162,7 +162,7 @@ DROP TABLE IF EXISTS `citizen_votes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `citizen_votes` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `status` tinyint(4) DEFAULT NULL,
   `electoral_process_id` int(11) NOT NULL,
   `citizen_id` int(11) NOT NULL,
@@ -194,7 +194,7 @@ DROP TABLE IF EXISTS `citizens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `citizens` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `lastname` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `password` varchar(64) COLLATE utf8_spanish2_ci DEFAULT NULL,
@@ -203,13 +203,14 @@ CREATE TABLE `citizens` (
   `birthdate` date NOT NULL,
   `citizen_type_id` varchar(6) COLLATE utf8_spanish2_ci NOT NULL,
   `headquarter_id` int(11) NOT NULL,
+  `state` tinyint(11) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `dui_UNIQUE` (`dui`),
   KEY `citizen_type_idx` (`citizen_type_id`),
   KEY `headquarter_citizen_idx` (`headquarter_id`),
   CONSTRAINT `citizen_type` FOREIGN KEY (`citizen_type_id`) REFERENCES `citizen_types` (`id`),
   CONSTRAINT `headquarter_citizen` FOREIGN KEY (`headquarter_id`) REFERENCES `headquarters` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -218,7 +219,7 @@ CREATE TABLE `citizens` (
 
 LOCK TABLES `citizens` WRITE;
 /*!40000 ALTER TABLE `citizens` DISABLE KEYS */;
-INSERT INTO `citizens` VALUES (1,'Carlos','Mojica','12345','12345678-9','El Salvador','2018-09-08','ADMGEN',1),(2,'Diego Alberto','Lemus Torres','1234','87654321-9','El Salvador, Avenida Bernal','2018-07-04','EMRNPN',1);
+INSERT INTO `citizens` VALUES (1,'Guillermo Armando','Calderon Sola',NULL,'13742204-5','Escalon','1993-11-25','CITIZN',3,1),(2,'Diego Alberto','Lemus Torres','1234','87654321-9','El Salvador, Avenida Bernal','2018-07-04','EMRNPN',1,1),(23,'Pedro Parolo','Calderon',NULL,'13742204-2','Bernal','1992-12-29','CITIZN',3,1),(24,'Franklin Pacacho','Castillo Cuadra',NULL,'12345679-1','Escalon','1992-11-30','CITIZN',3,1),(25,'Jorge Antonio','Flores Cañas',NULL,'12345679-4','Reparto las Chinamas casa #4','1992-09-30','CITIZN',3,1),(26,'Luis Ernesto','Suarez Ramirez',NULL,'01234567-2','Colonia Barcelona casa #1','1994-03-30','CITIZN',4,1),(27,'Carlos Alexander','Lemus Guardado',NULL,'12345678-8','Colonia Buenavista','1998-03-31','CITIZN',1,1);
 /*!40000 ALTER TABLE `citizens` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,10 +231,10 @@ DROP TABLE IF EXISTS `departments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `departments` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -254,7 +255,7 @@ DROP TABLE IF EXISTS `electoral_process`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `electoral_process` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `year` varchar(4) COLLATE utf8_spanish2_ci NOT NULL,
@@ -289,10 +290,10 @@ DROP TABLE IF EXISTS `electoral_process_status`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `electoral_process_status` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -313,10 +314,10 @@ DROP TABLE IF EXISTS `electoral_process_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `electoral_process_types` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -337,7 +338,7 @@ DROP TABLE IF EXISTS `headquarters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `headquarters` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `x` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `y` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -345,7 +346,7 @@ CREATE TABLE `headquarters` (
   PRIMARY KEY (`id`),
   KEY `headquarters_city_idx` (`city_id`),
   CONSTRAINT `headquarters_city` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -354,7 +355,7 @@ CREATE TABLE `headquarters` (
 
 LOCK TABLES `headquarters` WRITE;
 /*!40000 ALTER TABLE `headquarters` DISABLE KEYS */;
-INSERT INTO `headquarters` VALUES (1,'Centro Escolar Reparto Las Guacinamas','314321','432251',1);
+INSERT INTO `headquarters` VALUES (1,'Centro Escolar Reparto Las Guacinamas','314321','432251',2),(2,'Colegio las chinamas','324242','542432',1),(3,'Centro Escolar la palma','54357','21317',2),(4,'Colegio Costa Buena','131463','83953',1);
 /*!40000 ALTER TABLE `headquarters` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -366,7 +367,7 @@ DROP TABLE IF EXISTS `jrv`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jrv` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(64) COLLATE utf8_spanish2_ci NOT NULL,
   `headquarter_id` int(11) NOT NULL,
   `electoral_process_id` int(11) NOT NULL,
@@ -396,7 +397,7 @@ DROP TABLE IF EXISTS `jrv_citizen`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jrv_citizen` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `jrv_id` int(11) NOT NULL,
   `citizen_id` int(11) NOT NULL,
   `jrv_citizen_type_id` int(11) NOT NULL,
@@ -427,7 +428,7 @@ DROP TABLE IF EXISTS `jrv_citizen_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jrv_citizen_types` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `description` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   PRIMARY KEY (`id`)
@@ -451,7 +452,7 @@ DROP TABLE IF EXISTS `politic_group_votes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `politic_group_votes` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `votes` int(11) DEFAULT NULL,
   `politic_group_id` int(11) NOT NULL,
   `jrv_id` int(11) NOT NULL,
@@ -483,7 +484,7 @@ DROP TABLE IF EXISTS `politic_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `politic_groups` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `acronym` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `description` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -509,7 +510,7 @@ DROP TABLE IF EXISTS `presidencial_candidates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `presidencial_candidates` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `candidates_id` int(11) NOT NULL,
   `electoral_process_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -562,4 +563,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-09-22 23:06:43
+-- Dump completed on 2018-09-27 18:31:09

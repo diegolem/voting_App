@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author pc
  */
 public class Utilities {
+    
     public static void addMessageError(String tag, String msg){
         FacesMessage fm = new FacesMessage(msg, tag);
         fm.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -29,6 +30,15 @@ public class Utilities {
     public static String getParam(String name) {
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         return request.getParameter(name);
+    }
+    public static void AddMessage(String name, String message) {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put(name, message);
+        boolean cuenta = false;
+        if(!cuenta){
+            cuenta = true;
+        }else{
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().clear();
+        }
     }
     public static LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
         return dateToConvert.toInstant()

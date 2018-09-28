@@ -27,6 +27,9 @@
         <h:outputStylesheet name="css/daterangepicker.css" />
         <!-- Custom Theme Style -->
         <h:outputStylesheet name="css/custom.min.css" />
+        <!--Alertify-->
+        <h:outputStylesheet name="css/alertify.core.css" />
+        <h:outputStylesheet name="css/alertify.default.css" />
         
         <ui:insert name="head_link"></ui:insert>
     </h:head>
@@ -261,8 +264,12 @@
         <h:outputScript name="js/custom.min.js" />
     
         <h:outputScript name="js/list.js" />
+        <!--Alertify-->
+        <h:outputScript name="js/alertify.js"/>
         
         <ui:insert name="body_scripts"></ui:insert>
     </h:body>
-
+        <h:outputScript rendered="#{ not empty flash.exito }">
+            alertify.success('#{ flash.exito }');
+        </h:outputScript>
 </html>
