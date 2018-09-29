@@ -162,7 +162,7 @@ public class CitizenBean implements Serializable {
                             if (this.citizenModel.editCitizen(citizen)) {
                                 Utilities.AddMessage("exito", "El Ciudadano fue modificado!!");
                                 Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
-                            } else {
+                            }else{
                                 Utilities.addMessageError("Error_Insert", "No se ha podido modificar al ciudadano");
                             }
                         } else {

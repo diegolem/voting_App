@@ -59,9 +59,29 @@ public class PoliticGroupsModel {
             return false;
         }
     }
-    public boolean deletePoliticGroup(int id){
+    
+    public boolean existName(PoliticGroups politicGroup){
+        try {
+            Query query = em.createQuery("SELECT count(p) FROM PoliticGroups p WHERE p.name = :name");
+            query.setParameter("name", politicGroup.getName());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
+            return false;
+        }
+    }
+    public boolean existAcronym(PoliticGroups politicGroup){
+        try {
+            Query query = em.createQuery("SELECT count(p) FROM PoliticGroups p WHERE p.acronym = :acronym");
+            query.setParameter("acronym", politicGroup.getAcronym());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
+            return false;
+        }
+    }
+    
+    public boolean deletePoliticGroup(PoliticGroups politicGroup){
         try{
-            PoliticGroups enti = em.find(PoliticGroups.class, id);
+            PoliticGroups enti = em.find(PoliticGroups.class, politicGroup.getId());
             if(enti != null){
                 em.remove(enti);
                 em.flush();

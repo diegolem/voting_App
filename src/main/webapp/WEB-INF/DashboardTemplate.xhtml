@@ -65,28 +65,28 @@
                                 <h3>#{ Auth.citizen.citizenTypeId.description}</h3>
                                 <ul class="nav side-menu">
                                     <h:panelGroup rendered="#{ Auth.generalAdministration }">
-                                        <li><a><i class="fa fa-flag-o"></i>Partidos<span class="fa fa-chevron-down"></span></a>
+                                        <li><a><i class="fa fa-flag-o"></i>Partidos Politicos<span class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
-                                                <li><a href="index.html">Registrar</a></li>
-                                                <li><a href="index2.html">Buscar</a></li>
+                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/addPoliticGroup.xhtml">Registrar</a></li>
+                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/PoliticGroup.xhtml">Buscar</a></li>
                                             </ul>
                                         </li>
                                         <li><a><i class="fa fa-map-marker"></i>Departamentos<span class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
-                                                <li><a href="index.html">Registrar</a></li>
-                                                <li><a href="index2.html">Buscar</a></li>
+                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/addDepartment.xhtml">Registrar</a></li>
+                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/Department.xhtml">Buscar</a></li>
                                             </ul>
                                         </li>
                                         <li><a><i class="fa fa-sitemap"></i>Municipios<span class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
-                                                <li><a href="index.html">Registrar</a></li>
-                                                <li><a href="index2.html">Buscar</a></li>
+                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/addCity.xhtml">Registrar</a></li>
+                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/City.xhtml">Buscar</a></li>
                                             </ul>
                                         </li>
                                         <li><a><i class="fa fa-users"></i>Usuarios<span class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
-                                                <li><a href="index.html">Registrar</a></li>
-                                                <li><a href="index2.html">Buscar</a></li>
+                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/addUser.xhtml">Registrar</a></li>
+                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/User.xhtml">Buscar</a></li>
                                             </ul>
                                         </li>
                                         <li><a><i class="fa fa-newspaper-o"></i> Proceso electoral <span class="fa fa-chevron-down"></span></a>

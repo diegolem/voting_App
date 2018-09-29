@@ -57,7 +57,7 @@ public class CitizenModel {
         try {
             Query query = em.createQuery("SELECT c FROM Citizens c where c.dui = :dui AND c.password = :pass");
             query.setParameter("dui", citizen.getDui());
-            query.setParameter("pass", citizen.getPassword());
+            query.setParameter("pass", DigestUtils.sha256Hex(citizen.getPassword()));
             
             Citizens origin = (Citizens)query.getResultList().get(0);
             
@@ -121,7 +121,7 @@ public class CitizenModel {
         try {
             Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui AND c.password = :pass");
             query.setParameter("dui", citizen.getDui());
-            query.setParameter("pass", citizen.getPassword());
+            query.setParameter("pass", DigestUtils.sha256Hex(citizen.getPassword()));
             return ((long)query.getSingleResult())== 1l;
         } catch(Exception error){
             return false;
