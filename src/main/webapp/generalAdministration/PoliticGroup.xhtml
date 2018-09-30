@@ -41,7 +41,7 @@
                                                         </p:commandLink>
                                                     </li>
                                                     <li>
-                                                        <p:commandLink class="btn btn-default" value="Deshabilitar" action="#{politicGroupBean.setPoliticGroup(politicGroup)}">
+                                                        <p:commandLink class="btn btn-default" value="Eliminar" action="#{politicGroupBean.delete(politicgroup)}">
                                                         </p:commandLink>
 
                                                     </li>
@@ -63,6 +63,12 @@
                                                         <b>Descripción:</b> <p class="description">#{ politicgroup.description}</p>
                                                     </p>
                                                 </li>
+                                                <li>
+                                                    <p>
+                                                        <b>Bandera del partido</b><br></br>
+                                                        <h:graphicImage height="275px" width="470px" value="#{FacesContext.getCurrentInstance().getExternalContext()}/images/#{politicgroup.photo}" />
+                                                    </p>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -79,7 +85,7 @@
                 <script>
                     var monkeyList = new List('test-list', {
                         valueNames: ['name','acronym','description'],
-                        page: 3,
+                        page: 2,
                         pagination: true
                     });
                 </script>

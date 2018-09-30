@@ -11,7 +11,7 @@
         <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
 
             <ui:define name="tittle">
-                Ciudadanos
+                Departamentos
             </ui:define>
 
             <ui:define name="content">
@@ -23,25 +23,25 @@
                         </div>
 
                         <div class="row list" style="display: flex; justify-content: space-between;" >
-                            <p:repeat value="#{ citizenBean.listCitizens() }" var="citizen">
+                            <p:repeat value="#{departmentsBean.listAllDepartments()}" var="department">
                                 <!--alv-->
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                 <div class="x_panel">
                                     <div class="x_title">
-                                        <h2 class="name">#{ citizen.name }<small>Ciudadano</small></h2>
+                                        <h2 class="name">#{ department.name }<small>Departamento</small></h2>
                                         <ul class="nav navbar-right panel_toolbox">
                                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                             </li>
                                             <li class="dropdown">
-                                                <a href="#{citizenBean.setCitizen(citizen)}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                                <a href="#{departmentsBean.setDepartment(department)}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li>
-                                                        <p:commandLink class="btn btn-default" value="Editar" action="#{citizenBean.redirect()}">
-                                                            <f:param name="codigo" value="#{citizen.id}" />
+                                                        <p:commandLink class="btn btn-default" value="Editar" action="#{departmentsBean.redirect()}">
+                                                            <f:param name="codigo" value="#{department.id}" />
                                                         </p:commandLink>
                                                     </li>
                                                     <li>
-                                                        <p:commandLink class="btn btn-default" value="Deshabilitar" action="#{citizenBean.enabledCitizens(citizen)}">
+                                                        <p:commandLink class="btn btn-default" value="Eliminar" action="#{departmentsBean.delete(department)}">
                                                         </p:commandLink>
 
                                                     </li>
@@ -56,20 +56,11 @@
                                             <ul class="to_do">
                                                 <li>
                                                     <p>
-                                                        <b>Apellidos:</b> #{ citizen.lastname }</p>
-                                                </li>
-                                                <li>
-                                                    <p>
-                                                        <b>DUI:</b> <p class="dui">#{ citizen.dui }</p>
+                                                        <b>Municipios del departamento:</b>
+                                                        <p:repeat value="#{departmentsBean.listCities(department)}" var="cities">
+                                                                <p class="municipio">#{cities.name}</p>
+                                                            </p:repeat>
                                                     </p>
-                                                </li>
-                                                <li>
-                                                    <p>
-                                                       <b>Fecha de Nacimiento:</b> #{ citizen.birthdate.toLocaleString() }</p>
-                                                </li>
-                                                <li>
-                                                    <p>
-                                                        <b>Sede de votación:</b> <p class="sede">#{ citizen.headquarterId.name }</p></p>
                                                 </li>
                                             </ul>
                                         </div>
@@ -86,7 +77,7 @@
             <ui:define name="body_scripts">
                 <script>
                     var monkeyList = new List('test-list', {
-                        valueNames: ['name','dui','sede'],
+                        valueNames: ['name','municipio'],
                         page: 3,
                         pagination: true
                     });
