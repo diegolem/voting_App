@@ -65,11 +65,16 @@
                                                 </li>
                                                 <li>
                                                     <p>
+                                                        <b>Direccion:</b> <p class="dui">#{ citizen.adress }</p>
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <p>
                                                        <b>Fecha de Nacimiento:</b> #{ citizen.birthdate.toLocaleString() }</p>
                                                 </li>
                                                 <li>
                                                     <p>
-                                                        <b>Sede de votación:</b> <p class="sede">#{ citizen.headquarterId.name }</p></p>
+                                                        <b>Sede de votación:</b> <p class="sede">#{citizen.headquarterId.cityId.deparmentId.name}, #{citizen.headquarterId.cityId.name}, #{ citizen.headquarterId.name }</p></p>
                                                 </li>
                                             </ul>
                                         </div>

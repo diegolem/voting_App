@@ -69,9 +69,18 @@ public class CitiesModel {
             return false;
         }
     }
-    public boolean deleteCities(int id){
+    public boolean existCities(Cities city){
+        try {
+            Query query = em.createQuery("SELECT count(c) FROM Cities c WHERE c.name = :name");
+            query.setParameter("name", city.getName());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
+            return false;
+        }
+    }
+    public boolean deleteCities(Cities city){
         try{
-            Cities enti = em.find(Cities.class, id);
+            Cities enti = em.find(Cities.class, city.getId());
             if(enti != null){
                 em.remove(enti);
                 em.flush();

@@ -12,87 +12,36 @@
         <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
 
             <ui:define name="tittle">
-                Ciudadanos
+                Municipios
             </ui:define>
             
             <ui:define name="content">
-                    #{citizenBean.onloadRequest()}
-                    <h:form id="frm-citizens-update" class="form-horizontal form-label-left data-parsley-validate">
-                        <h:inputHidden id="idRequest" value="#{ citizenBean.citizen.id }" />
-                        <h:inputHidden id="idCitizenType" value="#{ citizenBean.citizen.citizenTypeId.id }" />
-                        <h:inputHidden id="idState" value="#{ citizenBean.citizen.state }" />
-                        
-                        <div class="form-group">
-                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="name" value="Nombres"> <span class="required">*</span></h:outputLabel>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <p:inputText id="name" requiredMessage="El nombre es requerido" required="true" value="#{citizenBean.citizen.name}" styleClass="form-control col-md-7 col-xs-12" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="apellido" value="Apellidos"> <span class="required">*</span></h:outputLabel>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <p:inputText id="apellido" requiredMessage="El apellido es requerido" required="true" value="#{citizenBean.citizen.lastname}" styleClass="form-control col-md-7 col-xs-12" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="dui" value="DUI"> <span class="required">*</span></h:outputLabel>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <p:inputText id="dui" requiredMessage="El dui es requerido" required="true" value="#{citizenBean.citizen.dui}" styleClass="form-control col-md-7 col-xs-12" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="direccion" value="Dirección"> <span class="required">*</span></h:outputLabel>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <p:inputText id="direccion" requiredMessage="La dirección es requerida" required="true" value="#{citizenBean.citizen.adress}" styleClass="form-control col-md-7 col-xs-12" />
-                        </div>
-                    </div>
+                    #{citiesBean.onloadRequest()}
                     
+                        <h:form id="frm-cities" class="form-horizontal form-label-left data-parsley-validate">
+
                     <div class="form-group">
-                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="birthday" value="Fecha de Cumpleaños"> <span class="required">*</span></h:outputLabel>
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="name" value="Nombre del municipio"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <h:inputText id="birthday" validatorMessage="Formato de fecha de cumpleaños incorrecto" requiredMessage="La fecha de cumpleaños es requerida" value="#{ citizenBean.citizen.birthdate }" class="form-control col-md-7 col-xs-12" required="true" title="Fecha de Cumpleaños" converterMessage="Inicio" a:type="date">
-                                <f:convertDateTime pattern="yyyy-MM-dd" />
-                            </h:inputText>
+                            <p:inputText id="name" requiredMessage="El nombre del municipio es requerido" required="true" value="#{citiesBean.city.name}" styleClass="form-control col-md-7 col-xs-12" />
                         </div>
-                    </div>
+                    </div>   
                     
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="department" value="Departamento"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <h:selectOneMenu rendered="true" requiredMessage="El departamento es requerido" id="department" value="#{ citizenBean.idDepartment }" class="form-control col-md-7 col-xs-12" >
-                                <f:selectItems value="#{citizenBean.depar}" var="depart" itemValue="#{ depart.id }" itemLabel="#{ depart.name }" />
-                                <f:ajax render="city"  />
+                            <h:selectOneMenu rendered="true" requiredMessage="El departamento al que pertenece el municipio es requerido" id="department" value="#{ citiesBean.city.deparmentId.id }" class="form-control col-md-7 col-xs-12" >
+                                <f:selectItems value="#{citiesBean.listDepartments()}" var="depart" itemValue="#{ depart.id }" itemLabel="#{ depart.name }" />
                             </h:selectOneMenu>
                         </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="city" value="Municipio"> <span class="required">*</span></h:outputLabel>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <h:selectOneMenu rendered="true" requiredMessage="El municipio es requerido" id="city" value="#{ citizenBean.idCity }" class="form-control col-md-7 col-xs-12" >
-                                <f:selectItem itemLabel="Elija un Municipio"/>
-                                <f:selectItems value="#{citizenBean.citiesForDepartment()}" var="city" itemValue="#{ city.id }" itemLabel="#{ city.name }" />
-                                <f:ajax render="headquarter" execute="@this"  />
-                            </h:selectOneMenu>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="headquarter" value="Sede de votación"> <span class="required">*</span></h:outputLabel>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <h:selectOneMenu rendered="true" requiredMessage="La sede es requerida" id="headquarter" value="#{ citizenBean.citizen.headquarterId.id }" class="form-control col-md-7 col-xs-12" >
-                                <f:selectItem itemLabel="Elija la Sede de votación"/>
-                                <f:selectItems value="#{citizenBean.headquartersForCities()}" var="head" itemValue="#{ head.id }" itemLabel="#{ head.name }" />
-                            </h:selectOneMenu>
-                        </div>
-                    </div>
-                        
+                            
                         <div class="ln_solid"></div>
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                 <button class="btn btn-primary" type="reset">Reset</button>
                                 <h:commandButton class="btn btn-warning" type="submit" value="Modificar" >
-                                    <f:ajax render="@form" execute="@form" listener="#{ citizenBean.update() }" />
+                                    <f:ajax render="@form" execute="@form" listener="#{ citiesBean.update() }" />
                                 </h:commandButton>
                             </div>
                         </div>

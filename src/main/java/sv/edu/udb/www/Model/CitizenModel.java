@@ -32,6 +32,11 @@ public class CitizenModel {
         query.setParameter("id", id);
         return query.getResultList();
     }
+    public List<Citizens> listCitizenForTypes(String id){
+        Query query = em.createQuery("SELECT c FROM Citizens c WHERE c.citizenTypeId.id = :id AND c.state = 1");
+        query.setParameter("id", id);
+        return query.getResultList();
+    }
     public boolean insertCitizen(Citizens citizen){
         try{
             em.persist(citizen);
@@ -124,6 +129,19 @@ public class CitizenModel {
             query.setParameter("pass", DigestUtils.sha256Hex(citizen.getPassword()));
             return ((long)query.getSingleResult())== 1l;
         } catch(Exception error){
+            return false;
+        }
+    }
+    public boolean deleteCitizens(Citizens citizen){
+        try{
+            Citizens enti = em.find(Citizens.class, citizen.getId());
+            if(enti != null){
+                em.remove(enti);
+                em.flush();
+                return true;
+            }
+            return false;
+        }catch(Exception e){
             return false;
         }
     }
