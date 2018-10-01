@@ -31,6 +31,7 @@ public class PresidencialCandidatesModel {
             em.flush();
             return true;
         }catch(Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -42,6 +43,7 @@ public class PresidencialCandidatesModel {
             }
             return null;
         }catch(Exception e){
+            e.printStackTrace();
             return null;
         }
     }
@@ -56,6 +58,7 @@ public class PresidencialCandidatesModel {
             }
             return false;
         }catch(Exception e){
+            e.printStackTrace();
             return false;
         }
     }

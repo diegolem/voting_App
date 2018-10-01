@@ -5,8 +5,11 @@
  */
 package sv.edu.udb.www;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,7 +35,15 @@ public class Validacion {
         }
         return response;
     }
-    
+
+    public static boolean isValidDate(String fechaN) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate fechaNac = LocalDate.parse(fechaN,fmt);
+        LocalDate ahora = LocalDate.now();
+        
+        Period periodo = Period.between(fechaNac, ahora);
+        return periodo.getYears() >= 18;
+    }
     public static boolean esEntero(String campo){
         try {
             entero = Integer.parseInt(cadena.trim());

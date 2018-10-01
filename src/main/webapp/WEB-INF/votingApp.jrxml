@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="votingApp" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="c9213a67-4c11-4d6c-b176-d45e0dd5133b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     jrv.`code` AS jrv_code,
+     jrv_citizen_types.`name` AS jrv_citizen_types_name,
+     jrv_citizen_types.`description` AS jrv_citizen_types_description,
+     headquarters.`name` AS headquarters_name,
+     citizens.`name` AS citizens_name,
+     citizens.`lastname` AS citizens_lastname,
+     citizens.`dui` AS citizens_dui,
+     citizens.`adress` AS citizens_adress,
+     cities.`name` AS cities_name,
+     departments.`name` AS departments_name,
+     citizens.`state` AS citizens_state
+FROM
+     `jrv` as jrv 
+     INNER JOIN `jrv_citizen` jrv_citizen ON jrv.`id` = jrv_citizen.`jrv_id`
+     INNER JOIN `jrv_citizen_types` jrv_citizen_types ON jrv_citizen.`jrv_citizen_type_id` = jrv_citizen_types.`id`
+     INNER JOIN `citizens` citizens ON jrv_citizen.`citizen_id` = citizens.`id`
+     INNER JOIN `headquarters` headquarters ON jrv.`headquarter_id` = headquarters.`id`
+     INNER JOIN `cities` cities ON headquarters.`city_id` = cities.`id`
+     INNER JOIN `departments` departments ON cities.`deparment_id` = departments.`id`
+where
+jrv.`id` = $P!{id}]]>
+	</queryString>
+	<field name="jrv_code" class="java.lang.String"/>
+	<field name="jrv_citizen_types_name" class="java.lang.String"/>
+	<field name="jrv_citizen_types_description" class="java.lang.String"/>
+	<field name="headquarters_name" class="java.lang.String"/>
+	<field name="citizens_name" class="java.lang.String"/>
+	<field name="citizens_lastname" class="java.lang.String"/>
+	<field name="citizens_dui" class="java.lang.String"/>
+	<field name="citizens_adress" class="java.lang.String"/>
+	<field name="cities_name" class="java.lang.String"/>
+	<field name="departments_name" class="java.lang.String"/>
+	<field name="citizens_state" class="java.lang.Integer"/>
+	<group name="Group1">
+		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/15)]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement uuid="8309df40-36bd-4258-911a-dfa4a4c34d15" style="SubTitle" x="47" y="13" width="506" height="24" forecolor="#CC0000"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Miembros de la junta"]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement uuid="936cd8a2-8a28-4c8c-94e5-7786a03f7603" mode="Opaque" x="0" y="13" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+				</rectangle>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="18"/>
+		</groupFooter>
+	</group>
+	<group name="Group2">
+		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/5)]]></groupExpression>
+		<groupHeader>
+			<band height="23">
+				<staticText>
+					<reportElement uuid="55bba815-9449-4fdf-b24d-c5072a403310" mode="Opaque" x="0" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#666666"/>
+					<textElement/>
+					<text><![CDATA[Nombre]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="f0e15110-7ea4-47d5-a7d0-5e87f11a67e7" mode="Opaque" x="100" y="0" width="110" height="20" forecolor="#FFFFFF" backcolor="#666666"/>
+					<textElement/>
+					<text><![CDATA[Apellido]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="ff5f6e0a-c86f-46d7-bf5e-e5a1d59a4dc1" mode="Opaque" x="210" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#666666"/>
+					<textElement/>
+					<text><![CDATA[Dui]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="e2c27577-3be1-4a3f-b7c7-f5e4f736bff4" mode="Opaque" x="310" y="0" width="102" height="20" forecolor="#FFFFFF" backcolor="#666666"/>
+					<textElement/>
+					<text><![CDATA[Rol]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2abaa152-b5fa-4e58-ac8b-a62b150810c1" mode="Opaque" x="412" y="0" width="143" height="20" forecolor="#FFFFFF" backcolor="#666666"/>
+					<textElement/>
+					<text><![CDATA[Direccion]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="694ec3fc-be9a-465e-b3c5-e8d6382f5dca" style="Title" x="0" y="13" width="263" height="33"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[JRV EL SALVADOR]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="acb7af84-29f7-4275-a0cb-cf42e7c05c75" x="99" y="46" width="164" height="22"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="18"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jrv_code}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="9c0645e2-6f30-4d2e-9980-a1fa5f6f7ab7" style="Column header" x="0" y="19" width="47" height="15"/>
+				<textElement/>
+				<text><![CDATA[Ciudad:]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="b009ce7a-b7de-4706-a25c-f57344e82038" positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement uuid="7edae498-0eea-48c1-a8f0-6a8671e80920" x="47" y="19" width="100" height="15" forecolor="#666666"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cities_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="aa101f50-af1e-44c4-8397-e3ae8a294ac7" x="275" y="19" width="137" height="15" forecolor="#666666"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{departments_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="89452361-34f6-4c17-9c10-8bab82b0ef95" style="Column header" x="185" y="19" width="85" height="15"/>
+				<textElement/>
+				<text><![CDATA[Departamento:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement uuid="d70dcad4-9a8f-4922-93de-6bc3a279beae" positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement uuid="fc035452-8c28-4ed2-b44a-172b1a3ded9e" x="0" y="15" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{citizens_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5421a5ec-6961-4f48-8ac0-0bbdd6cbcd0f" x="100" y="15" width="110" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{citizens_lastname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d1b8b904-e64a-410a-8ac1-a4ab6e2e576b" x="210" y="15" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{citizens_dui}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b327672e-70f6-4bf2-beb3-ac57485db770" x="310" y="16" width="102" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{jrv_citizen_types_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="be899c15-c450-495c-adc3-0b104e05d50e" x="412" y="15" width="143" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{citizens_adress}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="29" splitType="Stretch">
+			<line>
+				<reportElement uuid="f54b93ab-2c41-48e5-9c64-4585e5ff7b15" positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement uuid="22469428-ca05-4d8c-861c-0708530929f7" style="Column header" x="433" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="c9f05697-86e3-47e2-b363-817845aa0cc2" style="Column header" x="513" y="0" width="40" height="20"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="7539a4f1-70dd-4ff0-ae8a-dfd359ff3c18" style="Column header" x="0" y="0" width="197" height="20"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

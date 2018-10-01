@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Type JRV
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="frm" class="form-horizontal form-label-left data-parsley-validate">
+
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="name" value="Name"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:inputText id="name" requiredMessage="El Codigo es requerido" value="#{ jrvCitizenTypesBean.type.name }" required="true" class="form-control col-md-7 col-xs-12" />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="desc" value="Descripcion"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:inputText id="desc" requiredMessage="La descripcion es requerida" value="#{ jrvCitizenTypesBean.type.description }" required="true" class="form-control col-md-7 col-xs-12" />
+                        </div>
+                    </div>
+                    
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button class="btn btn-primary" type="reset">Reset</button>
+                            <h:commandButton class="btn btn-success" type="submit" value="Registrar" >
+                                <f:ajax render="@form" execute="@form" listener="#{ jrvCitizenTypesBean.save() }" />
+                            </h:commandButton>
+                        </div>
+                    </div>
+                    
+                    <h:messages class="alert alert-danger"></h:messages>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="body_scripts">
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

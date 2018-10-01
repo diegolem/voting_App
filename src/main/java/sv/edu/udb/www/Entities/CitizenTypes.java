@@ -7,8 +7,6 @@ package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -30,25 +28,17 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "citizen_types")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
     @NamedQuery(name = "CitizenTypes.findAll", query = "SELECT c FROM CitizenTypes c")
     , @NamedQuery(name = "CitizenTypes.findById", query = "SELECT c FROM CitizenTypes c WHERE c.id = :id")
     , @NamedQuery(name = "CitizenTypes.findByDescription", query = "SELECT c FROM CitizenTypes c WHERE c.description = :description")})
 public class CitizenTypes implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "citizenTypeId")
-    private Collection<Citizens> citizensCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "citizenTypeId")
-    private Collection<Citizens> citizenCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 3)
+    @Size(min = 1, max = 6)
     @Column(name = "id")
     private String id;
     @Basic(optional = false)
@@ -56,6 +46,8 @@ public class CitizenTypes implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "description")
     private String description;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "citizenTypeId")
+    private Collection<Citizens> citizensCollection;
 
     public CitizenTypes() {
     }
@@ -85,6 +77,15 @@ public class CitizenTypes implements Serializable {
         this.description = description;
     }
 
+    @XmlTransient
+    public Collection<Citizens> getCitizensCollection() {
+        return citizensCollection;
+    }
+
+    public void setCitizensCollection(Collection<Citizens> citizensCollection) {
+        this.citizensCollection = citizensCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -108,15 +109,6 @@ public class CitizenTypes implements Serializable {
     @Override
     public String toString() {
         return "sv.edu.udb.www.Entities.CitizenTypes[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public Collection<Citizens> getCitizensCollection() {
-        return citizensCollection;
-    }
-
-    public void setCitizensCollection(Collection<Citizens> citizensCollection) {
-        this.citizensCollection = citizensCollection;
     }
     
 }

@@ -25,6 +25,12 @@ public class JrvCitizenTypesModel {
         Query query = em.createQuery("SELECT j FROM JrvCitizenTypes j");
         return query.getResultList();
     }
+    
+    public List<JrvCitizenTypes> listJrvCitizenTypesUnique(){
+        Query query = em.createQuery("SELECT j FROM JrvCitizenTypes j where j.id > 4");
+        return query.getResultList();
+    }
+    
     public boolean insertJrvCitizenTypes(JrvCitizenTypes jrvcity){
         try{
             em.persist(jrvcity);

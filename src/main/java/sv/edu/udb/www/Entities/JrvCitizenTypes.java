@@ -7,12 +7,12 @@ package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -30,8 +30,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "jrv_citizen_types")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
     @NamedQuery(name = "JrvCitizenTypes.findAll", query = "SELECT j FROM JrvCitizenTypes j")
     , @NamedQuery(name = "JrvCitizenTypes.findById", query = "SELECT j FROM JrvCitizenTypes j WHERE j.id = :id")
@@ -39,13 +37,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "JrvCitizenTypes.findByDescription", query = "SELECT j FROM JrvCitizenTypes j WHERE j.description = :description")})
 public class JrvCitizenTypes implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "jrvCitizenTypeId")
-    private Collection<JrvCitizen> jrvCitizenCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -58,6 +53,8 @@ public class JrvCitizenTypes implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "description")
     private String description;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "jrvCitizenTypeId")
+    private Collection<JrvCitizen> jrvCitizenCollection;
 
     public JrvCitizenTypes() {
     }
@@ -96,6 +93,15 @@ public class JrvCitizenTypes implements Serializable {
         this.description = description;
     }
 
+    @XmlTransient
+    public Collection<JrvCitizen> getJrvCitizenCollection() {
+        return jrvCitizenCollection;
+    }
+
+    public void setJrvCitizenCollection(Collection<JrvCitizen> jrvCitizenCollection) {
+        this.jrvCitizenCollection = jrvCitizenCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -120,14 +126,12 @@ public class JrvCitizenTypes implements Serializable {
     public String toString() {
         return "sv.edu.udb.www.Entities.JrvCitizenTypes[ id=" + id + " ]";
     }
-
-    @XmlTransient
-    public Collection<JrvCitizen> getJrvCitizenCollection() {
-        return jrvCitizenCollection;
-    }
-
-    public void setJrvCitizenCollection(Collection<JrvCitizen> jrvCitizenCollection) {
-        this.jrvCitizenCollection = jrvCitizenCollection;
+    
+    public boolean canDelete(){
+        return (this.jrvCitizenCollection == null || this.jrvCitizenCollection.isEmpty());
     }
     
+    public boolean unique(){
+        return this.id == 1 || this.id == 2 || this.id == 3;
+    }
 }

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.view.ViewScoped;
 import sv.edu.udb.www.Entities.Departments;
 import sv.edu.udb.www.Model.DepartmentsModel;
@@ -18,7 +19,7 @@ import sv.edu.udb.www.Model.DepartmentsModel;
  * @author Diego Lemus
  */
 @ManagedBean(name = "departmentsBean")
-@ViewScoped
+@RequestScoped
 public class DepartmentsBean implements Serializable {
 
     @EJB

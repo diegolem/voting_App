@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Add Candidates
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="frm-process" class="form-horizontal form-label-left data-parsley-validate" enctype="multipart/form-data"  prependId="false">
+
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="photo" value="Foto"></h:outputLabel>
+                        <div class="input-group image-preview col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" class="form-control image-preview-filename" disabled="disabled"/>
+
+                            <span class="input-group-btn">
+                                <!-- image-preview-clear button -->
+                                <button type="button" class="btn btn-default image-preview-clear" style="display:none;">
+                                    <span class="glyphicon glyphicon-remove"></span> Clear
+                                </button>
+                                <!-- image-preview-input -->
+                                <div class="btn btn-default image-preview-input">
+                                    <span class="glyphicon glyphicon-folder-open"></span>
+                                    <span class="image-preview-input-title">Browse</span>
+                                    <h:inputFile id="input-file-preview" value="#{candidatesBean.uploadedFile}"  >
+                                        <f:ajax listener="#{ candidatesBean.handleFileUpload }" />
+                                    </h:inputFile>
+                                </div>
+                            </span>
+                        </div><!-- /input-group image-preview [TO HERE]--> 
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="name" value="Nombre"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:inputText id="name" requiredMessage="El nombre es requerido" required="true" value="#{ candidatesBean.citizens.name }" class="form-control col-md-7 col-xs-12" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="lastname" value="Apellido"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:inputText id="lastname" requiredMessage="El apellido es requerido" required="true" value="#{ candidatesBean.citizens.lastname }" class="form-control col-md-7 col-xs-12" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="dui" value="Dui"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:inputText id="dui" requiredMessage="El dui es requerido" required="true" value="#{ candidatesBean.citizens.dui }" class="form-control col-md-7 col-xs-12" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="headquarter" value="Sede"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:selectOneMenu rendered="true" requiredMessage="El tipo de proceso es requerido" id="headquarter" value="#{ candidatesBean.citizens.headquarterId.id }" class="form-control col-md-7 col-xs-12" >
+                                <f:selectItems value="#{ candidatesBean.allHeadquarters() }" var="headquarter" itemValue="#{ headquarter.id }" itemLabel="#{ headquarter.name }" />
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="politic_group_id" value="Gruopo"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:selectOneMenu rendered="true" requiredMessage="El tipo de proceso es requerido" id="politic_group_id" value="#{ candidatesBean.candidates.politicGroupId.id }" class="form-control col-md-7 col-xs-12" >
+                                <f:selectItems value="#{ candidatesBean.allPoliticGroups() }" var="politicGroup" itemValue="#{ politicGroup.id }" itemLabel="#{ politicGroup.acronym }" />
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="birthdate" value="Fecha de nacimiento"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:inputText id="birthdate" validatorMessage="Formato de fecha de nacimiento es incorrecta" requiredMessage="La fecha de nacimiento es requerida" class="form-control col-md-7 col-xs-12" required="true" value="#{ candidatesBean.citizens.birthdate }" title="fechaNacimiento" converterMessage="Inicio" a:type="date">
+                                <f:convertDateTime pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="adress" value="Direccion"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:inputTextarea id="adress" requiredMessage="La direccion es requerido" required="true" value="#{ candidatesBean.citizens.adress }" class="form-control col-md-7 col-xs-12" />
+                        </div>
+                    </div>
+                    
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button class="btn btn-primary" type="reset">Reset</button>
+                            <h:commandButton class="btn btn-success" type="submit" value="Registrar" >
+                                <f:ajax render="@form" execute="@form" listener="#{ candidatesBean.save() }" />
+                            </h:commandButton>
+                        </div>
+                    </div>
+
+                    <h:messages class="alert alert-danger"></h:messages>
+                    
+                    <h:outputScript name="js/batman.js" />
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

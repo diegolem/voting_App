@@ -7,12 +7,12 @@ package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,31 +32,19 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "headquarters")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
     @NamedQuery(name = "Headquarters.findAll", query = "SELECT h FROM Headquarters h")
     , @NamedQuery(name = "Headquarters.findById", query = "SELECT h FROM Headquarters h WHERE h.id = :id")
     , @NamedQuery(name = "Headquarters.findByName", query = "SELECT h FROM Headquarters h WHERE h.name = :name")
+    , @NamedQuery(name = "Headquarters.findByNameWithCityId", query = "SELECT h FROM Headquarters h WHERE h.name = :name and h.cityId.id = :id")
     , @NamedQuery(name = "Headquarters.findByX", query = "SELECT h FROM Headquarters h WHERE h.x = :x")
     , @NamedQuery(name = "Headquarters.findByY", query = "SELECT h FROM Headquarters h WHERE h.y = :y")})
 public class Headquarters implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "headquarterId")
-    private Collection<Citizens> citizensCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "headquarterId")
-    private Collection<Jrv> jrvCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "headquarterId")
-    private Collection<Citizens> citizenCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "headquarterId")
-
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -74,9 +62,13 @@ public class Headquarters implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "y")
     private String y;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "headquarterId")
+    private Collection<Jrv> jrvCollection;
     @JoinColumn(name = "city_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Cities cityId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "headquarterId")
+    private Collection<Citizens> citizensCollection;
 
     public Headquarters() {
     }
@@ -124,12 +116,30 @@ public class Headquarters implements Serializable {
         this.y = y;
     }
 
+    @XmlTransient
+    public Collection<Jrv> getJrvCollection() {
+        return jrvCollection;
+    }
+
+    public void setJrvCollection(Collection<Jrv> jrvCollection) {
+        this.jrvCollection = jrvCollection;
+    }
+
     public Cities getCityId() {
         return cityId;
     }
 
     public void setCityId(Cities cityId) {
         this.cityId = cityId;
+    }
+
+    @XmlTransient
+    public Collection<Citizens> getCitizensCollection() {
+        return citizensCollection;
+    }
+
+    public void setCitizensCollection(Collection<Citizens> citizensCollection) {
+        this.citizensCollection = citizensCollection;
     }
 
     @Override
@@ -157,31 +167,7 @@ public class Headquarters implements Serializable {
         return "sv.edu.udb.www.Entities.Headquarters[ id=" + id + " ]";
     }
 
-    @XmlTransient
-    public Collection<Citizens> getCitizenCollection() {
-        return citizenCollection;
+    public boolean use(){
+        return (this.citizensCollection == null || this.citizensCollection.isEmpty()) && ( this.jrvCollection == null || this.jrvCollection.isEmpty());
     }
-
-    public void setCitizenCollection(Collection<Citizens> citizenCollection) {
-        this.citizenCollection = citizenCollection;
-    }
-
-    @XmlTransient
-    public Collection<Jrv> getJrvCollection() {
-        return jrvCollection;
-    }
-
-    public void setJrvCollection(Collection<Jrv> jrvCollection) {
-        this.jrvCollection = jrvCollection;
-    }
-
-    @XmlTransient
-    public Collection<Citizens> getCitizensCollection() {
-        return citizensCollection;
-    }
-
-    public void setCitizensCollection(Collection<Citizens> citizensCollection) {
-        this.citizensCollection = citizensCollection;
-    }
-    
 }

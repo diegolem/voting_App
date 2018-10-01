@@ -52,6 +52,32 @@ public class DepartmentsModel {
             return null;
         }
     }
+    
+    public boolean existDepartmentByName(Departments departament){
+        try{
+            Query query = em.createNamedQuery("Departments.findByName");
+            query.setParameter("name", departament.getName());
+            
+            List<Departments> departaments = query.getResultList();
+            
+            if(departaments.size() > 0){
+                
+                Departments first = departaments.get(0);
+                
+                departament.setId(first.getId());
+                departament.setCitiesAdminsCollection(first.getCitiesAdminsCollection());
+                departament.setCitiesCollection(first.getCitiesCollection());
+                
+                return true;
+            }
+            
+            return false;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
     public boolean editDepartment(Departments department){
         try{
             Departments enti = em.find(Departments.class, department.getId());

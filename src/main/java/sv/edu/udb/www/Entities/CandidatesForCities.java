@@ -6,18 +6,17 @@
 package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import sv.edu.udb.www.Entities.Candidates;
 import sv.edu.udb.www.Entities.Cities;
@@ -30,8 +29,6 @@ import sv.edu.udb.www.Entities.ElectoralProcess;
 @Entity
 @Table(name = "candidates_for_cities")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
     @NamedQuery(name = "CandidatesForCities.findAll", query = "SELECT c FROM CandidatesForCities c")
     , @NamedQuery(name = "CandidatesForCities.findById", query = "SELECT c FROM CandidatesForCities c WHERE c.id = :id")})
@@ -39,8 +36,8 @@ public class CandidatesForCities implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @JoinColumn(name = "candidate_id", referencedColumnName = "id")
@@ -53,12 +50,12 @@ public class CandidatesForCities implements Serializable {
     @ManyToOne(optional = false)
     private ElectoralProcess electoralProcessId;
 
-    public void defaultCandidate(){
+    public void defaultCandidate() {
         this.setCandidateId(new Candidates());
         this.setCityId(new Cities());
         this.setElectoralProcessId(new ElectoralProcess());
     }
-    
+
     public CandidatesForCities() {
         defaultCandidate();
     }
@@ -124,5 +121,5 @@ public class CandidatesForCities implements Serializable {
     public String toString() {
         return "sv.edu.udb.www.Entities.CandidatesForCities[ id=" + id + " ]";
     }
-    
+
 }

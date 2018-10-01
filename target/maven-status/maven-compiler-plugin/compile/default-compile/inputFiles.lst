@@ -2,6 +2,7 @@ C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\
 C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\Model\ElectoralProcessTypesModel.java
 C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\Model\CandidatesForCitiesModel.java
 C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\Entities\CitizenVotes.java
+C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\Entities\Sequence.java
 C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\managed_beans\PoliticGroupBean.java
 C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\Model\JrvCitizenModel.java
 C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\managed_beans\CandidatesBean.java
@@ -34,6 +35,7 @@ C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\
 C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\Model\CandidatesModel.java
 C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\Model\JrvModel.java
 C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\Fechas.java
+C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\managed_beans\CandidateForCities.java
 C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\Entities\CandidatesForCities.java
 C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\Entities\CitiesAdmins.java
 C:\Users\pc\Documents\UDB\PILET\Ciclo 4\Periodo 2\POO2\voting_App\src\main\java\sv\edu\udb\www\Entities\JrvCitizenTypes.java

@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Type Jrv
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="frm">
+
+                    <div class="x_content">
+                        <h:panelGroup id="sedesRows">
+                            <div class="table-responsive">
+                                <table id="tblInformation" class="table table-striped jambo_table">
+                                    <thead>
+                                        <tr class="headings">
+                                            <th>Noombre</th>
+                                            <th class="column-title">Descripcion</th>
+                                            <th class="column-title">Opciones</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <p:repeat value="#{ jrvCitizenTypesBean.listUnique() }" var="type">
+
+                                            <tr class="even pointer">
+                                                <td class="a-center ">#{ type.name }</td>
+                                                <td class=" ">#{ type.description }</td>
+                                                <td class=" last">
+
+                                                    <h:outputLabel rendered="#{ !type.canDelete() }" value="Posee datos vinculados al tipo de junta" />
+
+                                                    <h:commandLink onclick="$('#mdlEdit').modal('show');" style="font-size: 1.3em" >
+                                                        <i class="fa fa-edit"></i>
+                                                        <p:ajax event="click" update=":frm:pnlEdit" listener="#{ jrvCitizenTypesBean.selectTypeJrv(type.id) }" />
+                                                    </h:commandLink>
+
+                                                    <h:commandLink onclick="$('#mdlDelete').modal('show');" rendered="#{ type.canDelete() }" style="font-size: 1.3em" >
+                                                        <i class="fa fa-eraser"></i>
+                                                        <p:ajax event="click" update=":frm:pnlDelete" listener="#{ jrvCitizenTypesBean.selectTypeJrv(type.id) }" />
+                                                    </h:commandLink>
+
+                                                </td>
+                                            </tr>
+
+                                        </p:repeat>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h:outputScript rendered="#{ flash.error.length() gt 0 }" >
+                                alertify.error('#{ flash.error }');
+                            </h:outputScript>
+
+                            <h:outputScript rendered="#{ flash.exito.length() gt 0 }" >
+                                alertify.success('#{ flash.exito }');
+                            </h:outputScript>
+
+                            <div id="mdlEdit" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <h:panelGroup id="pnlEdit" >
+                                            <!-- dialog body -->
+                                            <div class="modal-body bg-primary text-info">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                Tipo: #{ jrvCitizenTypesBean.type.name }
+                                            </div>
+                                            <!-- dialog buttons -->
+                                            <div class="modal-footer">
+
+                                                <h:inputHidden id="idEdit" value="#{ jrvCitizenTypesBean.type.id }" />
+
+                                                <div class="form-horizontal form-label-left data-parsley-validate">
+                                                    <div class="form-group">
+                                                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="name" value="Name"> <span class="required">*</span></h:outputLabel>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <h:inputText id="nameEdit" requiredMessage="El Codigo es requerido" value="#{ jrvCitizenTypesBean.type.name }" required="true" class="form-control col-md-7 col-xs-12" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="desc" value="Descripcion"> <span class="required">*</span></h:outputLabel>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <h:inputText id="descEdit" requiredMessage="La descripcion es requerida" value="#{ jrvCitizenTypesBean.type.description }" required="true" class="form-control col-md-7 col-xs-12" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <h:commandButton onclick="$('#mdlEdit').modal('hide');" class="btn btn-danger" style="font-size: 1.3em" value="Actualizar" >
+                                                    <f:ajax render="@form" listener="#{ jrvCitizenTypesBean.update() }" />
+                                                </h:commandButton>
+                                            </div>
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="mdlDelete" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <h:panelGroup id="pnlDelete" >
+                                            <!-- dialog body -->
+                                            <div class="modal-body bg-primary text-info">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                ¿Esta seguro que desea eliminarel tipo de junta #{ jrvCitizenTypesBean.type.name }?
+                                            </div>
+                                            <!-- dialog buttons -->
+                                            <div class="modal-footer">
+
+                                                <h:inputHidden id="idDelete" value="#{ jrvCitizenTypesBean.type.id }" />
+
+                                                <h:commandButton onclick="$('#mdlDelete').modal('hide');" class="btn btn-danger" style="font-size: 1.3em" value="Eliminar" >
+                                                    <f:ajax render="@form" listener="#{ jrvCitizenTypesBean.delete() }" />
+                                                </h:commandButton>
+                                            </div>
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                                $('#tblInformation').DataTable();
+                            </script>
+                        </h:panelGroup>
+                    </div>
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

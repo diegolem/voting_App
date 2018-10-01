@@ -36,8 +36,8 @@ public class CitiesModel {
     }
     public List<Cities> listCitiesforDepartment(int id){
         try{
-            Query query = em.createQuery("SELECT c FROM Cities c WHERE c.deparmentId = :id");
-            query.setParameter("id", id);
+            Query query = em.createQuery("SELECT c FROM Cities c WHERE c.deparmentId.id = :ids");
+            query.setParameter("ids", id);
             return query.getResultList();
         }catch(Exception ex){
             return null;
@@ -55,6 +55,33 @@ public class CitiesModel {
             return null;
         }
     }
+    public boolean existCitiesByNameWithDepartment(Cities city){
+        try{
+            
+            Query query = em.createNamedQuery("Cities.findByNameAndDepartament");
+            query.setParameter("name", city.getName());
+            query.setParameter("id", city.getDeparmentId().getId());
+            
+            List<Cities> cities = query.getResultList();
+            
+            if(cities.size() > 0){
+                Cities first = cities.get(0);
+                
+                city.setId(first.getId());
+                city.setDeparmentId(first.getDeparmentId());
+                city.setHeadquartersCollection(first.getHeadquartersCollection());
+                city.setCandidatesForCitiesCollection(first.getCandidatesForCitiesCollection());
+                
+                return true;
+            }
+            
+            return false;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
     public boolean editCities(Cities city){
         try{
             Cities enti = em.find(Cities.class, city.getId());

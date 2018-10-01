@@ -25,10 +25,10 @@ public class HeadquartersModel {
         Query query = em.createQuery("SELECT h FROM Headquarters h");
         return query.getResultList();
     }
-    public List<Headquarters> listHeadquartersForCity(int idCity){
+    public List<Headquarters> listHeadquartersForCity(int id){
         try{
-            Query query = em.createQuery("SELECT h FROM Headquarters h WHERE h.cityId = :id_city");
-            query.setParameter("id_city", idCity);
+            Query query = em.createQuery("SELECT h FROM Headquarters h WHERE h.cityId.id = :id");
+            query.setParameter("id", id);
             return query.getResultList();
         }catch(Exception ex){
             return null;
@@ -52,6 +52,33 @@ public class HeadquartersModel {
             return null;
         }catch(Exception e){
             return null;
+        }
+    }
+    public boolean existDeadquarterWithCity(Headquarters headquarter){
+        try{
+            Query query = em.createNamedQuery("Headquarters.findByNameWithCityId");
+            query.setParameter("name", headquarter.getName());
+            query.setParameter("id", headquarter.getCityId().getId());
+            
+            List<Headquarters> headquarters = query.getResultList();
+            
+            if(headquarters.size() > 0){
+                Headquarters first = headquarters.get(0);
+                
+                headquarter.setId(first.getId());
+                headquarter.setCityId(first.getCityId());
+                headquarter.setJrvCollection(first.getJrvCollection());
+                headquarter.setName(first.getName());
+                headquarter.setX(first.getX());
+                headquarter.setY(first.getY());
+                
+                return true;
+            }
+            
+            return false;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
         }
     }
     public boolean editHeadquarter(Headquarters headquarter){

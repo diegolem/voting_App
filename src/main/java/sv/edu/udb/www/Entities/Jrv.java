@@ -7,12 +7,12 @@ package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,18 +32,18 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "jrv")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
     @NamedQuery(name = "Jrv.findAll", query = "SELECT j FROM Jrv j")
+    , @NamedQuery(name = "Jrv.existByCode", query = "SELECT count(j) FROM Jrv j where j.code = :code")
+    , @NamedQuery(name = "Jrv.existByAnotherCode", query = "SELECT count(j) FROM Jrv j where j.code = :code AND j.id != :id")
     , @NamedQuery(name = "Jrv.findById", query = "SELECT j FROM Jrv j WHERE j.id = :id")
     , @NamedQuery(name = "Jrv.findByCode", query = "SELECT j FROM Jrv j WHERE j.code = :code")})
 public class Jrv implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -64,7 +64,13 @@ public class Jrv implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "jrvId")
     private Collection<JrvCitizen> jrvCitizenCollection;
 
+    private void defaultJrv() {
+        this.electoralProcessId = new ElectoralProcess();
+        this.headquarterId = new Headquarters();
+    }
+
     public Jrv() {
+        defaultJrv();
     }
 
     public Jrv(Integer id) {
@@ -159,5 +165,8 @@ public class Jrv implements Serializable {
     public String toString() {
         return "sv.edu.udb.www.Entities.Jrv[ id=" + id + " ]";
     }
-    
+
+    public boolean canDelete(){
+        return (this.politicGroupVotesCollection == null  || this.politicGroupVotesCollection.isEmpty() ) && (this.jrvCitizenCollection == null || this.jrvCitizenCollection.isEmpty()) && (this.citizenVotesCollection == null || this.citizenVotesCollection.isEmpty());
+    }
 }

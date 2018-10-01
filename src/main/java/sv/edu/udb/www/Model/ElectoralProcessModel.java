@@ -30,6 +30,17 @@ public class ElectoralProcessModel {
         Query query = em.createNamedQuery("ElectoralProcess.findAllByEndDateNow");
         return query.getResultList();
     }
+    
+    public List<ElectoralProcess> listElectoralProcessByEndDateDepartamental(){
+        Query query = em.createNamedQuery("ElectoralProcess.findAllByEndDateNowDepartament");
+        return query.getResultList();
+    }
+    
+    public List<ElectoralProcess> listElectoralProcessByEndDatePresidential(){
+        Query query = em.createNamedQuery("ElectoralProcess.findAllByEndDateNowPresidential");
+        return query.getResultList();
+    }
+    
     public boolean insertElectoralProcess(ElectoralProcess electoralpro){
         try{
             em.persist(electoralpro);
@@ -76,6 +87,7 @@ public class ElectoralProcessModel {
             }
             return false;
         }catch(Exception e){
+            e.printStackTrace();
             return false;
         }
     }

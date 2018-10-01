@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Procesos
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="frm">
+
+                    <h:inputHidden id="idCandidate" value="#{ candidatesBean.idCandidate }" />
+                    <h:inputHidden id="idCandidatesForCities" value="#{ candidatesBean.candidatesForCities.id }" />
+
+                    <div class="row" style="margin-bottom: 1em;">
+
+                        <div class="col-sm-12 col-md-6">
+                            <h:selectOneMenu id="politicGroup" value="#{ candidatesBean.idPoliticGroup }" class="form-control" >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione algun partido" />
+                                <f:selectItems value="#{ politicGroupBean.allPositicGroupWithCandidates() }" var="politicGroup" itemValue="#{ politicGroup.id }" itemLabel="#{ politicGroup.name } [#{ politicGroup.acronym }] " />
+                                <p:ajax event="change" update="candidatesRows" />
+                            </h:selectOneMenu>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Candidatos <small>Segun partidos politicos</small></h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content">
+                                <h:panelGroup id="candidatesRows">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped jambo_table">
+                                            <thead>
+                                                <tr class="headings">
+                                                    <th>
+                                                        ID
+                                                    </th>
+                                                    <th class="column-title">Nombre</th>
+                                                    <th class="column-title">Apellido</th>
+                                                    <th class="column-title">Dui</th>
+                                                    <th class="column-title">Direccion</th>
+                                                    <th class="column-title">Proceso activo</th>
+                                                    <th class="column-title">Opciones</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <p:repeat value="#{ candidatesBean.allCandidatesForGroupIdWithProccess() }" var="candidate">
+
+                                                    <tr class="even pointer">
+                                                        <td class="a-center ">
+                                                            #{ candidate.id }
+                                                        </td>
+                                                        <td class=" ">#{ candidate.citizenId.name }</td>
+                                                        <td class=" ">#{ candidate.citizenId.lastname }</td>
+                                                        <td class=" ">#{ candidate.citizenId.dui }</td>
+                                                        <td class=" ">#{ candidate.citizenId.adress }</td>
+                                                        <td class=" ">
+
+                                                            <h:outputLabel value="El candidato se encuentra en proceso presidencial" rendered="#{ candidate.hasPresidencialCandidatesActive() }" />
+                                                            <h:outputLabel value="#{ candidate.electoralProcessActive.electoralProcessId.name }" rendered="#{ candidate.hasElectoralProcessActive() }" />
+                                                            <h:outputLabel value="No posee ningun proceso electoral activo" rendered="#{ candidate.notHasPresidencialCandidatesActive() }" />
+
+                                                        </td>
+                                                        <td class=" last">
+                                                            <h:commandLink rendered="#{ candidate.notHasPresidencialCandidatesActive() }" style="font-size: 1.5em;" onclick="$('#mdlAddEdit').modal('show');" >
+                                                                <i class="fa fa-plus-circle"></i>
+                                                                <p:ajax update=":frm:pnlModals :frm:idCandidate :frm:idCandidatesForCities" listener="#{ candidatesBean.addCandidateProcessForId(candidate.id) }" />
+                                                            </h:commandLink>
+
+                                                            <h:commandLink rendered="#{ candidate.hasElectoralProcessActiveProcess() }" style="font-size: 1.5em;" onclick="$('#mdlAddEdit').modal('show');" >
+                                                                <i class="fa fa-pencil-square-o"></i>
+                                                                <p:ajax update=":frm:pnlModals :frm:idCandidate :frm:idCandidatesForCities" listener="#{ candidatesBean.editCandidateProcessCityForId(candidate.id, candidate.electoralProcessActive.id) }" />
+                                                            </h:commandLink>
+
+                                                            <h:commandLink rendered="#{ candidate.hasElectoralProcessActive() }" style="font-size: 1.5em;" onclick="$('#mdlDelete').modal('show');" >
+                                                                <i class="fa fa-minus-circle"></i>
+                                                                <p:ajax update=":frm:pnlModalsDelete :frm:idCandidate :frm:idCandidatesForCities" listener="#{ candidatesBean.editCandidateProcessCityForId(candidate.id, candidate.electoralProcessActive.id) }" />
+                                                            </h:commandLink>
+
+                                                            <h:commandLink style="font-size: 1.5em;" onclick="$('#mdlHistoy').modal('show');" >
+                                                                <i class="fa fa-history"></i>
+                                                                <p:ajax update=":frm:pnlModalsHystory :frm:idCandidate :frm:idCandidatesForCities" listener="#{ candidatesBean.editCandidateProcessCityForId(candidate.id, candidate.electoralProcessActive.id) }" />
+                                                            </h:commandLink>
+                                                        </td>
+                                                    </tr>
+
+                                                </p:repeat>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </h:panelGroup>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- set up the modal to start hidden and fade in and out -->
+
+                    <div id="mdlAddEdit" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <h:panelGroup id="pnlModals" >
+                                    <!-- dialog body -->
+                                    <div class="modal-body">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        Candidato: #{ candidatesBean.candidates.citizenId.name } #{ candidatesBean.candidates.citizenId.lastname }
+
+                                        <h:selectBooleanCheckbox style="display: none" id="editProcees" value="#{ candidatesBean.editProcees }" />
+
+                                        <div class="row">
+                                            <div class="col">
+                                                <h:selectOneMenu id="process" value="#{ candidatesBean.candidatesForCities.electoralProcessId.id }" class="form-control" >
+                                                    <f:selectItems value="#{ electoralProcessBean.allElectoralProcessByEndDateDepartamental() }" var="process" itemValue="#{ process.id }" itemLabel="#{ process.name}" />
+                                                </h:selectOneMenu>
+                                            </div>
+                                        </div>
+
+                                        <p></p>
+
+                                        <div class="row">
+                                            <div class="col">
+                                                <h:selectOneMenu id="cities" value="#{ candidatesBean.candidatesForCities.cityId.id }" class="form-control" >
+                                                    <f:selectItems value="#{ citiesBean.listCities() }" var="city" itemValue="#{ city.id }" itemLabel="#{ city.name}" />
+                                                </h:selectOneMenu>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <!-- dialog buttons -->
+                                    <div class="modal-footer">
+                                        <h:commandButton type="submit" class="btn btn-primary" value="Establecer proceso" actionListener="#{ candidatesBean.saveCadidateProcessesByCity() }">
+
+                                        </h:commandButton>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mdlDelete" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <h:panelGroup id="pnlModalsDelete" >
+                                    <!-- dialog body -->
+                                    <div class="modal-body">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        ¿Estas seguro que desea retirar el candidato #{ candidatesBean.candidates.citizenId.name } #{ candidatesBean.candidates.citizenId.lastname }?
+                                    </div>
+                                    <!-- dialog buttons -->
+                                    <div class="modal-footer">
+                                        <h:commandButton type="submit" class="btn btn-danger" value="Eliminar proceso" actionListener="#{ candidatesBean.deleteCadidateProcessesByCity() }" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mdlHistoy" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <h:panelGroup id="pnlModalsHystory" >
+                                    <!-- dialog body -->
+                                    <div class="modal-body">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        Historioal del candidato #{ candidatesBean.candidates.citizenId.name } #{ candidatesBean.candidates.citizenId.lastname }:
+
+                                        <ul class="list-group">
+                                            <p:repeat value="#{ candidatesBean.candidates.candidatesForCitiesCollection }" var="candidatesForCity" >
+                                                <li class="list-group-item">
+                                                    <span class="badge">#{ candidatesForCity.electoralProcessId.initDateFormat() }</span>
+                                                    Proceso: #{ candidatesForCity.electoralProcessId.name }
+                                                    Ciudad: #{ candidatesForCity.cityId.name }
+                                                </li>
+                                            </p:repeat>
+                                        </ul>
+
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- sometime later, probably inside your on load event callback -->
+                    <script>
+                        $(".modal").on("show", function () {    // wire up the OK button to dismiss the modal when shown
+                            $(".modal a.btn").on("click", function (e) {
+                                console.log("button pressed");   // just as an example...
+                                $(".modal").modal('hide');     // dismiss the dialog
+                            });
+                        });
+                        $(".modal").on("hide", function () {    // remove the event listeners when the dialog is dismissed
+                            $("#mdlAddEdit a.btn").off("click");
+                        });
+
+                        $(".modal").on("hidden", function () {  // remove the actual elements from the DOM when fully hidden
+                            $("#mdlAddEdit").remove();
+                        });
+
+                        $(".modal").modal({// wire up the actual modal functionality and show the dialog
+                            "backdrop": "static",
+                            "keyboard": true,
+                            "show": true                     // ensure the modal is shown immediately
+                        });
+                    </script>
+
+                </h:form>
+            </ui:define>
+
+            <ui:define name="body_scripts">
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

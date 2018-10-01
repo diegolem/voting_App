@@ -116,7 +116,7 @@ public class LoginFilter implements Filter {
         
         String url = req.getRequestURI(); // URL actual
         
-        if (url.contains(".xhtml")) {
+        if (url.contains(".xhtml") || url.contains(".jasper") || url.contains(".pdf")) {
             // Si no ha iniciado session o no esta logeado
             if (auth == null || !auth.isLogged()) {
                 if (!url.contains("login.xhtml")) // En caso que no vaya al login

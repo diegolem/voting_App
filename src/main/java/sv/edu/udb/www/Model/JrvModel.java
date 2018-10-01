@@ -5,9 +5,14 @@
  */
 package sv.edu.udb.www.Model;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import sv.edu.udb.www.Entities.Jrv;
@@ -18,59 +23,108 @@ import sv.edu.udb.www.Entities.Jrv;
  */
 @Stateless
 public class JrvModel {
+
     @PersistenceContext(unitName = "voting_AppPU")
     private EntityManager em;
-    
-    public List<Jrv> listJrvs(){
+
+    public List<Jrv> listJrvs() {
         Query query = em.createQuery("SELECT j FROM Jrv j");
         return query.getResultList();
     }
-    public boolean insertJrv(Jrv jrv){
-        try{
+
+    public boolean insertJrv(Jrv jrv) {
+        try {
             em.persist(jrv);
             em.flush();
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
-    public Jrv getJrv(int id){
-        try{
+
+    public Jrv getJrv(int id) {
+        try {
             Jrv enti = em.find(Jrv.class, id);
-            if(enti != null){
+            if (enti != null) {
                 return enti;
             }
             return null;
-        }catch(Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
-    public boolean editJrv(Jrv jrvcity){
-        try{
+
+    public boolean existByCode(Jrv jrv) {
+        try {
+
+            Query query = em.createNamedQuery("Jrv.existByCode");
+            query.setParameter("code", jrv.getCode());
+
+            long count = (long) query.getSingleResult();
+
+            return count > 0;
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean existByAnotherCode(Jrv jrv) {
+        try {
+
+            Query query = em.createNamedQuery("Jrv.existByAnotherCode");
+            query.setParameter("code", jrv.getCode());
+            query.setParameter("id", jrv.getId());
+
+            long count = (long) query.getSingleResult();
+
+            return count > 0;
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean editJrv(Jrv jrvcity) {
+        try {
             Jrv enti = em.find(Jrv.class, jrvcity.getId());
-            if(enti != null){
+            if (enti != null) {
                 enti = jrvcity;
                 em.merge(enti);
                 em.flush();
                 return true;
             }
             return false;
-        }catch(Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
-    public boolean deleteJrv(int id){
-        try{
+
+    public boolean deleteJrv(int id) {
+        try {
             Jrv enti = em.find(Jrv.class, id);
-            if(enti != null){
+            if (enti != null) {
                 em.remove(enti);
                 em.flush();
                 return true;
             }
             return false;
-        }catch(Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
+    }
+
+    public java.sql.Connection conection() {
+        String PERSISTENCE_UNIT_NAME = "voting_AppPU";
+
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+        EntityManager em = factory.createEntityManager();
+        java.sql.Connection conn = (java.sql.Connection) em.unwrap(java.sql.Connection.class);
+        return conn;
     }
 
 }

@@ -7,6 +7,8 @@ package sv.edu.udb.www.Model;
 
 import javax.ejb.Stateless;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -24,6 +26,17 @@ public class CitizenModel {
         Query query = em.createQuery("SELECT c FROM Citizens c");
         return query.getResultList();
     }
+    public List<Citizens> listCitizenNormal(String id){
+        Query query = em.createQuery("SELECT c FROM Citizens c WHERE c.citizenTypeId.id = :id AND c.state = 1");
+        query.setParameter("id", id);
+        return query.getResultList();
+    }
+    public List<Citizens> listCitizenByDepartament(int idDept){
+        Query query = em.createNamedQuery("Citizens.findAllByDepartament");
+        query.setParameter("id", idDept);
+        return query.getResultList();
+    }
+    
     public boolean insertCitizen(Citizens citizen){
         try{
             em.persist(citizen);
@@ -32,6 +45,7 @@ public class CitizenModel {
             return true;
         }catch(Exception e){
             e.printStackTrace();
+            Logger.getLogger(CitizenModel.class.getName()).log(Level.SEVERE, null, e);
             return false;
         }
     }
@@ -61,6 +75,7 @@ public class CitizenModel {
             citizen.setDui(origin.getDui());
             citizen.setId(origin.getId());
             citizen.setPassword(citizen.getPassword());
+            citizen.setState(origin.getState());
             
             citizen.setCandidatesCollection(origin.getCandidatesCollection());
             citizen.setCitiesAdminsCollection(origin.getCitiesAdminsCollection());
@@ -70,10 +85,27 @@ public class CitizenModel {
             citizen.setJrvCitizenCollection(origin.getJrvCitizenCollection());
             
         } catch(Exception error){
-            System.out.println("Error: " + error.getMessage());
+            System.out.println("Error conexion: " + error.getMessage());
         }
     }
     public boolean editCitizen(Citizens citizen){
+        try{
+            Citizens enti = em.find(Citizens.class, citizen.getId());
+            if(enti != null){
+                enti = citizen;
+                em.merge(enti);
+                em.flush();
+                System.out.println("se realizo los cambios");
+                return true;
+            }
+            System.out.println("no se realizo los cambios");
+            return false;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean enableCitizen(Citizens citizen){
         try{
             Citizens enti = em.find(Citizens.class, citizen.getId());
             if(enti != null){
@@ -84,20 +116,15 @@ public class CitizenModel {
             }
             return false;
         }catch(Exception e){
-            e.printStackTrace();
             return false;
         }
     }
-    public boolean deleteCitizen(int id){
-        try{
-            Citizens enti = em.find(Citizens.class, id);
-            if(enti != null){
-                em.remove(enti);
-                em.flush();
-                return true;
-            }
-            return false;
-        }catch(Exception e){
+    public boolean existsDui (Citizens citizen){
+        try {
+            Query query = em.createQuery("SELECT count(c) FROM Citizens c WHERE c.dui = :dui");
+            query.setParameter("dui", citizen.getDui());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
             return false;
         }
     }

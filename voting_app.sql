@@ -18,8 +18,9 @@
 --
 -- Table structure for table `candidates`
 --
-drop database if exists voting_app;
-create DATABASE voting_app;
+
+Drop DATABASE IF EXISTS voting_app;
+create database voting_app;
 
 use voting_app;
 
@@ -56,7 +57,7 @@ DROP TABLE IF EXISTS `candidates_for_cities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `candidates_for_cities` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `candidate_id` int(11) NOT NULL,
   `electoral_process_id` int(11) NOT NULL,
   `city_id` int(11) NOT NULL,
@@ -87,13 +88,13 @@ DROP TABLE IF EXISTS `cities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cities` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `deparment_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `department_city_idx` (`deparment_id`),
   CONSTRAINT `department_city` FOREIGN KEY (`deparment_id`) REFERENCES `departments` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=263 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +103,7 @@ CREATE TABLE `cities` (
 
 LOCK TABLES `cities` WRITE;
 /*!40000 ALTER TABLE `cities` DISABLE KEYS */;
-INSERT INTO `cities` VALUES (1,'Ahuachap√°n',1),(2,'Jujutla',1),(3,'Atiquizaya',1),(4,'Concepci√≥n de Ataco',1),(5,'El Refugio',1),(6,'Guaymango',1),(7,'Apaneca',1),(8,'San Francisco Men√©ndez',1),(9,'San Lorenzo',1),(10,'San Pedro Puxtla',1),(11,'Tacuba',1),(12,'Tur√≠n',1),(13,'Candelaria de la Frontera',2),(14,'Chalchuapa',2),(15,'Coatepeque',2),(16,'El Congo',2),(17,'El Porvenir',2),(18,'Masahuat',2),(19,'Metap√°n',2),(20,'San Antonio Pajonal',2),(21,'San Sebasti√°n Salitrillo',2),(22,'Santa Ana',2),(23,'Santa Rosa Guachipil√≠n',2),(24,'Santiago de la Frontera',2),(25,'Texistepeque',2),(26,'Acajutla',3),(27,'Armenia',3),(28,'Caluco',3),(29,'Cuisnahuat',3),(30,'Izalco',3),(31,'Juay√∫a',3),(32,'Nahuizalco',3),(33,'Nahulingo',3),(34,'Salcoatit√°n',3),(35,'San Antonio del Monte',3),(36,'San Juli√°n',3),(37,'Santa Catarina Masahuat',3),(38,'Santa Isabel Ishuat√°n',3),(39,'Santo Domingo de Guzm√°n',3),(40,'Sonsonate',3),(41,'Sonzacate',3),(42,'Alegr√≠a',11),(43,'Berl√≠n',11),(44,'California',11),(45,'Concepci√≥n Batres',11),(46,'El Triunfo',11),(47,'Ereguayqu√≠n',11),(48,'Estanzuelas',11),(49,'Jiquilisco',11),(50,'Jucuapa',11),(51,'Jucuar√°n',11),(52,'Mercedes Uma√±a',11),(53,'Nueva Granada',11),(54,'Ozatl√°n',11),(55,'Puerto El Triunfo',11),(56,'San Agust√≠n',11),(57,'San Buenaventura',11),(58,'San Dionisio',11),(59,'San Francisco Javier',11),(60,'Santa Elena',11),(61,'Santa Mar√≠a',11),(62,'Santiago de Mar√≠a',11),(63,'Tecap√°n',11),(64,'Usulut√°n',11),(65,'Carolina',13),(66,'Chapeltique',13),(67,'Chinameca',13),(68,'Chirilagua',13),(69,'Ciudad Barrios',13),(70,'Comacar√°n',13),(71,'El Tr√°nsito',13),(72,'Lolotique',13),(73,'Moncagua',13),(74,'Nueva Guadalupe',13),(75,'Nuevo Ed√©n de San Juan',13),(76,'Quelepa',13),(77,'San Antonio del Mosco',13),(78,'San Gerardo',13),(79,'San Jorge',13),(80,'San Luis de la Reina',13),(81,'San Miguel',13),(82,'San Rafael Oriente',13),(83,'Sesori',13),(84,'Uluazapa',13),(85,'Arambala',12),(86,'Cacaopera',12),(87,'Chilanga',12),(88,'Corinto',12),(89,'Delicias de Concepci√≥n',12),(90,'El Divisadero',12),(91,'El Rosario (Moraz√°n)',12),(92,'Gualococti',12),(93,'Guatajiagua',12),(94,'Joateca',12),(95,'Jocoaitique',12),(96,'Jocoro',12),(97,'Lolotiquillo',12),(98,'Meanguera',12),(99,'Osicala',12),(100,'Perqu√≠n',12),(101,'San Carlos',12),(102,'San Fernando (Moraz√°n)',12),(103,'San Francisco Gotera',12),(104,'San Isidro (Moraz√°n)',12),(105,'San Sim√≥n',12),(106,'Sensembra',12),(107,'Sociedad',12),(108,'Torola',12),(109,'Yamabal',12),(110,'Yoloaiqu√≠n',12),(111,'La Uni√≥n',14),(112,'San Alejo',14),(113,'Yucuaiqu√≠n',14),(114,'Conchagua',14),(115,'Intipuc√°',14),(116,'San Jos√©',14),(117,'El Carmen (La Uni√≥n)',14),(118,'Yayantique',14),(119,'Bol√≠var',14),(120,'Meanguera del Golfo',14),(121,'Santa Rosa de Lima',14),(122,'Pasaquina',14),(123,'Anamoros',14),(124,'Nueva Esparta',14),(125,'El Sauce',14),(126,'Concepci√≥n de Oriente',14),(127,'Polor√≥s',14),(128,'Lislique',14),(129,'Antiguo Cuscatl√°n',4),(130,'Chiltiup√°n',4),(131,'Ciudad Arce',4),(132,'Col√≥n',4),(133,'Comasagua',4),(134,'Huiz√∫car',4),(135,'Jayaque',4),(136,'Jicalapa',4),(137,'La Libertad',4),(138,'Santa Tecla',4),(139,'Nuevo Cuscatl√°n',4),(140,'San Juan Opico',4),(141,'Quezaltepeque',4),(142,'Sacacoyo',4),(143,'San Jos√© Villanueva',4),(144,'San Mat√≠as',4),(145,'San Pablo Tacachico',4),(146,'Talnique',4),(147,'Tamanique',4),(148,'Teotepeque',4),(149,'Tepecoyo',4),(150,'Zaragoza',4),(151,'Agua Caliente',5),(152,'Arcatao',5),(153,'Azacualpa',5),(154,'Cancasque',5),(155,'Chalatenango',5),(156,'Cital√°',5),(157,'Comapala',5),(158,'Concepci√≥n Quezaltepeque',5),(159,'Dulce Nombre de Mar√≠a',5),(160,'El Carrizal',5),(161,'El Para√≠so',5),(162,'La Laguna',5),(163,'La Palma',5),(164,'La Reina',5),(165,'Las Vueltas',5),(166,'Nueva Concepci√≥n',5),(167,'Nueva Trinidad',5),(168,'Nombre de Jes√∫s',5),(169,'Ojos de Agua',5),(170,'Potonico',5),(171,'San Antonio de la Cruz',5),(172,'San Antonio Los Ranchos',5),(173,'San Fernando (Chalatenango)',5),(174,'San Francisco Lempa',5),(175,'San Francisco Moraz√°n',5),(176,'San Ignacio',5),(177,'San Isidro Labrador',5),(178,'Las Flores',5),(179,'San Luis del Carmen',5),(180,'San Miguel de Mercedes',5),(181,'San Rafael',5),(182,'Santa Rita',5),(183,'Tejutla',5),(184,'Cojutepeque',7),(185,'Candelaria',7),(186,'El Carmen (Cuscatl√°n)',7),(187,'El Rosario (Cuscatl√°n)',7),(188,'Monte San Juan',7),(189,'Oratorio de Concepci√≥n',7),(190,'San Bartolom√© Perulap√≠a',7),(191,'San Crist√≥bal',7),(192,'San Jos√© Guayabal',7),(193,'San Pedro Perulap√°n',7),(194,'San Rafael Cedros',7),(195,'San Ram√≥n',7),(196,'Santa Cruz Analquito',7),(197,'Santa Cruz Michapa',7),(198,'Suchitoto',7),(199,'Tenancingo',7),(200,'Aguilares',6),(201,'Apopa',6),(202,'Ayutuxtepeque',6),(203,'Cuscatancingo',6),(204,'Ciudad Delgado',6),(205,'El Paisnal',6),(206,'Guazapa',6),(207,'Ilopango',6),(208,'Mejicanos',6),(209,'Nejapa',6),(210,'Panchimalco',6),(211,'Rosario de Mora',6),(212,'San Marcos',6),(213,'San Mart√≠n',6),(214,'San Salvador',6),(215,'Santiago Texacuangos',6),(216,'Santo Tom√°s',6),(217,'Soyapango',6),(218,'Tonacatepeque',6),(219,'Zacatecoluca',8),(220,'Cuyultit√°n',8),(221,'El Rosario (La Paz)',8),(222,'Jerusal√©n',8),(223,'Mercedes La Ceiba',8),(224,'Olocuilta',8),(225,'Para√≠so de Osorio',8),(226,'San Antonio Masahuat',8),(227,'San Emigdio',8),(228,'San Francisco Chinameca',8),(229,'San Pedro Masahuat',8),(230,'San Juan Nonualco',8),(231,'San Juan Talpa',8),(232,'San Juan Tepezontes',8),(233,'San Luis La Herradura',8),(234,'San Luis Talpa',8),(235,'San Miguel Tepezontes',8),(236,'San Pedro Nonualco',8),(237,'San Rafael Obrajuelo',8),(238,'Santa Mar√≠a Ostuma',8),(239,'Santiago Nonualco',8),(240,'Tapalhuaca',8),(241,'Cinquera',9),(242,'Dolores',9),(243,'Guacotecti',9),(244,'Ilobasco',9),(245,'Jutiapa',9),(246,'San Isidro (Caba√±as)',9),(247,'Sensuntepeque',9),(248,'Tejutepeque',9),(249,'Victoria',9),(250,'Apastepeque',10),(251,'Guadalupe',10),(252,'San Cayetano Istepeque',10),(253,'San Esteban Catarina',10),(254,'San Ildefonso',10),(255,'San Lorenzo',10),(256,'San Sebasti√°n',10),(257,'San Vicente',10),(258,'Santa Clara',10),(259,'Santo Domingo',10),(260,'Tecoluca',10),(261,'Tepetit√°n',10),(262,'Verapaz',10);
+INSERT INTO `cities` VALUES (1,'Ahuachap·n',1),(2,'Jujutla',1),(3,'Atiquizaya',1),(4,'ConcepciÛn de Ataco',1),(5,'El Refugio',1),(6,'Guaymango',1),(7,'Apaneca',1),(8,'San Francisco MenÈndez',1),(9,'San Lorenzo',1),(10,'San Pedro Puxtla',1),(11,'Tacuba',1),(12,'TurÌn',1),(13,'Candelaria de la Frontera',2),(14,'Chalchuapa',2),(15,'Coatepeque',2),(16,'El Congo',2),(17,'El Porvenir',2),(18,'Masahuat',2),(19,'Metap·n',2),(20,'San Antonio Pajonal',2),(21,'San Sebasti·n Salitrillo',2),(22,'Santa Ana',2),(23,'Santa Rosa GuachipilÌn',2),(24,'Santiago de la Frontera',2),(25,'Texistepeque',2),(26,'Acajutla',3),(27,'Armenia',3),(28,'Caluco',3),(29,'Cuisnahuat',3),(30,'Izalco',3),(31,'Juay˙a',3),(32,'Nahuizalco',3),(33,'Nahulingo',3),(34,'Salcoatit·n',3),(35,'San Antonio del Monte',3),(36,'San Juli·n',3),(37,'Santa Catarina Masahuat',3),(38,'Santa Isabel Ishuat·n',3),(39,'Santo Domingo de Guzm·n',3),(40,'Sonsonate',3),(41,'Sonzacate',3),(42,'AlegrÌa',11),(43,'BerlÌn',11),(44,'California',11),(45,'ConcepciÛn Batres',11),(46,'El Triunfo',11),(47,'EreguayquÌn',11),(48,'Estanzuelas',11),(49,'Jiquilisco',11),(50,'Jucuapa',11),(51,'Jucuar·n',11),(52,'Mercedes UmaÒa',11),(53,'Nueva Granada',11),(54,'Ozatl·n',11),(55,'Puerto El Triunfo',11),(56,'San AgustÌn',11),(57,'San Buenaventura',11),(58,'San Dionisio',11),(59,'San Francisco Javier',11),(60,'Santa Elena',11),(61,'Santa MarÌa',11),(62,'Santiago de MarÌa',11),(63,'Tecap·n',11),(64,'Usulut·n',11),(65,'Carolina',13),(66,'Chapeltique',13),(67,'Chinameca',13),(68,'Chirilagua',13),(69,'Ciudad Barrios',13),(70,'Comacar·n',13),(71,'El Tr·nsito',13),(72,'Lolotique',13),(73,'Moncagua',13),(74,'Nueva Guadalupe',13),(75,'Nuevo EdÈn de San Juan',13),(76,'Quelepa',13),(77,'San Antonio del Mosco',13),(78,'San Gerardo',13),(79,'San Jorge',13),(80,'San Luis de la Reina',13),(81,'San Miguel',13),(82,'San Rafael Oriente',13),(83,'Sesori',13),(84,'Uluazapa',13),(85,'Arambala',12),(86,'Cacaopera',12),(87,'Chilanga',12),(88,'Corinto',12),(89,'Delicias de ConcepciÛn',12),(90,'El Divisadero',12),(91,'El Rosario (Moraz·n)',12),(92,'Gualococti',12),(93,'Guatajiagua',12),(94,'Joateca',12),(95,'Jocoaitique',12),(96,'Jocoro',12),(97,'Lolotiquillo',12),(98,'Meanguera',12),(99,'Osicala',12),(100,'PerquÌn',12),(101,'San Carlos',12),(102,'San Fernando (Moraz·n)',12),(103,'San Francisco Gotera',12),(104,'San Isidro (Moraz·n)',12),(105,'San SimÛn',12),(106,'Sensembra',12),(107,'Sociedad',12),(108,'Torola',12),(109,'Yamabal',12),(110,'YoloaiquÌn',12),(111,'La UniÛn',14),(112,'San Alejo',14),(113,'YucuaiquÌn',14),(114,'Conchagua',14),(115,'Intipuc·',14),(116,'San JosÈ',14),(117,'El Carmen (La UniÛn)',14),(118,'Yayantique',14),(119,'BolÌvar',14),(120,'Meanguera del Golfo',14),(121,'Santa Rosa de Lima',14),(122,'Pasaquina',14),(123,'Anamoros',14),(124,'Nueva Esparta',14),(125,'El Sauce',14),(126,'ConcepciÛn de Oriente',14),(127,'PolorÛs',14),(128,'Lislique',14),(129,'Antiguo Cuscatl·n',4),(130,'Chiltiup·n',4),(131,'Ciudad Arce',4),(132,'ColÛn',4),(133,'Comasagua',4),(134,'Huiz˙car',4),(135,'Jayaque',4),(136,'Jicalapa',4),(137,'La Libertad',4),(138,'Santa Tecla',4),(139,'Nuevo Cuscatl·n',4),(140,'San Juan Opico',4),(141,'Quezaltepeque',4),(142,'Sacacoyo',4),(143,'San JosÈ Villanueva',4),(144,'San MatÌas',4),(145,'San Pablo Tacachico',4),(146,'Talnique',4),(147,'Tamanique',4),(148,'Teotepeque',4),(149,'Tepecoyo',4),(150,'Zaragoza',4),(151,'Agua Caliente',5),(152,'Arcatao',5),(153,'Azacualpa',5),(154,'Cancasque',5),(155,'Chalatenango',5),(156,'Cital·',5),(157,'Comapala',5),(158,'ConcepciÛn Quezaltepeque',5),(159,'Dulce Nombre de MarÌa',5),(160,'El Carrizal',5),(161,'El ParaÌso',5),(162,'La Laguna',5),(163,'La Palma',5),(164,'La Reina',5),(165,'Las Vueltas',5),(166,'Nueva ConcepciÛn',5),(167,'Nueva Trinidad',5),(168,'Nombre de Jes˙s',5),(169,'Ojos de Agua',5),(170,'Potonico',5),(171,'San Antonio de la Cruz',5),(172,'San Antonio Los Ranchos',5),(173,'San Fernando (Chalatenango)',5),(174,'San Francisco Lempa',5),(175,'San Francisco Moraz·n',5),(176,'San Ignacio',5),(177,'San Isidro Labrador',5),(178,'Las Flores',5),(179,'San Luis del Carmen',5),(180,'San Miguel de Mercedes',5),(181,'San Rafael',5),(182,'Santa Rita',5),(183,'Tejutla',5),(184,'Cojutepeque',7),(185,'Candelaria',7),(186,'El Carmen (Cuscatl·n)',7),(187,'El Rosario (Cuscatl·n)',7),(188,'Monte San Juan',7),(189,'Oratorio de ConcepciÛn',7),(190,'San BartolomÈ PerulapÌa',7),(191,'San CristÛbal',7),(192,'San JosÈ Guayabal',7),(193,'San Pedro Perulap·n',7),(194,'San Rafael Cedros',7),(195,'San RamÛn',7),(196,'Santa Cruz Analquito',7),(197,'Santa Cruz Michapa',7),(198,'Suchitoto',7),(199,'Tenancingo',7),(200,'Aguilares',6),(201,'Apopa',6),(202,'Ayutuxtepeque',6),(203,'Cuscatancingo',6),(204,'Ciudad Delgado',6),(205,'El Paisnal',6),(206,'Guazapa',6),(207,'Ilopango',6),(208,'Mejicanos',6),(209,'Nejapa',6),(210,'Panchimalco',6),(211,'Rosario de Mora',6),(212,'San Marcos',6),(213,'San MartÌn',6),(214,'San Salvador',6),(215,'Santiago Texacuangos',6),(216,'Santo Tom·s',6),(217,'Soyapango',6),(218,'Tonacatepeque',6),(219,'Zacatecoluca',8),(220,'Cuyultit·n',8),(221,'El Rosario (La Paz)',8),(222,'JerusalÈn',8),(223,'Mercedes La Ceiba',8),(224,'Olocuilta',8),(225,'ParaÌso de Osorio',8),(226,'San Antonio Masahuat',8),(227,'San Emigdio',8),(228,'San Francisco Chinameca',8),(229,'San Pedro Masahuat',8),(230,'San Juan Nonualco',8),(231,'San Juan Talpa',8),(232,'San Juan Tepezontes',8),(233,'San Luis La Herradura',8),(234,'San Luis Talpa',8),(235,'San Miguel Tepezontes',8),(236,'San Pedro Nonualco',8),(237,'San Rafael Obrajuelo',8),(238,'Santa MarÌa Ostuma',8),(239,'Santiago Nonualco',8),(240,'Tapalhuaca',8),(241,'Cinquera',9),(242,'Dolores',9),(243,'Guacotecti',9),(244,'Ilobasco',9),(245,'Jutiapa',9),(246,'San Isidro (CabaÒas)',9),(247,'Sensuntepeque',9),(248,'Tejutepeque',9),(249,'Victoria',9),(250,'Apastepeque',10),(251,'Guadalupe',10),(252,'San Cayetano Istepeque',10),(253,'San Esteban Catarina',10),(254,'San Ildefonso',10),(255,'San Lorenzo',10),(256,'San Sebasti·n',10),(257,'San Vicente',10),(258,'Santa Clara',10),(259,'Santo Domingo',10),(260,'Tecoluca',10),(261,'Tepetit·n',10),(262,'Verapaz',10);
 /*!40000 ALTER TABLE `cities` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,7 +115,7 @@ DROP TABLE IF EXISTS `cities_admins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cities_admins` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `department_id` int(11) NOT NULL,
   `citizen_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -166,7 +167,7 @@ DROP TABLE IF EXISTS `citizen_votes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `citizen_votes` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `status` tinyint(4) DEFAULT NULL,
   `electoral_process_id` int(11) NOT NULL,
   `citizen_id` int(11) NOT NULL,
@@ -207,13 +208,14 @@ CREATE TABLE `citizens` (
   `birthdate` date NOT NULL,
   `citizen_type_id` varchar(6) COLLATE utf8_spanish2_ci NOT NULL,
   `headquarter_id` int(11) NOT NULL,
+  `state` tinyint(11) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `dui_UNIQUE` (`dui`),
   KEY `citizen_type_idx` (`citizen_type_id`),
   KEY `headquarter_citizen_idx` (`headquarter_id`),
   CONSTRAINT `citizen_type` FOREIGN KEY (`citizen_type_id`) REFERENCES `citizen_types` (`id`),
   CONSTRAINT `headquarter_citizen` FOREIGN KEY (`headquarter_id`) REFERENCES `headquarters` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -222,7 +224,7 @@ CREATE TABLE `citizens` (
 
 LOCK TABLES `citizens` WRITE;
 /*!40000 ALTER TABLE `citizens` DISABLE KEYS */;
-INSERT INTO `citizens` VALUES (1,'Carlos','Mojica','12345','12345678-9','El Salvador','2018-09-08','ADMGEN',1),(2,'Diego Alberto','Lemus Torres','1234','87654321-9','El Salvador, Avenida Bernal','2018-07-04','EMRNPN',1);
+INSERT INTO `citizens` VALUES (1,'Guillermo Armando','Calderon Sola',NULL,'13742204-5','Escalon','1993-11-25','CITIZN',3,1),(2,'Diego Alberto','Lemus Torres','1234','87654321-9','El Salvador, Avenida Bernal','2018-07-04','EMRNPN',1,1),(23,'Pedro Parolo','Calderon',NULL,'13742204-2','Bernal','1992-12-29','CITIZN',3,1),(24,'Franklin Pacacho','Castillo Cuadra',NULL,'12345679-1','Escalon','1992-11-30','CITIZN',3,1),(25,'Jorge Antonio','Flores CaÒas',NULL,'12345679-4','Reparto las Chinamas casa #4','1992-09-30','CITIZN',3,1),(26,'Luis Ernesto','Suarez Ramirez',NULL,'01234567-2','Colonia Barcelona casa #1','1994-03-30','CITIZN',4,1),(27,'Carlos Alexander','Lemus Guardado',NULL,'12345678-8','Colonia Buenavista','1998-03-31','CITIZN',1,1);
 /*!40000 ALTER TABLE `citizens` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -234,10 +236,10 @@ DROP TABLE IF EXISTS `departments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `departments` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,7 +248,7 @@ CREATE TABLE `departments` (
 
 LOCK TABLES `departments` WRITE;
 /*!40000 ALTER TABLE `departments` DISABLE KEYS */;
-INSERT INTO `departments` VALUES (1,'Ahuachap√°n'),(2,'Santa Ana'),(3,'Sonsonate'),(4,'La Libertad'),(5,'Chalatenango'),(6,'San Salvador'),(7,'Cuscatl√°n'),(8,'La Paz'),(9,'Caba√±as'),(10,'San Vicente'),(11,'Usulut√°n'),(12,'Moraz√°n'),(13,'San Miguel'),(14,'La Uni√≥n');
+INSERT INTO `departments` VALUES (1,'Ahuachap·n'),(2,'Santa Ana'),(3,'Sonsonate'),(4,'La Libertad'),(5,'Chalatenango'),(6,'San Salvador'),(7,'Cuscatl·n'),(8,'La Paz'),(9,'CabaÒas'),(10,'San Vicente'),(11,'Usulut·n'),(12,'Moraz·n'),(13,'San Miguel'),(14,'La UniÛn');
 /*!40000 ALTER TABLE `departments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -258,7 +260,7 @@ DROP TABLE IF EXISTS `electoral_process`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `electoral_process` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `year` varchar(4) COLLATE utf8_spanish2_ci NOT NULL,
@@ -293,10 +295,10 @@ DROP TABLE IF EXISTS `electoral_process_status`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `electoral_process_status` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -317,10 +319,10 @@ DROP TABLE IF EXISTS `electoral_process_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `electoral_process_types` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -341,7 +343,7 @@ DROP TABLE IF EXISTS `headquarters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `headquarters` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `x` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `y` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -349,7 +351,7 @@ CREATE TABLE `headquarters` (
   PRIMARY KEY (`id`),
   KEY `headquarters_city_idx` (`city_id`),
   CONSTRAINT `headquarters_city` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -358,7 +360,7 @@ CREATE TABLE `headquarters` (
 
 LOCK TABLES `headquarters` WRITE;
 /*!40000 ALTER TABLE `headquarters` DISABLE KEYS */;
-INSERT INTO `headquarters` VALUES (1,'Centro Escolar Reparto Las Guacinamas','314321','432251',1);
+INSERT INTO `headquarters` VALUES (1,'Centro Escolar Reparto Las Guacinamas','314321','432251',2),(2,'Colegio las chinamas','324242','542432',1),(3,'Centro Escolar la palma','54357','21317',2),(4,'Colegio Costa Buena','131463','83953',1);
 /*!40000 ALTER TABLE `headquarters` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -370,7 +372,7 @@ DROP TABLE IF EXISTS `jrv`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jrv` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(64) COLLATE utf8_spanish2_ci NOT NULL,
   `headquarter_id` int(11) NOT NULL,
   `electoral_process_id` int(11) NOT NULL,
@@ -400,7 +402,7 @@ DROP TABLE IF EXISTS `jrv_citizen`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jrv_citizen` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `jrv_id` int(11) NOT NULL,
   `citizen_id` int(11) NOT NULL,
   `jrv_citizen_type_id` int(11) NOT NULL,
@@ -431,7 +433,7 @@ DROP TABLE IF EXISTS `jrv_citizen_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jrv_citizen_types` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `description` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   PRIMARY KEY (`id`)
@@ -455,7 +457,7 @@ DROP TABLE IF EXISTS `politic_group_votes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `politic_group_votes` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `votes` int(11) DEFAULT NULL,
   `politic_group_id` int(11) NOT NULL,
   `jrv_id` int(11) NOT NULL,
@@ -487,7 +489,7 @@ DROP TABLE IF EXISTS `politic_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `politic_groups` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `acronym` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `description` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -513,7 +515,7 @@ DROP TABLE IF EXISTS `presidencial_candidates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `presidencial_candidates` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `candidates_id` int(11) NOT NULL,
   `electoral_process_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -566,4 +568,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-09-22 23:06:43
+-- Dump completed on 2018-09-27 18:31:09

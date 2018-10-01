@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Sedes electorales
+            </ui:define>
+
+            <ui:define name="content">
+                <div id='map' style="width: 100%; height: 500px;"></div>
+
+                <h:form id="frm" >
+
+                    <h:inputHidden id="name" value="#{ headquartersBean.headquarters.name }" />
+                    <h:inputHidden id="city" value="#{ headquartersBean.city.name }" />
+                    <h:inputHidden id="departament" value="#{ headquartersBean.department.name }" />
+                    <h:inputHidden id="lat" value="#{ headquartersBean.headquarters.x }" />
+                    <h:inputHidden id="lng" value="#{ headquartersBean.headquarters.y }" />
+
+                    <h:commandButton value="Insertar" class="btn btn-success" >
+                        <p:ajax update=":frm:sedesRows" listener="#{ headquartersBean.saveMap() }" />
+                    </h:commandButton>
+
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Candidatos <small>Segun partidos politicos</small></h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content">
+                                <h:panelGroup id="sedesRows">
+                                    <div class="table-responsive">
+                                        <table id="tblInformation" class="table table-striped jambo_table">
+                                            <thead>
+                                                <tr class="headings">
+                                                    <th>
+                                                        ID
+                                                    </th>
+                                                    <th class="column-title">Sede</th>
+                                                    <th class="column-title">Ciudad</th>
+                                                    <th class="column-title">Departamento</th>
+                                                    <th class="column-title">Opciones</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <p:repeat value="#{ headquartersBean.listHeadquarter() }" var="headquarters">
+
+                                                    <tr class="even pointer">
+                                                        <td class="a-center ">
+                                                            #{ headquarters.id }
+                                                        </td>
+                                                        <td class=" ">#{ headquarters.name}</td>
+                                                        <td class=" ">#{ headquarters.cityId.name  }</td>
+                                                        <td class=" ">#{ headquarters.cityId.deparmentId.name }</td>
+                                                        <td class=" last">
+                                                            <h:commandLink onclick="$('#mdlEliminar').modal('show');" rendered="#{ headquarters.use() }" style="font-size: 1.3em" >
+                                                                <i class="fa fa-remove"></i>
+                                                                <p:ajax event="click" update=":frm:sedesRows :frm:pnlInformation" listener="#{ headquartersBean.informationForId(headquarters.id)}" />
+                                                            </h:commandLink>
+                                                            <h:outputLabel rendered="#{ !headquarters.use() }" value="La sede posee registro asociados" />
+                                                        </td>
+                                                    </tr>
+
+                                                </p:repeat>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <h:outputScript rendered="#{ flash.error.length() gt 0 }" >
+                                        alertify.error('#{ flash.error }');
+                                    </h:outputScript>
+
+                                    <h:outputScript rendered="#{ flash.exito.length() gt 0 }" >
+                                        alertify.success('#{ flash.exito }');
+                                    </h:outputScript>
+
+                                    <script>
+                                        $('#tblInformation').DataTable();
+                                    </script>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mdlEliminar" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <h:panelGroup id="pnlInformation" >
+                                    <!-- dialog body -->
+                                    <div class="modal-body bg-primary text-info">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        ¿Desea eliminar la sede #{ headquartersBean.information.name }?
+                                        <h:inputHidden id="idInformation" value="#{ headquartersBean.idInformation }" />
+                                    </div>
+                                    <!-- dialog buttons -->
+                                    <div class="modal-footer">
+                                        <h:commandButton onclick="$('#mdlEliminar').modal('hide');" class="btn btn-danger" style="font-size: 1.3em" value="Eliminar" >
+                                            <p:ajax update=":frm:sedesRows" listener="#{ headquartersBean.deleteMap() }" />
+                                        </h:commandButton>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div> 
+
+                </h:form>
+
+                <script>
+                    mapboxgl.accessToken = 'pk.eyJ1IjoibGcxNzE2MTgiLCJhIjoiY2ptbXJybnp2MDZ6eTNrcWMwdTkxcWJiYyJ9.JtBed7uJsBGIpRB5j22P0w';
+
+                    var map = new mapboxgl.Map({
+                        container: 'map', // container id
+                        style: 'mapbox://styles/mapbox/streets-v9',
+                        center: [-96, 37.8], // starting position
+                        zoom: 3 // starting zoom
+                    });
+
+                    map.addControl(new mapboxgl.GeolocateControl({
+                        positionOptions: {
+                            enableHighAccuracy: true
+                        },
+                        trackUserLocation: true
+                    }));
+
+                    var geocoder = new MapboxGeocoder({
+                        accessToken: mapboxgl.accessToken
+                    });
+
+                    map.addControl(geocoder);
+
+                    map.on('load', function () {
+                        map.addSource('single-point', {
+                            "type": "geojson",
+                            "data": {
+                                "type": "FeatureCollection",
+                                "features": []
+                            }
+                        });
+                        map.addLayer({
+                            "id": "point",
+                            "source": "single-point",
+                            "type": "circle",
+                            "paint": {
+                                "circle-radius": 10,
+                                "circle-color": "#007cbf"
+                            }
+                        });
+                        // Listen for the `result` event from the MapboxGeocoder that is triggered when a user
+                        // makes a selection and add a symbol that matches the result.
+                        geocoder.on('result', function (ev) {
+                            map.getSource('single-point').setData(ev.result.geometry);
+
+                            var place = ev.result.place_name.split(',');
+
+                            var lugar = place[0];
+                            var ciudad = place[place.length - 3];
+                            var departamento = place[place.length - 2];
+
+                            var lat = ev.result.geometry.coordinates[0];
+                            var log = ev.result.geometry.coordinates[1];
+
+                            document.getElementById('frm:name').value = lugar.trim();
+                            document.getElementById('frm:city').value = ciudad.trim();
+                            document.getElementById('frm:departament').value = departamento.trim();
+                            document.getElementById('frm:lat').value = lat;
+                            document.getElementById('frm:lng').value = log;
+                        });
+                    });
+                </script>
+            </ui:define>
+
+            <ui:define name="body_scripts">
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

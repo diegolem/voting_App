@@ -81,6 +81,14 @@ public class ElectoralProcessBean implements Serializable {
         return this.electoralProcessModel.listElectoralProcessByEndDate();
     }
     
+    public List<ElectoralProcess> allElectoralProcessByEndDateDepartamental(){
+        return this.electoralProcessModel.listElectoralProcessByEndDateDepartamental();
+    }
+    
+    public List<ElectoralProcess> allElectoralProcessByEndDatePresidential(){
+        return this.electoralProcessModel.listElectoralProcessByEndDatePresidential();
+    }
+    
     public void save() {
         if (!this.electoralProcessModel.existsCode(electoralProcess)) {
             // Primero revisamos la diferencia entre las fechas
@@ -151,11 +159,20 @@ public class ElectoralProcessBean implements Serializable {
 
     }
     
-     public void delete(int id) {
-        ElectoralProcess electoral = this.electoralProcessModel.getElectoralProcess(id);
+    public void delete() {
+        ElectoralProcess electoral = this.electoralProcessModel.getElectoralProcess(this.electoralProcess.getId());
         
-        if (electoral != null & electoral.avalible()) {
-             this.electoralProcessModel.deleteElectoralProcess(id);
-        }
+        if (electoral != null) {
+            if (electoral.getCandidatesForCitiesCollection().size() > 0 || electoral.getPresidencialCandidatesCollection().size() > 0)
+                Utilities.addMessageFlash("error", "El proceso posee candidados relacionados");
+            else
+                if (!this.electoralProcessModel.deleteElectoralProcess(electoral.getId()))
+                    Utilities.addMessageFlash("error", "Error inesperado");
+        } else
+            Utilities.addMessageFlash("error", "No se ha podido eliminar el proceso");
+    }
+    
+    public void defineElectoralId(int id){
+        this.electoralProcess = this.electoralProcessModel.getElectoralProcess(id);
     }
 }

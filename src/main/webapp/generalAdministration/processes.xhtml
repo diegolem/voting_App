@@ -16,7 +16,7 @@
             </ui:define>
 
             <ui:define name="content">
-                <h:form>
+                <h:form id="frm">
                     <div id="test-list">
                         <div class="form-group">
                             <label for="filter">Buscar</label>
@@ -29,20 +29,18 @@
                                     <div class="x_panel tile fixed_height_320">
                                         <div class="x_title">
                                             <a class="name label label-default" href="#{ request.contextPath }/faces/generalAdministration/editProcess.xhtml?id=#{electoral.id}" style="font-size: 1.5em; margin-top: 2px" >#{ electoral.name }</a>
-                                            
+
                                             <h:panelGroup rendered="#{ electoral.avalible() }">
-                                            <ul class="nav navbar-right panel_toolbox">
-                                                <li>
-                                                    <p:commandButton value="eliminar" onclick="PF('dialog_eliminar').show()" />
-                                                    <p:dialog widgetVar="dialog_eliminar" header="Proceso electoral" closeOnEscape="true" resizable="false" modal="true">
-                                                        <P> ¿Esta seguro que desea elimar el proceso #{ electoral.name }? </P>
-                                                        <p:commandButton styleClass="btn btn-danger" style="color: white" value="Eliminar" actionListener="#{ electoralProcessBean.delete(electoral.id) }" update="@form" onclick="PF('dialog_eliminar').hide()" />
-                                                        <p:commandButton styleClass="btn btn-success" style="color: white" value="Cancelar" onclick="PF('dialog_eliminar').hide()" />
-                                                     </p:dialog>
-                                                </li>
-                                            </ul>
+                                                <ul class="nav navbar-right panel_toolbox">
+                                                    <li>
+                                                        <h:commandLink onclick="$('#mdlEliminar').modal('show');" style="font-size: 1em;" >
+                                                            Eliminar <i class="fa fa-remove"></i>
+                                                            <p:ajax update=":frm:pnlEliminar" listener="#{ electoralProcessBean.defineElectoralId(electoral.id) }" />
+                                                        </h:commandLink>
+                                                    </li>
+                                                </ul>
                                             </h:panelGroup>
-                                                
+
                                             <div class="clearfix"></div>
                                         </div>
                                         <div class="x_content">
@@ -73,6 +71,27 @@
 
                         <ul class="pagination"></ul>
                     </div>
+
+                    <div id="mdlEliminar" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <h:panelGroup id="pnlEliminar" >
+                                    <!-- dialog body -->
+                                    <div class="modal-body bg-primary text-info">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        ¿Esta seguro que desea eliminar el proceso #{ electoralProcessBean.electoralProcess.name }?
+                                        
+                                        <h:inputHidden id="electoralProcessId" value="#{ electoralProcessBean.electoralProcess.id }" />
+                                    </div>
+                                    <!-- dialog buttons -->
+                                    <div class="modal-footer">
+                                        <h:commandButton value="Eliminar" class="btn btn-primary" type="submit" actionListener="#{ electoralProcessBean.delete() }" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div> 
+
                 </h:form>
             </ui:define>
 

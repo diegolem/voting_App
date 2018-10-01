@@ -7,12 +7,12 @@ package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -30,8 +30,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "politic_groups")
 @XmlRootElement
-@Named
-@RequestScoped
 @NamedQueries({
     @NamedQuery(name = "PoliticGroups.findAll", query = "SELECT p FROM PoliticGroups p")
     , @NamedQuery(name = "PoliticGroups.findAllWithCandidates", query = "SELECT DISTINCT p FROM PoliticGroups p INNER JOIN p.candidatesCollection c")
@@ -42,16 +40,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "PoliticGroups.findByPhoto", query = "SELECT p FROM PoliticGroups p WHERE p.photo = :photo")})
 public class PoliticGroups implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "politicGroupId")
-    private Collection<PoliticGroupVotes> politicGroupVotesCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "politicGroupId")
-    private Collection<Candidates> candidatesCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -74,6 +66,10 @@ public class PoliticGroups implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "photo")
     private String photo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "politicGroupId")
+    private Collection<PoliticGroupVotes> politicGroupVotesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "politicGroupId")
+    private Collection<Candidates> candidatesCollection;
 
     public PoliticGroups() {
     }
@@ -130,6 +126,24 @@ public class PoliticGroups implements Serializable {
         this.photo = photo;
     }
 
+    @XmlTransient
+    public Collection<PoliticGroupVotes> getPoliticGroupVotesCollection() {
+        return politicGroupVotesCollection;
+    }
+
+    public void setPoliticGroupVotesCollection(Collection<PoliticGroupVotes> politicGroupVotesCollection) {
+        this.politicGroupVotesCollection = politicGroupVotesCollection;
+    }
+
+    @XmlTransient
+    public Collection<Candidates> getCandidatesCollection() {
+        return candidatesCollection;
+    }
+
+    public void setCandidatesCollection(Collection<Candidates> candidatesCollection) {
+        this.candidatesCollection = candidatesCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -154,23 +168,4 @@ public class PoliticGroups implements Serializable {
     public String toString() {
         return "sv.edu.udb.www.Entities.PoliticGroups[ id=" + id + " ]";
     }
-
-    @XmlTransient
-    public Collection<Candidates> getCandidatesCollection() {
-        return candidatesCollection;
-    }
-
-    public void setCandidatesCollection(Collection<Candidates> candidatesCollection) {
-        this.candidatesCollection = candidatesCollection;
-    }
-
-    @XmlTransient
-    public Collection<PoliticGroupVotes> getPoliticGroupVotesCollection() {
-        return politicGroupVotesCollection;
-    }
-
-    public void setPoliticGroupVotesCollection(Collection<PoliticGroupVotes> politicGroupVotesCollection) {
-        this.politicGroupVotesCollection = politicGroupVotesCollection;
-    }
-
 }

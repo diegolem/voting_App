@@ -20,38 +20,46 @@ import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import javax.servlet.ServletContext;
 import static javax.servlet.SessionTrackingMode.URL;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author pc
  */
 public class Utilities {
-    public static void addMessageError(String tag, String msg){
+
+    public static void addMessageError(String tag, String msg) {
         FacesMessage fm = new FacesMessage(msg, tag);
         fm.setSeverity(FacesMessage.SEVERITY_ERROR);
         FacesContext.getCurrentInstance().addMessage(null, fm);
     }
-    
+
+    public static String getParam(String name) {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        return request.getParameter(name);
+    }
+
     public static LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
         return dateToConvert.toInstant()
-          .atZone(ZoneId.systemDefault())
-          .toLocalDate();
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
-   
-     public static boolean isEquealOrAfterNow(Date date){
+
+    public static boolean isEquealOrAfterNow(Date date) {
         LocalDate now = LocalDate.now();
         LocalDate target = convertToLocalDateViaInstant(date);
         return target.isAfter(now) || target.isEqual(now);
     }
-    
-    public static boolean isEquealOrBerofeNow(Date date){
+
+    public static boolean isEquealOrBerofeNow(Date date) {
         LocalDate now = LocalDate.now();
-        return (now.isAfter(Utilities.convertToLocalDateViaInstant(date))) || (now.isEqual(Utilities.convertToLocalDateViaInstant(date))); 
+        return (now.isAfter(Utilities.convertToLocalDateViaInstant(date))) || (now.isEqual(Utilities.convertToLocalDateViaInstant(date)));
     }
-    
-    public static void redirect(String url){
+
+    public static void redirect(String url) {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         try {
             context.redirect(context.getRequestContextPath() + url);
@@ -59,29 +67,38 @@ public class Utilities {
             Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static String getPath(String folder){
+
+    public static String getPath(String folder) {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         return context.getRealPath(folder).replace("\\target\\voting_App-1.0", "\\src\\main\\webapp");
     }
-    
-     public static int getYears(Date date) {
+
+    public static int getYears(Date date) {
         try {
-            
+
             Date now = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            
+
             Calendar inicio = new GregorianCalendar();
             Calendar fin = new GregorianCalendar();
-            
+
             inicio.setTime(date);
             fin.setTime(now);
-            
+
             int difA = fin.get(Calendar.YEAR) - inicio.get(Calendar.YEAR);
-            
+
             return difA;
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return 0;
         }
+    }
+
+    public static void addMessageFlash(String name, String message) {
+        Flash messages = FacesContext.getCurrentInstance().getExternalContext().getFlash();
+        messages.put(name, message);
+    }
+    
+    public static String getRequestValue(String name){
+        return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(name);
     }
 }
