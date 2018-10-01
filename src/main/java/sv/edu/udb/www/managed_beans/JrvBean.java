@@ -44,6 +44,7 @@ import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.j2ee.servlets.ImageServlet;
+import org.apache.commons.codec.digest.DigestUtils;
 import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Model.CitizenTypesModel;
 
@@ -170,7 +171,7 @@ public class JrvBean implements Serializable {
         if (jvrCitenez.getJrvCitizenTypeId().getId() == 1){
             CitizenTypes type = this.citizenTypesModel.getCitizenTypes("PREJRV");
             jvrCitenez.getCitizenId().setCitizenTypeId(type);
-            jvrCitenez.getCitizenId().setPassword(jvrCitenez.getCitizenId().getDui());
+            jvrCitenez.getCitizenId().setPassword(DigestUtils.sha256Hex(jvrCitenez.getCitizenId().getDui()));
             this.citizenModel.editCitizen(jvrCitenez.getCitizenId());
         }
         

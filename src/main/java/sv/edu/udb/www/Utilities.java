@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -30,8 +32,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author pc
  */
 public class Utilities {
-
-    public static void addMessageError(String tag, String msg) {
+    public static void addMessageError(String tag, String msg){
         FacesMessage fm = new FacesMessage(msg, tag);
         fm.setSeverity(FacesMessage.SEVERITY_ERROR);
         FacesContext.getCurrentInstance().addMessage(null, fm);
@@ -42,13 +43,24 @@ public class Utilities {
         return request.getParameter(name);
     }
 
+    public static void AddMessage(String name, String message) {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put(name, message);
+    }
+
     public static LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
     }
 
-    public static boolean isEquealOrAfterNow(Date date) {
+    public static boolean validateMayorEdad(Date fechaC) throws ParseException{
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        LocalDate now = LocalDate.now();
+        
+        return now.compareTo(convertToLocalDateViaInstant(fechaC)) >= 18 && now.compareTo(convertToLocalDateViaInstant(fechaC)) <= 120;
+    }
+    
+    public static boolean isEquealOrAfterNow(Date date){
         LocalDate now = LocalDate.now();
         LocalDate target = convertToLocalDateViaInstant(date);
         return target.isAfter(now) || target.isEqual(now);

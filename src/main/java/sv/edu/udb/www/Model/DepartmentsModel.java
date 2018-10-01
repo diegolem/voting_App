@@ -92,9 +92,18 @@ public class DepartmentsModel {
             return false;
         }
     }
-    public boolean deleteDepartment(int id){
+    public boolean existDepartment(Departments department){
+        try {
+            Query query = em.createQuery("SELECT count(d) FROM Departments d WHERE d.name = :name");
+            query.setParameter("name", department.getName());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
+            return false;
+        }
+    }
+    public boolean deleteDepartment(Departments departments){
         try{
-            Departments enti = em.find(Departments.class, id);
+            Departments enti = em.find(Departments.class, departments.getId());
             if(enti != null){
                 em.remove(enti);
                 em.flush();

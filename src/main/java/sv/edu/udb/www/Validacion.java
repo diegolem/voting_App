@@ -151,7 +151,11 @@ public class Validacion {
         Matcher mat = pat.matcher(cadena);
         return mat.matches();
     }
-    
+    public static boolean esNombreImagen(String cadena){
+        Pattern pat = Pattern.compile("^[a-zA-Z0-9 ñÑáéíóú+_$#.-]*.([jpg]|[png]|[jpeg]|[svg])$");
+        Matcher mat = pat.matcher(cadena);
+        return mat.matches();
+    }
     public static boolean verificarFechas(LocalDate date1, LocalDate date2){
         return date1.isBefore(date2) || date1.equals(date2);
     }

@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Municipios
+            </ui:define>
+            
+            <ui:define name="content">
+                    #{citiesBean.onloadRequest()}
+                    
+                        <h:form id="frm-cities" class="form-horizontal form-label-left data-parsley-validate">
+
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="name" value="Nombre del municipio"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <p:inputText id="name" requiredMessage="El nombre del municipio es requerido" required="true" value="#{citiesBean.city.name}" styleClass="form-control col-md-7 col-xs-12" />
+                        </div>
+                    </div>   
+                    
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="department" value="Departamento"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:selectOneMenu rendered="true" requiredMessage="El departamento al que pertenece el municipio es requerido" id="department" value="#{ citiesBean.city.deparmentId.id }" class="form-control col-md-7 col-xs-12" >
+                                <f:selectItems value="#{citiesBean.listDepartments()}" var="depart" itemValue="#{ depart.id }" itemLabel="#{ depart.name }" />
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+                            
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <button class="btn btn-primary" type="reset">Reset</button>
+                                <h:commandButton class="btn btn-warning" type="submit" value="Modificar" >
+                                    <f:ajax render="@form" execute="@form" listener="#{ citiesBean.update() }" />
+                                </h:commandButton>
+                            </div>
+                        </div>
+
+                        <h:messages class="alert alert-danger"></h:messages>
+                    </h:form>              
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

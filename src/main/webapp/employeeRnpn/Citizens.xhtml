@@ -41,10 +41,8 @@
                                                         </p:commandLink>
                                                     </li>
                                                     <li>
-                                                        <p:growl id="message" showDetail="true" />
-
-                                                        <p:commandButton class="btn btn-dark" value="Deshabilitar" actionListener="#{citizenBean.enabledCitizens(citizen)}" update="message">
-                                                        </p:commandButton>
+                                                        <p:commandLink class="btn btn-default" value="Deshabilitar" action="#{citizenBean.enabledCitizens(citizen)}">
+                                                        </p:commandLink>
 
                                                     </li>
                                                 </ul>
@@ -62,7 +60,13 @@
                                                 </li>
                                                 <li>
                                                     <p>
-                                                        <b>DUI:</b> #{ citizen.dui }</p>
+                                                        <b>DUI:</b> <p class="dui">#{ citizen.dui }</p>
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <p>
+                                                        <b>Direccion:</b> <p class="dui">#{ citizen.adress }</p>
+                                                    </p>
                                                 </li>
                                                 <li>
                                                     <p>
@@ -70,7 +74,7 @@
                                                 </li>
                                                 <li>
                                                     <p>
-                                                        <b>Sede de votación:</b> #{ citizen.headquarterId.name }</p>
+                                                        <b>Sede de votación:</b> <p class="sede">#{citizen.headquarterId.cityId.deparmentId.name}, #{citizen.headquarterId.cityId.name}, #{ citizen.headquarterId.name }</p></p>
                                                 </li>
                                             </ul>
                                         </div>
@@ -79,7 +83,6 @@
                             </div>
                             </p:repeat>
                         </div>
-                        
                         <ul class="pagination"></ul>
                     </div>
                 </h:form>                
@@ -88,7 +91,7 @@
             <ui:define name="body_scripts">
                 <script>
                     var monkeyList = new List('test-list', {
-                        valueNames: ['name'],
+                        valueNames: ['name','dui','sede'],
                         page: 3,
                         pagination: true
                     });
@@ -98,4 +101,8 @@
         </ui:composition>
 
     </body>
+        <h:outputScript rendered="#{ not empty flash.exito }">
+            alertify.success('#{ flash.exito }');
+        </h:outputScript>
+        #{citizenBean.eliminateFlash()}
 </html>

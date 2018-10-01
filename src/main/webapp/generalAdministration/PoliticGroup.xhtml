@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Ciudadanos
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                    <div id="test-list">
+                        <div class="form-group">
+                            <label for="filter">Buscar</label>
+                            <input id="filter" type="text" class="form-control search" />
+                        </div>
+
+                        <div class="row list" style="display: flex; justify-content: space-between;" >
+                            <p:repeat value="#{ politicGroupBean.listPoliticGroups() }" var="politicgroup">
+                                <!--alv-->
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2 class="acronym">#{ politicgroup.acronym }<small>Partido Politico</small></h2>
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+                                            <li class="dropdown">
+                                                <a href="#{politicGroupBean.setPoliticGroup(politicGroup)}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>
+                                                        <p:commandLink class="btn btn-default" value="Editar" action="#{politicGroupBean.redirect()}">
+                                                            <f:param name="codigo" value="#{politicgroup.id}" />
+                                                        </p:commandLink>
+                                                    </li>
+                                                    <li>
+                                                        <p:commandLink class="btn btn-default" value="Eliminar" action="#{politicGroupBean.delete(politicgroup)}">
+                                                        </p:commandLink>
+
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+
+                                        <div class="">
+                                            <ul class="to_do">
+                                                <li>
+                                                    <p>
+                                                        <b>Nombre:</b> <p class="name">#{ politicgroup.name }</p></p>
+                                                </li>
+                                                <li>
+                                                    <p>
+                                                        <b>Descripción:</b> <p class="description">#{ politicgroup.description}</p>
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <p>
+                                                        <b>Bandera del partido</b><br></br>
+                                                        <h:graphicImage height="275px" width="470px" value="#{FacesContext.getCurrentInstance().getExternalContext()}/images/#{politicgroup.photo}" />
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </p:repeat>
+                        </div>
+                        <ul class="pagination"></ul>
+                    </div>
+                </h:form>                
+            </ui:define>
+                        
+            <ui:define name="body_scripts">
+                <script>
+                    var monkeyList = new List('test-list', {
+                        valueNames: ['name','acronym','description'],
+                        page: 2,
+                        pagination: true
+                    });
+                </script>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+        <h:outputScript rendered="#{ not empty flash.exito }">
+            alertify.success('#{ flash.exito }');
+        </h:outputScript>
+        #{citizenBean.eliminateFlash()}
+</html>

@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.apache.commons.codec.digest.DigestUtils;
 import sv.edu.udb.www.Entities.Citizens;
 /**
  *
@@ -31,9 +32,16 @@ public class CitizenModel {
         query.setParameter("id", id);
         return query.getResultList();
     }
+    
     public List<Citizens> listCitizenByDepartament(int idDept){
         Query query = em.createNamedQuery("Citizens.findAllByDepartament");
         query.setParameter("id", idDept);
+        return query.getResultList();
+    }
+    
+    public List<Citizens> listCitizenForTypes(String id){
+        Query query = em.createQuery("SELECT c FROM Citizens c WHERE c.citizenTypeId.id = :id AND c.state = 1");
+        query.setParameter("id", id);
         return query.getResultList();
     }
     
@@ -64,7 +72,7 @@ public class CitizenModel {
         try {
             Query query = em.createQuery("SELECT c FROM Citizens c where c.dui = :dui AND c.password = :pass");
             query.setParameter("dui", citizen.getDui());
-            query.setParameter("pass", citizen.getPassword());
+            query.setParameter("pass", DigestUtils.sha256Hex(citizen.getPassword()));
             
             Citizens origin = (Citizens)query.getResultList().get(0);
             
@@ -132,12 +140,13 @@ public class CitizenModel {
         try {
             Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui AND c.password = :pass");
             query.setParameter("dui", citizen.getDui());
-            query.setParameter("pass", citizen.getPassword());
+            query.setParameter("pass", DigestUtils.sha256Hex(citizen.getPassword()));
             return ((long)query.getSingleResult())== 1l;
         } catch(Exception error){
             return false;
         }
     }
+    
     public boolean existsWithDui (Citizens citizen){
         try {
             Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui");
@@ -147,6 +156,7 @@ public class CitizenModel {
             return false;
         }
     }
+    
     public boolean existsWithOtherDui (Citizens citizen){
         try {
             Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui AND c.id != :id");
@@ -154,6 +164,20 @@ public class CitizenModel {
             query.setParameter("dui", citizen.getDui());
             return ((long)query.getSingleResult())== 1l;
         } catch(Exception error){
+            return false;
+        }
+    }
+
+    public boolean deleteCitizens(Citizens citizen){
+        try{
+            Citizens enti = em.find(Citizens.class, citizen.getId());
+            if(enti != null){
+                em.remove(enti);
+                em.flush();
+                return true;
+            }
+            return false;
+        }catch(Exception e){
             return false;
         }
     }

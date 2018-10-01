@@ -224,7 +224,11 @@ CREATE TABLE `citizens` (
 
 LOCK TABLES `citizens` WRITE;
 /*!40000 ALTER TABLE `citizens` DISABLE KEYS */;
+<<<<<<< HEAD
 INSERT INTO `citizens` VALUES (1,'Guillermo Armando','Calderon Sola',NULL,'13742204-5','Escalon','1993-11-25','CITIZN',3,1),(2,'Diego Alberto','Lemus Torres','1234','87654321-9','El Salvador, Avenida Bernal','2018-07-04','EMRNPN',1,1),(23,'Pedro Parolo','Calderon',NULL,'13742204-2','Bernal','1992-12-29','CITIZN',3,1),(24,'Franklin Pacacho','Castillo Cuadra',NULL,'12345679-1','Escalon','1992-11-30','CITIZN',3,1),(25,'Jorge Antonio','Flores Cañas',NULL,'12345679-4','Reparto las Chinamas casa #4','1992-09-30','CITIZN',3,1),(26,'Luis Ernesto','Suarez Ramirez',NULL,'01234567-2','Colonia Barcelona casa #1','1994-03-30','CITIZN',4,1),(27,'Carlos Alexander','Lemus Guardado',NULL,'12345678-8','Colonia Buenavista','1998-03-31','CITIZN',1,1);
+=======
+INSERT INTO `citizens` VALUES (1,'Guillermo Armando','Calderon Sola',NULL,'13742204-5','Escalon','1993-11-25','CITIZN',3,1),(2,'Diego Alberto','Lemus Torres','1234','87654321-9','El Salvador, Avenida Bernal','2018-07-04','EMRNPN',1,1),(23,'Pedro Parolo','Calderon',NULL,'13742204-2','Bernal','1992-12-29','CITIZN',3,1),(24,'Franklin Pacacho','Castillo Cuadra',NULL,'12345679-1','Escalon','1992-11-30','CITIZN',3,1),(25,'Jorge Antonio','Flores CaÃ±as',NULL,'12345679-4','Reparto las Chinamas casa #4','1992-09-30','CITIZN',3,1),(26,'Luis Ernesto','Suarez Ramirez',NULL,'01234567-2','Colonia Barcelona casa #1','1994-03-30','CITIZN',4,1),(27,'Carlos Alexander','Lemus Guardado',NULL,'12345678-8','Colonia Buenavista','1998-03-31','CITIZN',1,1);
+>>>>>>> 6a5a6932c51751c62ddc09146a05ac2d0598bf9b
 /*!40000 ALTER TABLE `citizens` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -568,4 +572,8 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+<<<<<<< HEAD
 -- Dump completed on 2018-09-27 18:31:09
+=======
+-- Dump completed on 2018-09-27 18:31:09
+>>>>>>> 6a5a6932c51751c62ddc09146a05ac2d0598bf9b

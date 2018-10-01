@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Municipios
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                    <div id="test-list">
+                        <div class="form-group">
+                            <label for="filter">Buscar</label>
+                            <input id="filter" type="text" class="form-control search" />
+                        </div>
+
+                        <div class="row list" style="display: flex; justify-content: space-between;" >
+                            <p:repeat value="#{ citiesBean.listCities() }" var="city">
+                                <!--alv-->
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2 class="name">#{ city.name }<small>Municipio</small></h2>
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+                                            <li class="dropdown">
+                                                <a href="#{citiesBean.setCity(city)}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>
+                                                        <p:commandLink class="btn btn-default" value="Editar" action="#{citiesBean.redirect()}">
+                                                            <f:param name="codigo" value="#{city.id}" />
+                                                        </p:commandLink>
+                                                    </li>
+                                                    <li>
+                                                        <p:commandLink class="btn btn-black" value="Eliminar" action="#{citiesBean.delete(city)}">
+                                                        </p:commandLink>
+
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+
+                                        <div class="">
+                                            <ul class="to_do">
+                                                <li>
+                                                    <p>
+                                                        <b>Departamento:</b> 
+                                                        <p class="department">#{ city.deparmentId.name }</p>
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <p>
+                                                        <b>Sedes de votación:</b>
+                                                            <p:repeat value="#{citiesBean.listHeadquarters(city)}" var="headquarter">
+                                                                <p class="sede">#{headquarter.name}</p>
+                                                            </p:repeat>
+                                                            
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </p:repeat>
+                        </div>
+                        <ul class="pagination"></ul>
+                    </div>
+                </h:form>                
+            </ui:define>
+                        
+            <ui:define name="body_scripts">
+                <script>
+                    var monkeyList = new List('test-list', {
+                        valueNames: ['name','department','sede'],
+                        page: 3,
+                        pagination: true
+                    });
+                </script>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+        <h:outputScript rendered="#{ not empty flash.exito }">
+            alertify.success('#{ flash.exito }');
+        </h:outputScript>
+        #{citizenBean.eliminateFlash()}
+</html>
