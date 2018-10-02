@@ -8,7 +8,11 @@ import sv.edu.udb.www.Entities.CandidatesForCities;
 import sv.edu.udb.www.Entities.Departments;
 import sv.edu.udb.www.Entities.Headquarters;
 
+<<<<<<< HEAD
 @Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-10-02T17:56:42")
+=======
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-10-02T15:59:00")
+>>>>>>> f5ff2b56d07a64c76812838f4524f1393015b928
 @StaticMetamodel(Cities.class)
 public class Cities_ { 
 

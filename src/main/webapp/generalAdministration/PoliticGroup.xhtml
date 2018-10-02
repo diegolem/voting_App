@@ -36,9 +36,7 @@
                                                 <a href="#{politicGroupBean.setPoliticGroup(politicGroup)}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li>
-                                                        <p:commandLink class="btn btn-default" value="Editar" action="#{politicGroupBean.redirect()}">
-                                                            <f:param name="codigo" value="#{politicgroup.id}" />
-                                                        </p:commandLink>
+                                                        <a class="btn btn-default" href="#{ request.contextPath }/faces/generalAdministration/editPoliticGroup.xhtml?id=#{politicgroup.id}">Modificar</a>
                                                     </li>
                                                     <li>
                                                         <p:commandLink class="btn btn-default" value="Eliminar" action="#{politicGroupBean.delete(politicgroup)}">
