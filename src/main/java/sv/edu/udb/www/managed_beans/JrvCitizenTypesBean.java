@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
 import sv.edu.udb.www.Entities.Jrv;
 import sv.edu.udb.www.Entities.JrvCitizen;
 import sv.edu.udb.www.Entities.JrvCitizenTypes;

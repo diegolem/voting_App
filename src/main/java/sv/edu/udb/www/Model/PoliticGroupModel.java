@@ -17,7 +17,7 @@ import sv.edu.udb.www.Entities.PoliticGroups;
  * @author Diego Lemus
  */
 @Stateless
-public class PoliticGroupsModel {
+public class PoliticGroupModel {
     @PersistenceContext(unitName = "voting_AppPU")
     private EntityManager em;
     

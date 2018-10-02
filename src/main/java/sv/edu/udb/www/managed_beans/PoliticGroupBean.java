@@ -13,16 +13,16 @@ import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
 import sv.edu.udb.www.Entities.PoliticGroups;
-import sv.edu.udb.www.Model.PoliticGroupsModel;
+import sv.edu.udb.www.Model.PoliticGroupModel;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.servlet.http.Part;
 import org.primefaces.event.FileUploadEvent;
 import sv.edu.udb.www.Entities.PoliticGroups;
-import sv.edu.udb.www.Model.PoliticGroupsModel;
+import sv.edu.udb.www.Model.PoliticGroupModel;
 import sv.edu.udb.www.Utilities;
 import sv.edu.udb.www.Validacion;
 
@@ -35,7 +35,7 @@ import sv.edu.udb.www.Validacion;
 public class PoliticGroupBean implements Serializable {
 
     @EJB
-    private PoliticGroupsModel politicGroupsModel;
+    private PoliticGroupModel politicGroupsModel;
 
     /**
      * Creates a new instance of PoliticGroupBean
@@ -45,7 +45,7 @@ public class PoliticGroupBean implements Serializable {
         return this.politicGroupsModel.listPoliticGroupsWithCandidates();
     }
     
-    private PoliticGroupsModel politicGroupModel;
+    private PoliticGroupModel politicGroupModel;
     
     private PoliticGroups politicGroup;
     

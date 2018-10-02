@@ -20,7 +20,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
 import javax.naming.Context;
 import sv.edu.udb.www.Entities.Jrv;
 import sv.edu.udb.www.Entities.CitizenTypes;

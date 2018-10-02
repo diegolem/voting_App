@@ -18,7 +18,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
 import javax.servlet.http.Part;
 import sv.edu.udb.www.Entities.Candidates;
 import sv.edu.udb.www.Entities.Citizens;
@@ -29,7 +29,7 @@ import sv.edu.udb.www.Model.CandidatesModel;
 import sv.edu.udb.www.Model.CitizenModel;
 import sv.edu.udb.www.Model.CitizenTypesModel;
 import sv.edu.udb.www.Model.HeadquartersModel;
-import sv.edu.udb.www.Model.PoliticGroupsModel;
+import sv.edu.udb.www.Model.PoliticGroupModel;
 import sv.edu.udb.www.Utilities;
 import sv.edu.udb.www.Validacion;
 import sv.edu.udb.www.Entities.CandidatesForCities;
@@ -49,7 +49,7 @@ public class CandidatesBean implements Serializable {
     @EJB
     private CitizenTypesModel citizenTypesModel;
     @EJB
-    private PoliticGroupsModel politicGroupsModel;
+    private PoliticGroupModel politicGroupsModel;
     @EJB
     private HeadquartersModel headquartersModel;
     @EJB

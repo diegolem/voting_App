@@ -68,7 +68,6 @@ sv\edu\udb\www\managed_beans\CitizenVotesBean.class
 sv\edu\udb\www\filters\LoginFilter.class
 sv\edu\udb\www\managed_beans\DepartmentsBean.class
 sv\edu\udb\www\managed_beans\PoliticGroupVotesBean.class
-sv\edu\udb\www\Model\PoliticGroupsModel.class
 sv\edu\udb\www\Entities\CitizenTypes.class
 sv\edu\udb\www\managed_beans\HeadquartersBean.class
 sv\edu\udb\www\Entities\ElectoralProcess_.class

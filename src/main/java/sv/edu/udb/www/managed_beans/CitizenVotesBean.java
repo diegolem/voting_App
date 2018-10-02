@@ -7,7 +7,7 @@ package sv.edu.udb.www.managed_beans;
 
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
 
 /**
  *

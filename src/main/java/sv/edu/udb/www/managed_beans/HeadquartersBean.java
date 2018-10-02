@@ -12,7 +12,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
 import sv.edu.udb.www.Entities.Cities;
 import sv.edu.udb.www.Entities.Departments;
 import sv.edu.udb.www.Entities.Headquarters;
