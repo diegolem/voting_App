@@ -46,7 +46,11 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.j2ee.servlets.ImageServlet;
 import org.apache.commons.codec.digest.DigestUtils;
 import sv.edu.udb.www.Entities.Citizens;
+import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Model.CitizenTypesModel;
+import sv.edu.udb.www.Model.ElectoralProcessModel;
+import sv.edu.udb.www.Model.ElectoralProcessStatusModel;
+import sv.edu.udb.www.Validacion;
 
 /**
  *
@@ -56,6 +60,10 @@ import sv.edu.udb.www.Model.CitizenTypesModel;
 @ViewScoped
 public class JrvBean implements Serializable {
 
+    @EJB
+    private ElectoralProcessModel electoralProcessModel;
+    @EJB
+    private ElectoralProcessStatusModel electoralProcessStatusModel;
     @EJB
     private CitizenTypesModel citizenTypesModel;
     @EJB
@@ -68,11 +76,20 @@ public class JrvBean implements Serializable {
     private JrvModel jrvModel;
 
     private Jrv jrv;
+    private Citizens citizen;
     private int idCitizen;
     private int idType;
 
     public Jrv getJrv() {
         return jrv;
+    }
+
+    public Citizens getCitizen() {
+        return citizen;
+    }
+
+    public void setCitizen(Citizens citizen) {
+        this.citizen = citizen;
     }
 
     public void setJrv(Jrv jrv) {
@@ -270,5 +287,57 @@ public class JrvBean implements Serializable {
         }
 
         return conn;
+    }
+    
+    public void startProcessElectoral(){
+         int id = Integer.parseInt(Utilities.getRequestValue("frm:idJvr"));
+         
+         Jrv jrv = this.jrvModel.getJrv(id);
+         
+         if (jrv != null) {
+            ElectoralProcess process = jrv.getElectoralProcessId();
+            
+            process.setElectoralProcessStatusId(this.electoralProcessStatusModel.getElectoralProcessStatus(3));
+            this.electoralProcessModel.editElectoralProcess(process);
+            
+            Utilities.addMessageFlash("exito", "cambios realizados");
+        } else
+             Utilities.addMessageFlash("error", "No se ha podido localizar la junta");
+    }
+    
+    public void endProcessElectoral(){
+         int id = Integer.parseInt(Utilities.getRequestValue("frm:idJvr"));
+         
+         Jrv jrv = this.jrvModel.getJrv(id);
+         
+         if (jrv != null) {
+            ElectoralProcess process = jrv.getElectoralProcessId();
+            
+            process.setElectoralProcessStatusId(this.electoralProcessStatusModel.getElectoralProcessStatus(4));
+            this.electoralProcessModel.editElectoralProcess(process);
+            
+            Utilities.addMessageFlash("exito", "El proceso ha finalizado");
+        } else
+             Utilities.addMessageFlash("error", "No se ha podido localizar la junta");
+    }
+    
+    public void verifyCitizens(){
+        String dui = Utilities.getRequestValue("frm:dui");
+        String me = Utilities.getRequestValue("frm:meDui");
+        
+        if (!me.equals(dui)) {
+            if (Validacion.esDui(dui)) {
+                Citizens citizen = this.citizenModel.getCitizen(dui);
+
+                if (citizen != null) {
+
+                    this.citizen = citizen;
+
+                } else
+                    Utilities.addMessageError("error", "No se ha encontrado ningun votante con dicho dui");
+            } else
+                Utilities.addMessageError("error", "El dui no es valido");
+        } else
+            Utilities.addMessageError("error", "Ha ingresado su mismo dui");
     }
 }

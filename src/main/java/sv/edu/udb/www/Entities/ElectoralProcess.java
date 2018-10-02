@@ -274,6 +274,10 @@ public class ElectoralProcess implements Serializable {
     public boolean avalible() {
         return Utilities.isEquealOrAfterNow(this.processDate);
     }
+    
+    public boolean startProcess() {
+        return Utilities.isEquealOrBerofeNow(this.processDate);
+    }
 
     public boolean end() {
         return Utilities.isEquealOrBerofeNow(this.endDate);
@@ -283,6 +287,14 @@ public class ElectoralProcess implements Serializable {
         return Utilities.isEquealOrAfterNow(this.getProcessDate());
     }
 
+    public boolean stepEndInscription(){
+        return this.electoralProcessStatusId.getId() == 2;
+    }
+    
+    public boolean startProcessByType(){
+        return this.electoralProcessTypesId.getId() == 2;
+    }
+    
     @Override
     public String toString() {
         return "sv.edu.udb.www.Entities.ElectoralProcess[ id=" + id + " ]";

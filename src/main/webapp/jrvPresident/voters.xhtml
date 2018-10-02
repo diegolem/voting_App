@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Voters
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="frm" class="form-horizontal form-label-left data-parsley-validate">
+
+                    <h:inputHidden id="meDui" value="#{ Auth.citizen.dui }" />
+
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="dui" value="Dui"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:inputText id="dui" requiredMessage="El dui es requerido" required="true" class="form-control col-md-7 col-xs-12" />
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <h:commandButton class="btn btn-primary" type="submit" value="Verificar" >
+                                <f:ajax render="@form" execute="@form" listener="#{ jrvBean.verifyCitizens() }"/>
+                            </h:commandButton>
+                        </div>
+                    </div>
+
+                    <h:messages class="alert alert-danger"></h:messages>
+
+                    <h:panelGroup rendered="#{ not empty jrvBean.citizen }">
+                        <center>
+                            <h:panelGroup style="width: 100%" rendered="#{ jrvBean.citizen.headquarterId.id == Auth.jrvActive().headquarterId.id }" >
+                                <div class="col-md-3 col-xs-12 widget widget_tally_box">
+                                    <div class="x_panel fixed_height_390">
+                                        <div class="x_content">
+
+                                            <div class="flex">
+                                                <ul class="list-inline widget_profile_box">
+                                                    <li>
+                                                        <h:commandLink onclick="document.getElementById('frm:dui').value = '';">
+                                                            <i class="fa fa-thumbs-o-down"></i>
+                                                            <f:ajax render="@form" execute="@form" />
+                                                        </h:commandLink>
+                                                    </li>
+                                                    <li>
+                                                        <img src="#{ request.contextPath }/faces/resources/images/user.png" alt="..." class="img-circle profile_img" />
+                                                    </li>
+                                                    <li>
+                                                        <h:commandLink>
+                                                            <i class="fa fa-thumbs-o-up"></i>
+                                                        </h:commandLink>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <h3 class="name">#{ jrvBean.citizen.name } #{ jrvBean.citizen.lastname }</h3>
+
+                                            <div class="flex">
+                                                <ul class="list-inline count2">
+                                                    <li>
+                                                        <h5>Ciudad</h5>
+                                                        <span>#{ jrvBean.citizen.headquarterId.cityId.name }</span>
+                                                    </li>
+                                                    <li>
+                                                        <h5>Departamento</h5>
+                                                        <span>#{ jrvBean.citizen.headquarterId.cityId.deparmentId.name }</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <p>
+                                                #{ jrvBean.citizen.adress }
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </center>
+                        <h:panelGroup rendered="#{ jrvBean.citizen.headquarterId.id != Auth.jrvActive().headquarterId.id }" >
+                            <center><h1>¡Lo sentimos pero este no es su centro de votacion autorizado!</h1></center>
+                            <center> Su centro de votacion es <strong>#{ jrvBean.citizen.headquarterId.name }</strong> en #{ jrvBean.citizen.headquarterId.cityId.name } del departamento #{ jrvBean.citizen.headquarterId.cityId.deparmentId.name } </center>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="body_scripts">
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

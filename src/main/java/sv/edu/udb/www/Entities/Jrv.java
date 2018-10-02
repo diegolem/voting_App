@@ -6,7 +6,9 @@
 package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,6 +22,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -63,7 +66,9 @@ public class Jrv implements Serializable {
     private Headquarters headquarterId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "jrvId")
     private Collection<JrvCitizen> jrvCitizenCollection;
-
+    @Transient
+    private int total;
+    
     private void defaultJrv() {
         this.electoralProcessId = new ElectoralProcess();
         this.headquarterId = new Headquarters();
@@ -84,6 +89,14 @@ public class Jrv implements Serializable {
 
     public Integer getId() {
         return id;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 
     public void setId(Integer id) {
@@ -168,5 +181,44 @@ public class Jrv implements Serializable {
 
     public boolean canDelete(){
         return (this.politicGroupVotesCollection == null  || this.politicGroupVotesCollection.isEmpty() ) && (this.jrvCitizenCollection == null || this.jrvCitizenCollection.isEmpty()) && (this.citizenVotesCollection == null || this.citizenVotesCollection.isEmpty());
+    }
+    
+    public boolean hasCandidates(){
+        return this.electoralProcessId.getCandidatesForCitiesCollection().size() > 0;
+    }
+    
+    public boolean hasCandidatesVoting(){
+        return this.electoralProcessId.getCandidatesForCitiesCollection().size() > 1;
+    }
+    
+    public boolean startVoting(){
+        return this.electoralProcessId.getElectoralProcessStatusId().getId() == 3;
+    }
+    
+    public boolean endProcessStep(){
+        return this.electoralProcessId.getElectoralProcessStatusId().getId() == 4;
+    }
+    
+    public boolean endVoting(){
+        return this.electoralProcessId.end();
+    }
+    
+    public List<PoliticGroupVotes> result(){
+        
+        List<PoliticGroupVotes> votes = new ArrayList();
+        int idProcess = this.electoralProcessId.getId();
+        this.total = 0;
+        
+        for(PoliticGroupVotes vote : this.politicGroupVotesCollection)
+            if (vote.getElectoralProcessId().getId() == idProcess)
+                this.total += vote.getVotes();
+        
+        for(PoliticGroupVotes vote : this.politicGroupVotesCollection){
+            vote.setPorcentage(((double)vote.getVotes() / (double)this.total) * 100);
+            votes.add(vote);
+        }
+            
+        return votes;
+        
     }
 }

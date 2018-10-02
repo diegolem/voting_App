@@ -110,5 +110,4 @@ public class JrvCitizen implements Serializable {
     public String toString() {
         return "sv.edu.udb.www.Entities.JrvCitizen[ id=" + id + " ]";
     }
-    
 }

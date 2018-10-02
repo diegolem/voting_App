@@ -68,6 +68,21 @@ public class CitizenModel {
             return null;
         }
     }
+    public Citizens getCitizen(String dui){
+        try{
+            Query query = em.createQuery("SELECT c FROM Citizens c where c.dui = :dui");
+            query.setParameter("dui", dui);
+            
+            Citizens enti = (Citizens)query.getResultList().get(0);
+            
+            if(enti != null){
+                return enti;
+            }
+            return null;
+        }catch(Exception e){
+            return null;
+        }
+    }
     public void pullForDui(Citizens citizen){
         try {
             Query query = em.createQuery("SELECT c FROM Citizens c where c.dui = :dui AND c.password = :pass");

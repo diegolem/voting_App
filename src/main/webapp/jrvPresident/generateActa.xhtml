@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
+
+            <ui:define name="tittle">
+                Acta
+            </ui:define>
+
+            <ui:define name="content">
+                <div class="row">
+                    <div class="row tile_count">
+                        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                            <span class="count_top"><i class="fa fa-clock-o"></i> Fecha de inicio</span>
+                            <div class="count">#{ Auth.jrvActive().electoralProcessId.initDateFormat() }</div>
+                        </div>
+                        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                            <span class="count_top"><i class="fa fa-clock-o"></i> Inicio del proceso</span>
+                            <div class="count">#{ Auth.jrvActive().electoralProcessId.processDateFormat() }</div>
+                        </div>
+                        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                            <span class="count_top"><i class="fa fa-clock-o"></i> Finalizacion del proceso</span>
+                            <div class="count green">#{ Auth.jrvActive().electoralProcessId.endDateFormat() }</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Miembros de la junta <small>#{ Auth.jrvActive().code }</small></h2>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Dui</th>
+                                            <th>Nombre completo</th>
+                                            <th>Rol</th>
+                                            <th>Direccion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <p:repeat value="#{ Auth.jrvActive().jrvCitizenCollection }" var="jvrCitizen" >
+                                            <tr>
+                                                <th scope="row">#{ jvrCitizen.citizenId.dui }</th>
+                                                <td>#{ jvrCitizen.citizenId.name } #{ candidate.citizenId.lastname }</td>
+                                                <td>#{ jvrCitizen.jrvCitizenTypeId.name }</td>
+                                                <td>#{ jvrCitizen.citizenId.adress }</td>
+                                            </tr>
+                                        </p:repeat>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="x_panel tile fixed_height_320">
+                            <div class="x_title">
+                                <h2>Voitos totales por partidos politicos</h2>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+                                <p:repeat value="#{ Auth.jrvActive().result() }" var="vote" >
+                                    <div class="widget_summary">
+                                        <div class="w_left w_25">
+                                            <span>#{ vote.politicGroupId.name } [ #{ vote.politicGroupId.acronym } ]</span>
+                                        </div>
+                                        <div class="w_center w_55">
+                                            <div class="progress">
+                                                <div class="progress-bar bg-green" role="progressbar" aria-valuenow="#{ vote.porcentage }" aria-valuemin="0" aria-valuemax="100" style="width: #{ vote.porcentage }%;">
+                                                    <span class="sr-only">#{ vote.porcentage }%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="w_right w_20">
+                                            <span>#{ vote.votes } Votos</span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </p:repeat>
+                                
+                                <center><h3>Votos totales: #{ Auth.jrvActive().total }</h3></center>
+                                <center><h3>Total de voletas usadas #{ Auth.jrvActive().citizenVotesCollection.size() }</h3></center>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </ui:define>
+
+            <ui:define name="body_scripts">
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

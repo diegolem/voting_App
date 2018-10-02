@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -49,7 +50,9 @@ public class PoliticGroupVotes implements Serializable {
     @JoinColumn(name = "politic_group_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private PoliticGroups politicGroupId;
-
+    @Transient
+    private double porcentage;
+    
     public PoliticGroupVotes() {
     }
 
@@ -67,6 +70,14 @@ public class PoliticGroupVotes implements Serializable {
 
     public Integer getVotes() {
         return votes;
+    }
+
+    public double getPorcentage() {
+        return porcentage;
+    }
+
+    public void setPorcentage(double porcentage) {
+        this.porcentage = porcentage;
     }
 
     public void setVotes(Integer votes) {

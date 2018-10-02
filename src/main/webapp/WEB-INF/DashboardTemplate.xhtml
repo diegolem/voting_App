@@ -162,6 +162,17 @@
                                             </ul>
                                         </li>
                                     </h:panelGroup>
+                                    <h:panelGroup rendered="#{ Auth.presidentJrv }">
+                                        <h:panelGroup rendered="#{ !Auth.jrvActive().endProcessStep() }">
+                                            <h:panelGroup rendered="#{ Auth.jrvActive().startVoting() }">
+                                                <li><a><i class="fa fa-ticket"></i>Votantes<span class="fa fa-chevron-down"></span></a>
+                                                    <ul class="nav child_menu">
+                                                        <li><a href="#{ request.contextPath }/faces/jrvPresident/voters.xhtml">verificar</a></li>
+                                                    </ul>
+                                                </li>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
                                 </ul>
                             </div>
                         </div>
