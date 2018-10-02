@@ -14,7 +14,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.view.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.servlet.http.Part;
@@ -40,6 +41,17 @@ public class PoliticGroupBean implements Serializable {
     private Part image;
     
     private String fileName;
+    
+    @ManagedProperty("#{param.id}")
+    private int idRequest;
+
+    public int getIdRequest() {
+        return idRequest;
+    }
+
+    public void setIdRequest(int idRequest) {
+        this.idRequest = idRequest;
+    }
     
     public String getFileName() {
         return fileName;
@@ -70,15 +82,14 @@ public class PoliticGroupBean implements Serializable {
     }
 
     public void onloadRequest() {
-        String code = Utilities.getParam("codigo");
-        this.politicGroup = this.politicGroupModel.getPoliticGroup(Integer.parseInt(code));
+        this.politicGroup = this.politicGroupModel.getPoliticGroup(this.idRequest);
         this.fileName = this.politicGroup.getPhoto();
     }
     public void doUpload(){
         try{
            InputStream in = this.image.getInputStream();
            if(Validacion.esNombreImagen(this.image.getSubmittedFileName())){
-             File f = new File("C:\\Users\\Diego Lemus\\Desktop\\voting_App\\src\\main\\webapp\\images\\" + this.image.getSubmittedFileName());
+             File f = new File(Utilities.getPath("/images/") + "/" + this.image.getSubmittedFileName());
            this.politicGroup.setPhoto(this.image.getSubmittedFileName());
            f.createNewFile();
            FileOutputStream out = new FileOutputStream(f);
@@ -107,6 +118,7 @@ public class PoliticGroupBean implements Serializable {
                                 Utilities.AddMessage("exito", "El Partido politico fue ingresado!!");
                                 Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");
                             } else {
+                                this.eliminateImage(new File(Utilities.getPath("/images/") + "/" + this.politicGroup.getPhoto()));
                                 Utilities.addMessageError("Error_Insert", "No se ha podido ingresar el partido politico");
                             }
                         } else {
@@ -147,7 +159,7 @@ public class PoliticGroupBean implements Serializable {
                                     Utilities.addMessageError("Error_Insert", "No se ha podido ingresar el partido politico");
                                 }
                             }else{
-                                this.eliminateImage(new File("C:\\Users\\Diego Lemus\\Desktop\\voting_App\\src\\main\\webapp\\images\\" + this.politicGroup.getPhoto()));
+                                this.eliminateImage(new File(Utilities.getPath("/images/") + "/" + this.politicGroup.getPhoto()));
                                 this.doUpload();
                                 if (this.politicGroupModel.editPoliticGroup(this.politicGroup)) {
                                 Utilities.AddMessage("exito", "El partido politico fue modificado!!");
@@ -172,8 +184,8 @@ public class PoliticGroupBean implements Serializable {
         flash.clear();
     }
 
-    public String redirect() {
-        return "/generalAdministration/editPoliticGroup.xhtml";
+    public void redirect() {
+        Utilities.redirect("/faces/generalAdministration/editPoliticGroup.xhtml");
     }
     public void asignPhotoPoliticGroup(FileUploadEvent event){
         FacesMessage message = new FacesMessage("Exito", event.getFile().getFileName() + "Archivo cargado");
@@ -182,9 +194,9 @@ public class PoliticGroupBean implements Serializable {
 
     public void delete(PoliticGroups politicGroup) {
         this.politicGroup = politicGroup;
-        this.eliminateImage(new File("C:\\Users\\Diego Lemus\\Desktop\\voting_App\\src\\main\\webapp\\images\\" + this.politicGroup.getPhoto()));
+        this.eliminateImage(new File(Utilities.getPath("/images/") + "/" + this.politicGroup.getPhoto()));
         if (this.politicGroupModel.deletePoliticGroup(this.politicGroup)) {
-            Utilities.AddMessage("exito", "El Ciudadano fue eliminado!!");
+            Utilities.AddMessage("exito", "El partido politico fue eliminado!!");
             Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");
         }
         Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");

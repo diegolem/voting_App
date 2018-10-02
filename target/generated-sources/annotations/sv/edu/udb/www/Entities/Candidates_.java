@@ -9,7 +9,7 @@ import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Entities.PoliticGroups;
 import sv.edu.udb.www.Entities.PresidencialCandidates;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-10-01T09:50:39")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-10-02T15:59:00")
 @StaticMetamodel(Candidates.class)
 public class Candidates_ { 
 

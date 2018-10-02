@@ -9,7 +9,8 @@ import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.view.ViewScoped;
 import sv.edu.udb.www.Entities.Cities;
 import sv.edu.udb.www.Entities.Departments;
 import sv.edu.udb.www.Model.CitiesModel;
@@ -31,6 +32,17 @@ public class DepartmentsBean implements Serializable {
     private CitiesModel citiesModel;
     
     private Departments department;
+    
+    @ManagedProperty("#{param.id}")
+    private int idRequest;
+
+    public int getIdRequest() {
+        return idRequest;
+    }
+
+    public void setIdRequest(int idRequest) {
+        this.idRequest = idRequest;
+    }
 
     public Departments getDepartment() {
         return department;
@@ -47,8 +59,7 @@ public class DepartmentsBean implements Serializable {
         this.department = new Departments();
     }
     public void onloadRequest(){
-        String code = Utilities.getParam("codigo");
-        this.department = this.departmentModel.getDepartment(Integer.parseInt(code));
+        this.department = this.departmentModel.getDepartment(this.idRequest);
     }
     public List<Departments> listAllDepartments(){
         return departmentModel.getDepartments();

@@ -9,8 +9,9 @@ import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import sv.edu.udb.www.Entities.Cities;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import sv.edu.udb.www.Entities.Departments;
 import sv.edu.udb.www.Entities.Headquarters;
 import sv.edu.udb.www.Model.CitiesModel;
@@ -37,6 +38,18 @@ public class CitiesBean  implements Serializable {
     private Cities city;
     
     private Departments department;
+    
+    @ManagedProperty("#{param.id}")
+    private int idRequest;
+
+    public int getIdRequest() {
+        return idRequest;
+    }
+
+    public void setIdRequest(int idRequest) {
+        this.idRequest = idRequest;
+    }
+    
 
     public Cities getCity() {
         return city;
@@ -62,8 +75,7 @@ public class CitiesBean  implements Serializable {
         this.city.setDeparmentId(new Departments());
     }
     public void onloadRequest(){
-        String code = Utilities.getParam("codigo");
-        this.city = this.citiesModel.getCities(Integer.parseInt(code));  
+        this.city = this.citiesModel.getCities(this.idRequest);  
     }
     public List<Cities> listCities(){
         return this.citiesModel.listCities();
@@ -99,6 +111,7 @@ public class CitiesBean  implements Serializable {
     public void update(){
         if(Validacion.esNombrePersona(this.city.getName())){
             this.city.setDeparmentId(this.departmentModel.getDepartment(this.city.getDeparmentId().getId()));
+            this.city.setId(this.idRequest);
                 if(this.citiesModel.editCities(this.city)){
                     Utilities.AddMessage("exito", "El municipio fue modificado!!");
                     Utilities.redirect("/faces/generalAdministration/City.xhtml");
@@ -109,8 +122,8 @@ public class CitiesBean  implements Serializable {
             Utilities.addMessageError("Error_Name", "Algunos caracteres del nombre del municipio no estan permitidos");
         }
     }
-    public String redirect() {
-        return "/generalAdministration/editCity.xhtml";
+    public void redirect() {
+        Utilities.redirect("/faces/generalAdministration/editPoliticGroup.xhtml");
     }
     public void delete(Cities city){
         this.city = city;

@@ -77,7 +77,7 @@
                     </div>
 
                     <div class="form-group">
-                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="politic_group_id" value="Gruopo"> <span class="required">*</span></h:outputLabel>
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="politic_group_id" value="Grupo"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <h:selectOneMenu rendered="true" requiredMessage="El tipo de proceso es requerido" id="politic_group_id" value="#{ candidatesBean.candidates.politicGroupId.id }" class="form-control col-md-7 col-xs-12" >
                                 <f:selectItems value="#{ candidatesBean.allPoliticGroups() }" var="politicGroup" itemValue="#{ politicGroup.id }" itemLabel="#{ politicGroup.acronym }" />

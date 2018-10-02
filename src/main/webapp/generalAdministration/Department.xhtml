@@ -36,9 +36,7 @@
                                                 <a href="#{departmentsBean.setDepartment(department)}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li>
-                                                        <p:commandLink class="btn btn-default" value="Editar" action="#{departmentsBean.redirect()}">
-                                                            <f:param name="codigo" value="#{department.id}" />
-                                                        </p:commandLink>
+                                                        <a class="btn btn-default" href="#{ request.contextPath }/faces/generalAdministration/editDepartment.xhtml?id=#{department.id}">Modificar</a>
                                                     </li>
                                                     <li>
                                                         <p:commandLink class="btn btn-default" value="Eliminar" action="#{departmentsBean.delete(department)}">
