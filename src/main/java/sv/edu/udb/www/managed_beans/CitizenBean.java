@@ -30,6 +30,7 @@ import javax.faces.context.FacesContext;
 import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Entities.JrvCitizen;
 import javax.faces.context.Flash;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -114,7 +115,6 @@ public class CitizenBean implements Serializable {
         this.citizen = new Citizens();
         this.citizen.setCitizenTypeId(new CitizenTypes());
         this.citizen.setHeadquarterId(new Headquarters());
-        //this.listaCitizen = this.citizenModel.listCitizen();
     }
 
     public List<Departments> getDepar() {
@@ -123,6 +123,9 @@ public class CitizenBean implements Serializable {
 
     public List<Cities> citiesForDepartment() {
         return citiesModel.listCitiesforDepartment(this.idDepartment);
+    }
+    public List<CitizenTypes> listTypesCitizens(){
+        return this.citizenTypesModel.listCitizenTypes();
     }
 
     public List<Citizens> citinezForDepartmentJrvUnique(int idDep) {
@@ -159,8 +162,8 @@ public class CitizenBean implements Serializable {
 
     public List<Citizens> listUsersForType() {
         String type = Utilities.getParam("tipo");
-        this.listaCitizen = citizenModel.listCitizenForTypes(type);
-        return listaCitizen;
+            this.listaCitizen = citizenModel.listCitizen();
+            return this.listaCitizen;
     }
 
     public List<Citizens> listUsers() {
@@ -169,9 +172,19 @@ public class CitizenBean implements Serializable {
     }
 
     public List<Citizens> listCitizensTypeUsers() {
-        return this.listaCitizen;
+        if(this.listaCitizen == null){
+            return this.listaCitizen = this.citizenModel.listCitizen();
+        }else{
+            return this.listaCitizen;
+        }
     }
-
+    public void redirectGeneralAdministration(String route){
+        Utilities.redirect("/faces/generalAdministration/" + route);
+    }
+     public void redirectEmployeeRnpn(String route){
+        Utilities.redirect("/faces/employeeRnpn/" + route);
+    }
+    
     public void onloadRequest() {
         String code = Utilities.getParam("codigo");
         this.citizen = this.citizenModel.getCitizen(Integer.parseInt(code));
@@ -199,6 +212,11 @@ public class CitizenBean implements Serializable {
                         this.citizen.setCitizenTypeId(this.citizenTypesModel.getCitizenTypes(this.citizen.getCitizenTypeId().getId()));
                         this.citizen.setHeadquarterId(this.headquarterModel.getHeadquarter(this.citizen.getHeadquarterId().getId()));
                         this.citizen.setState(Short.parseShort("1"));
+                        if(this.citizen.getCitizenTypeId().getId().equals("CITIZN")){
+                            this.citizen.setPassword(null);
+                        }else{
+                            this.citizen.setPassword(DigestUtils.sha256Hex(this.citizen.getDui()));
+                        }
                         if (!this.citizen.getBirthdate().after(new Date())) {
                             if (Utilities.validateMayorEdad(this.citizen.getBirthdate())) {
                                 if (this.citizenModel.insertCitizen(citizen)) {
@@ -236,9 +254,14 @@ public class CitizenBean implements Serializable {
                     this.citizen.setHeadquarterId(this.headquarterModel.getHeadquarter(this.citizen.getHeadquarterId().getId()));
                     if (!this.citizen.getBirthdate().after(new Date())) {
                         if (Utilities.validateMayorEdad(this.citizen.getBirthdate())) {
+                            if(this.citizen.getCitizenTypeId().getId().equals("CITIZN")){
+                                this.citizen.setPassword(null);
+                            }else{
+                                this.citizen.setPassword(DigestUtils.sha256Hex(this.citizen.getDui()));
+                            }
                             if (this.citizenModel.editCitizen(citizen)) {
                                 Utilities.AddMessage("exito", "El Ciudadano fue modificado!!");
-                                Utilities.redirect("/faces/generalAdministraion/User.xhtml");
+                                Utilities.redirect("/faces/generalAdministration/User.xhtml");
                             } else {
                                 Utilities.addMessageError("Error_Insert", "No se ha podido modificar al ciudadano");
                             }
@@ -265,6 +288,10 @@ public class CitizenBean implements Serializable {
             Utilities.AddMessage("exito", "El Ciudadano fue eliminado!!");
             Utilities.redirect("/faces/generalAdministration/User.xhtml");
         }
+        Utilities.redirect("/faces/generalAdministration/User.xhtml");
+    }
+
+    public void resetFilter() {
         Utilities.redirect("/faces/generalAdministration/User.xhtml");
     }
 
@@ -368,18 +395,10 @@ public class CitizenBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void redirect() {
-        //String code = Utilities.getParam("codigo");
-        this.idRequest = 1;//Integer.parseInt(Utilities.getParam("codigo"));
-        this.citizen = this.citizenModel.getCitizen(1);
-        Utilities.redirect("/faces/employeeRnpn/editarCitizen.xhtml");
+    public String redirect() {
+        return "/employeeRnpn/editCitizen.xhtml";
     }
 
-    /*
-    public String redirect() {
-        return "/employeeRnpn/editarCitizen.xhtml";
-    }
-     */
     public String redirectUser() {
         return "/generalAdministration/editUser.xhtml";
     }

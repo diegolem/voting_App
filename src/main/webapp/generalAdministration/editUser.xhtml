@@ -16,10 +16,9 @@
             </ui:define>
             
             <ui:define name="content">
-                    #{citizenBean.onloadRequest()}
+                    #{citizenBean.onloadRequestUser()}
                     <h:form id="frm-citizens-update" class="form-horizontal form-label-left data-parsley-validate">
                         <h:inputHidden id="idRequest" value="#{ citizenBean.citizen.id }" />
-                        <h:inputHidden id="idCitizenType" value="#{ citizenBean.citizen.citizenTypeId.id }" />
                         <h:inputHidden id="idState" value="#{ citizenBean.citizen.state }" />
                         
                         <div class="form-group">
@@ -57,6 +56,15 @@
                     </div>
                     
                     <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="typecitizen" value="Tipo de Ciudadano"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:selectOneMenu rendered="true" requiredMessage="El tipo de Ciudadano es requerido" id="typecitizen" value="#{ citizenBean.citizen.citizenTypeId.id }" class="form-control col-md-7 col-xs-12" >
+                                <f:selectItems value="#{citizenBean.listTypesCitizens()}" var="types" itemValue="#{ types.id }" itemLabel="#{ types.description }" />
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+                        
+                    <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="department" value="Departamento"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <h:selectOneMenu rendered="true" requiredMessage="El departamento es requerido" id="department" value="#{ citizenBean.idDepartment }" class="form-control col-md-7 col-xs-12" >
@@ -90,9 +98,9 @@
                         <div class="ln_solid"></div>
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                <button class="btn btn-primary" type="reset">Reset</button>
+                                <a class="btn btn-primary" href="#{ request.contextPath }/faces/generalAdministration/User.xhtml">Regresar</a>
                                 <h:commandButton class="btn btn-warning" type="submit" value="Modificar" >
-                                    <f:ajax render="@form" execute="@form" listener="#{ citizenBean.update() }" />
+                                    <f:ajax render="@form" execute="@form" listener="#{ citizenBean.updateUser() }" />
                                 </h:commandButton>
                             </div>
                         </div>
