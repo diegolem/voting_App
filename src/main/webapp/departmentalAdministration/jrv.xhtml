@@ -39,22 +39,27 @@
                                                 <td class=" ">#{ jrv.headquarterId.name } [ #{ jrv.headquarterId.cityId.name } ] </td>
                                                 <td class="a-center last">
 
-                                                    <h:outputLabel rendered="#{ !jrv.electoralProcessId.avalibleUpdate() }" value="No se puede realizar acciones sobre la junta" />
+                                                    <h:panelGroup rendered="#{ jrv.electoralProcessId.typeDepartamental() }">
 
-                                                    <h:commandLink onclick="$('#mdlEdit').modal('show');" rendered="#{ jrv.electoralProcessId.avalibleUpdate() }" style="font-size: 1.3em" >
-                                                        <i class="fa fa-edit"></i>
-                                                        <p:ajax event="click" update=":frm:pnlEdit" listener="#{ jrvBean.selectJrv(jrv.id) }" />
-                                                    </h:commandLink>
+                                                        <h:outputLabel rendered="#{ !jrv.electoralProcessId.avalibleUpdate() }" value="No se puede realizar acciones sobre la junta" />
 
-                                                    <h:commandLink onclick="$('#mdlDelete').modal('show');" rendered="#{ jrv.electoralProcessId.avalibleUpdate() }" style="font-size: 1.3em" >
-                                                        <i class="fa fa-eraser"></i>
-                                                        <p:ajax event="click" update=":frm:pnlDelete" listener="#{ jrvBean.selectJrv(jrv.id) }" />
-                                                    </h:commandLink>
+                                                        <h:commandLink onclick="$('#mdlEdit').modal('show');" rendered="#{ jrv.electoralProcessId.avalibleUpdate() }" style="font-size: 1.3em" >
+                                                            <i class="fa fa-edit"></i>
+                                                            <p:ajax event="click" update=":frm:pnlEdit" listener="#{ jrvBean.selectJrv(jrv.id) }" />
+                                                        </h:commandLink>
 
-                                                    <h:commandLink onclick="$('#mdlCitinez').modal('show');" rendered="#{ jrv.electoralProcessId.avalibleUpdate() }" style="font-size: 1.3em" >
-                                                        <i class="fa fa-users"></i>
-                                                        <p:ajax event="click" update=":frm:pnlCitinez" listener="#{ jrvBean.selectJrv(jrv.id) }" />
-                                                    </h:commandLink>
+                                                        <h:commandLink onclick="$('#mdlDelete').modal('show');" rendered="#{ jrv.electoralProcessId.avalibleUpdate() }" style="font-size: 1.3em" >
+                                                            <i class="fa fa-eraser"></i>
+                                                            <p:ajax event="click" update=":frm:pnlDelete" listener="#{ jrvBean.selectJrv(jrv.id) }" />
+                                                        </h:commandLink>
+
+                                                        <h:commandLink onclick="$('#mdlCitinez').modal('show');" rendered="#{ jrv.electoralProcessId.avalibleUpdate() }" style="font-size: 1.3em" >
+                                                            <i class="fa fa-users"></i>
+                                                            <p:ajax event="click" update=":frm:pnlCitinez" listener="#{ jrvBean.selectJrv(jrv.id) }" />
+                                                        </h:commandLink>
+                                                    </h:panelGroup>
+                                                    
+                                                    <h:outputLabel rendered="#{ !jrv.electoralProcessId.typeDepartamental() }" value="Esta junta esta relacionada al tipo presidencial" />
 
                                                 </td>
                                             </tr>
@@ -102,7 +107,7 @@
                                                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="process" value="proceso electoral"> <span class="required">*</span></h:outputLabel>
                                                         <div class="col-md-6 col-sm-6 col-xs-12">
                                                             <h:selectOneMenu requiredMessage="El proceso es requerido" value="#{ jrvBean.jrv.electoralProcessId.id }" id="process" class="form-control col-md-7 col-xs-12" >
-                                                                <f:selectItems value="#{ electoralProcessBean.allElectoralProcessByEndDate() }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name } [ #{ item.electoralProcessTypesId.description } ]" />
+                                                                <f:selectItems value="#{ electoralProcessBean.allElectoralProcessByEndDateDepartamental() }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name } [ #{ item.electoralProcessTypesId.description } ]" />
                                                             </h:selectOneMenu>
                                                         </div>
                                                     </div>
@@ -212,25 +217,25 @@
 
                                             </tbody>
                                         </table>
-                                        
+
                                         <h:commandButton onclick="$('#mdlCitinez').modal('hide');" class="btn btn-danger" style="font-size: 1.3em" value="Eliminar seleccionados" >
                                             <p:ajax event="click" update=":frm:sedesRows" listener="#{ jrvBean.removeCitenez() }" />
                                         </h:commandButton>
 
-                                        
+
                                         <h:commandButton class="btn btn-warning" id="CommandPDF" value="generar PDF" action="#{ jrvBean.generateReport() }" immediate="true" />
                                     </div>
-                                    
+
                                     <script>
-                                        
-                                        function changeIDSelect(id){
+
+                                        function changeIDSelect(id) {
                                             var key = id + ',';
                                             if (document.getElementById('frm:idsJvrCitinez').value.indexOf(key) !== -1)
-                                                document.getElementById('frm:idsJvrCitinez').value = document.getElementById('frm:idsJvrCitinez').value.replace(key,'');
+                                                document.getElementById('frm:idsJvrCitinez').value = document.getElementById('frm:idsJvrCitinez').value.replace(key, '');
                                             else
                                                 document.getElementById('frm:idsJvrCitinez').value = document.getElementById('frm:idsJvrCitinez').value + key;
                                         }
-                                        
+
                                     </script>
                                 </h:panelGroup>
                             </div>

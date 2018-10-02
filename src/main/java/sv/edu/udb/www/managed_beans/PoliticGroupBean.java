@@ -15,14 +15,16 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import sv.edu.udb.www.Entities.PoliticGroups;
-import sv.edu.udb.www.Model.PoliticGroupModel;
+import sv.edu.udb.www.Model.PoliticGroupsModel;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.servlet.http.Part;
 import org.primefaces.event.FileUploadEvent;
 import sv.edu.udb.www.Entities.PoliticGroups;
-import sv.edu.udb.www.Model.PoliticGroupModel;
+import sv.edu.udb.www.Model.PoliticGroupsModel;
 import sv.edu.udb.www.Utilities;
 import sv.edu.udb.www.Validacion;
 
@@ -35,18 +37,16 @@ import sv.edu.udb.www.Validacion;
 public class PoliticGroupBean implements Serializable {
 
     @EJB
-    private PoliticGroupModel politicGroupsModel;
+    private PoliticGroupsModel politicGroupModel;
 
     /**
      * Creates a new instance of PoliticGroupBean
      */
     
     public List<PoliticGroups> allPositicGroupWithCandidates(){
-        return this.politicGroupsModel.listPoliticGroupsWithCandidates();
+        return this.politicGroupModel.listPoliticGroupsWithCandidates();
     }
-    
-    private PoliticGroupModel politicGroupModel;
-    
+   
     private PoliticGroups politicGroup;
     
     private Part image;
@@ -90,7 +90,7 @@ public class PoliticGroupBean implements Serializable {
         try{
            InputStream in = this.image.getInputStream();
            if(Validacion.esNombreImagen(this.image.getSubmittedFileName())){
-             File f = new File("C:\\Users\\Diego Lemus\\Desktop\\voting_App\\src\\main\\webapp\\images\\" + this.image.getSubmittedFileName());
+             File f = new File( Utilities.getPath("/images") + this.image.getSubmittedFileName());
            this.politicGroup.setPhoto(this.image.getSubmittedFileName());
            f.createNewFile();
            FileOutputStream out = new FileOutputStream(f);
@@ -106,6 +106,7 @@ public class PoliticGroupBean implements Serializable {
            }
            
         }catch(IOException ex){
+            ex.printStackTrace();
             Utilities.addMessageError("Error_Archivo", "Ha ocurrido un error con el archivo");
         }
     }
@@ -134,9 +135,12 @@ public class PoliticGroupBean implements Serializable {
             Utilities.addMessageError("Error_Nombre", "El nombre no es valido");
         }
     }
+    
     public List<PoliticGroups> listPoliticGroups(){
         return this.politicGroupModel.listPoliticGroups();
     }
+
+  
     public void eliminateImage(File fichero){
         if(!fichero.exists()){
             Utilities.addMessageError("Error_Archivo", "El archivo con nombre " + fichero.getName() + " no existe");

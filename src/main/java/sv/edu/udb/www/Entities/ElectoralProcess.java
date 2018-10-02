@@ -299,4 +299,12 @@ public class ElectoralProcess implements Serializable {
     public String toString() {
         return "sv.edu.udb.www.Entities.ElectoralProcess[ id=" + id + " ]";
     }
+    
+    public boolean typePresidential(){
+        return this.electoralProcessTypesId.getId() == 1;
+    }
+    
+    public boolean typeDepartamental(){
+        return this.electoralProcessTypesId.getId() == 2;
+    }
 }

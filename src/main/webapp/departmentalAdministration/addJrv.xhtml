@@ -36,7 +36,7 @@
                             <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="process" value="proceso electoral"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <h:selectOneMenu rendered="true" requiredMessage="El proceso es requerido" value="#{ jrvBean.jrv.electoralProcessId.id }" id="process" class="form-control col-md-7 col-xs-12" >
-                                <f:selectItems value="#{ electoralProcessBean.allElectoralProcessByEndDate() }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name } [ #{ item.electoralProcessTypesId.description } ]" />
+                                <f:selectItems value="#{ electoralProcessBean.allElectoralProcessByEndDateDepartamental() }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name } [ #{ item.electoralProcessTypesId.description } ]" />
                             </h:selectOneMenu>
                         </div>
                     </div>

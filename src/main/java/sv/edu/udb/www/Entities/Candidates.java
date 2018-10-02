@@ -6,7 +6,9 @@
 package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -65,36 +67,44 @@ public class Candidates implements Serializable {
     private CandidatesForCities electoralProcessActive;
     @Transient
     private PresidencialCandidates presidencialCandidatesActive;
-    
+
     // //////////////////´///////////////////////////////////////
     public CandidatesForCities getElectoralProcessActive() {
         return electoralProcessActive;
     }
-    public void setElectoralProcessActive(CandidatesForCities electoralProcessActive) {    
+
+    public void setElectoralProcessActive(CandidatesForCities electoralProcessActive) {
         this.electoralProcessActive = electoralProcessActive;
     }
-    public boolean hasElectoralProcessActive(){
+
+    public boolean hasElectoralProcessActive() {
         return this.electoralProcessActive != null && this.presidencialCandidatesActive == null;
     }
-    public boolean hasElectoralProcessActiveProcess(){
+
+    public boolean hasElectoralProcessActiveProcess() {
         return hasElectoralProcessActive() && this.electoralProcessActive.getElectoralProcessId().avalibleUpdate();
     }
+
     public PresidencialCandidates getPresidencialCandidatesActive() {
         return presidencialCandidatesActive;
     }
-    
+
     public void setPresidencialCandidatesActive(PresidencialCandidates presidencialCandidatesActive) {
         this.presidencialCandidatesActive = presidencialCandidatesActive;
     }
-    public boolean hasPresidencialCandidatesActive(){
+
+    public boolean hasPresidencialCandidatesActive() {
         return this.presidencialCandidatesActive != null && this.electoralProcessActive == null;
     }
-     public boolean notHasPresidencialCandidatesActive(){
+
+    public boolean notHasPresidencialCandidatesActive() {
         return this.presidencialCandidatesActive == null && this.electoralProcessActive == null;
     }
-    public boolean hasPresidencialCandidatesProcessActive(){
+
+    public boolean hasPresidencialCandidatesProcessActive() {
         return hasPresidencialCandidatesActive() && this.presidencialCandidatesActive.getElectoralProcessId().avalibleUpdate();
     }
+
     /// //////////////////////////
     public boolean avalible() {
         return true;
@@ -194,5 +204,25 @@ public class Candidates implements Serializable {
     @Override
     public String toString() {
         return "sv.edu.udb.www.Entities.Candidates[ id=" + id + " ]";
+    }
+
+    public boolean hasProcessElectoral() {
+
+        if (this.candidatesForCitiesCollection.size() > 0) {
+
+            List cities;
+            
+            if (this.candidatesForCitiesCollection instanceof List) {
+                cities = (List) this.candidatesForCitiesCollection;
+            } else {
+                cities = new ArrayList(this.candidatesForCitiesCollection);
+            }
+
+            CandidatesForCities city = (CandidatesForCities)cities.get(cities.size() - 1);
+            
+            return city.getElectoralProcessId().getElectoralProcessStatusId().getId() != 4;
+        }
+
+        return false;
     }
 }

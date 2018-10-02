@@ -132,6 +132,20 @@ public class JrvBean implements Serializable {
             Utilities.addMessageError("error", "Ya existe una JRV con la informacion especificada");
         }
     }
+    
+    public void savePresidencial() {
+
+        if (!this.jrvModel.existByCode(jrv)) {
+            if (this.jrvModel.insertJrv(jrv)) {
+                Utilities.addMessageFlash("exito", "Se ha añadido una nueva Junta");
+                Utilities.redirect("/faces/generalAdministration/jrv.xhtml");
+            } else {
+                Utilities.addMessageError("error", "No se ha podido regisrar la junta");
+            }
+        } else {
+            Utilities.addMessageError("error", "Ya existe una JRV con la informacion especificada");
+        }
+    }
 
     public void update() {
 

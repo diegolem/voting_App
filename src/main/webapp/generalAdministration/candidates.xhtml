@@ -41,14 +41,19 @@
                                                         <center><span class="label label-default">#{ candidate.citizenId.name } #{ candidate.citizenId.lastname }</span></center>
                                                         <img class="img-thumbnail" src="#{request.contextPath}/faces/resources/images/#{ candidate.photo }" style="width: 160px; height: 160px;" />
                                                         <div class="caption" style="background-color: transparent; display: flex; justify-content: center;">
-                                                            <p>
-                                                                <a href="#{request.contextPath}/faces/generalAdministration/editCandidate.xhtml?id=#{ candidate.id }" style="font-size: 2em;"><i class="fa fa-edit"></i></a>
+                                                            <h:panelGroup rendered="#{ !candidate.hasProcessElectoral() }">
+                                                                <p>
+                                                                    <a href="#{request.contextPath}/faces/generalAdministration/editCandidate.xhtml?id=#{ candidate.id }" style="font-size: 2em;"><i class="fa fa-edit"></i></a>
 
-                                                                <h:commandLink onclick="$('#myModal').modal('show');" style="margin-left: 2px; font-size: 2em;" >
-                                                                    <i class="fa fa-eraser"></i>
-                                                                    <p:ajax event="click" update="idCandidate" listener="#{ candidatesBean.saveId(candidate.id) }" />
-                                                                </h:commandLink>
-                                                            </p>
+                                                                    <h:commandLink onclick="$('#myModal').modal('show');" style="margin-left: 2px; font-size: 2em;" >
+                                                                        <i class="fa fa-eraser"></i>
+                                                                        <p:ajax event="click" update="idCandidate" listener="#{ candidatesBean.saveId(candidate.id) }" />
+                                                                    </h:commandLink>
+                                                                </p>
+                                                            </h:panelGroup>
+                                                            <h:panelGroup rendered="#{ candidate.hasProcessElectoral() }">
+                                                                Esta en medio de un proceso electoral
+                                                            </h:panelGroup>
                                                         </div>
                                                     </div>
 
@@ -156,7 +161,7 @@
                         pagination: true
                     });
                 </script>
-                
+
             </ui:define>
 
         </ui:composition>
