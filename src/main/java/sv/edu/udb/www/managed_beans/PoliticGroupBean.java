@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import sv.edu.udb.www.Entities.PoliticGroups;
 import sv.edu.udb.www.Model.PoliticGroupsModel;
 import javax.faces.application.FacesMessage;
