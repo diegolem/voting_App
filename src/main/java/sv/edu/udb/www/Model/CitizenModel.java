@@ -83,6 +83,24 @@ public class CitizenModel {
             return null;
         }
     }
+    
+    public Citizens getLoginCitizenAdmin(String dui,String pass){
+        try{
+            Query query = em.createQuery("SELECT c FROM Citizens c WHERE c.dui = :dui AND c.password = :pass");
+            query.setParameter("dui", dui);
+            query.setParameter("pass", DigestUtils.sha256Hex(pass));
+            
+            Citizens enti = (Citizens) query.getResultList().get(0);
+            
+            if(enti != null){
+                return enti;
+            }
+            return null;
+        }catch(Exception e){
+            return null;
+        }
+    }
+    
     public void pullForDui(Citizens citizen){
         try {
             Query query = em.createQuery("SELECT c FROM Citizens c where c.dui = :dui AND c.password = :pass");
@@ -151,6 +169,28 @@ public class CitizenModel {
             return false;
         }
     }
+    public boolean isPresident(Citizens citizen){
+        try {
+            Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui AND c.citizenTypeId.id = :idtype");
+            query.setParameter("dui", citizen.getDui());
+            query.setParameter("idtype", citizen.getCitizenTypeId().getId());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
+            return false;
+        }
+    }
+    
+    public boolean verifyCitizen (Citizens citizen){
+        try {
+            Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui AND c.password = :pass");
+            query.setParameter("dui", citizen.getDui());
+            query.setParameter("pass", citizen.getPassword());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
+            return false;
+        }
+    }
+    
     public boolean exists (Citizens citizen){
         try {
             Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui AND c.password = :pass");

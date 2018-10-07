@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import sv.edu.udb.www.Entities.ElectoralProcess;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-10-05T23:33:56")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-10-07T08:58:55")
 @StaticMetamodel(ElectoralProcessTypes.class)
 public class ElectoralProcessTypes_ { 
 

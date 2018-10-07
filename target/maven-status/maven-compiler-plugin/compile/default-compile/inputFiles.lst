@@ -1,4 +1,5 @@
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\managed_beans\PoliticGroupVotesBean.java
+C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\rest\voting_app.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Model\JrvCitizenTypesModel.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Entities\PoliticGroupVotes.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Entities\ElectoralProcessTypes.java
@@ -13,11 +14,14 @@ C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\managed_bea
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Model\CandidatesForCitiesModel.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\managed_beans\JrvBean.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Model\CitizenVotesModel.java
+C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\rest\HeadquartersRest.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\managed_beans\Auth.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Model\ElectoralProcessTypesModel.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\managed_beans\JrvCitizenTypesBean.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Model\CandidatesModel.java
+C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\rest\ElectoralProcessRest.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\managed_beans\CitizenTypesBean.java
+C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\rest\JrvCitizenRest.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Model\DepartmentsModel.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Validacion.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Model\JrvModel.java
@@ -50,6 +54,7 @@ C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Entities\Ci
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Entities\ElectoralProcess.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\managed_beans\CitiesBean.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\filters\LoginFilter.java
+C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\rest\CitizensRest.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Model\PoliticGroupVotesModel.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Model\ElectoralProcessModel.java
 C:\Users\Diego Lemus\Desktop\voting_App\src\main\java\sv\edu\udb\www\Model\CitizenTypesModel.java
