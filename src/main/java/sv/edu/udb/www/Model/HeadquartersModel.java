@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Entities.Headquarters;
 
 /**
@@ -34,6 +35,16 @@ public class HeadquartersModel {
             return null;
         }
     }
+    public List<Headquarters> listHeadForDui(Citizens citizen){
+        try{
+            Query query = em.createQuery("SELECT h FROM Headquarters h WHERE h.id = :id");
+            query.setParameter("id", citizen.getHeadquarterId().getId());
+            return query.getResultList();
+        }catch(Exception ex){
+            return null;
+        }
+    }
+    
     public boolean insertHeadquarter(Headquarters headquarter){
         try{
             em.persist(headquarter);

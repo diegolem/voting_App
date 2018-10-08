@@ -5,6 +5,7 @@ sv\edu\udb\www\Entities\Headquarters_.class
 sv\edu\udb\www\Entities\PresidencialCandidates.class
 sv\edu\udb\www\Model\JrvCitizenTypesModel.class
 sv\edu\udb\www\Model\ElectoralProcessStatusModel.class
+sv\edu\udb\www\rest\JrvCitizenRest.class
 sv\edu\udb\www\Entities\JrvCitizenTypes_.class
 sv\edu\udb\www\Entities\PoliticGroups.class
 sv\edu\udb\www\managed_beans\CitiesBean.class

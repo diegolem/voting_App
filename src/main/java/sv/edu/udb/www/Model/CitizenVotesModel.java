@@ -11,6 +11,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import sv.edu.udb.www.Entities.CitizenVotes;
+import sv.edu.udb.www.Entities.Citizens;
+import sv.edu.udb.www.Entities.Jrv;
+import sv.edu.udb.www.Entities.JrvCitizen;
 
 /**
  *
@@ -34,6 +37,31 @@ public class CitizenVotesModel {
             return false;
         }
     }
+    public boolean verifyVote(Citizens citizen,int idAdm){
+        try{
+            JrvCitizen jrv = this.getJrvVotes(idAdm);
+            Query query = em.createQuery("SELECT c FROM CitizenVotes c where c.jrvId.id = :jrvid AND c.citizenId.id = :idcitizen AND c.electoralProcessId.id = :idprocess");
+            query.setParameter("jrvid", jrv.getJrvId().getId());
+            query.setParameter("idcitizen", jrv.getCitizenId().getId());
+            query.setParameter("idprocess", jrv.getJrvId().getElectoralProcessId().getId());
+            
+            return query.getResultList().isEmpty();
+        }catch(Exception e){
+            return false;
+        }
+    }
+    
+    public JrvCitizen getJrvVotes(int idAdmin){
+        try{
+            Query query = em.createQuery("SELECT j FROM JrvCitizen j where j.citizenId.id = :id");
+            query.setParameter("id", idAdmin);
+            
+            return (JrvCitizen) query.getResultList().get(0);
+        }catch(Exception ex){
+            return null;
+        }
+    }
+    
     public CitizenVotes getCitizenVotes(int id){
         try{
             CitizenVotes enti = em.find(CitizenVotes.class, id);
