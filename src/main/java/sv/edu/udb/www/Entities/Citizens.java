@@ -53,6 +53,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Citizens.findByPassword", query = "SELECT c FROM Citizens c WHERE c.password = :password")
     , @NamedQuery(name = "Citizens.findByDui", query = "SELECT c FROM Citizens c WHERE c.dui = :dui")
     , @NamedQuery(name = "Citizens.findByAdress", query = "SELECT c FROM Citizens c WHERE c.adress = :adress")
+    , @NamedQuery(name = "Citizens.findByHeadquarter", query = "SELECT c FROM Citizens c WHERE c.headquarterId.id = :idHeadquarter and c.citizenTypeId.id = 'CITIZN' and c.state = 1")
     , @NamedQuery(name = "Citizens.findByBirthdate", query = "SELECT c FROM Citizens c WHERE c.birthdate = :birthdate")
     , @NamedQuery(name = "Citizens.findAllByDepartament", query = "SELECT c FROM Citizens c where c.headquarterId.cityId.deparmentId.id = :id and c.state = 1 and (c.citizenTypeId.id = 'CITIZN' OR c.citizenTypeId.id = 'PREJRV')")
     , @NamedQuery(name = "Citizens.findByState", query = "SELECT c FROM Citizens c WHERE c.state = :state")})
@@ -286,5 +287,29 @@ public class Citizens implements Serializable {
         result &= (this.password == null || this.password.isEmpty());
 
         return result;
+    }
+    
+    //Obtener la carpeta segun el tipo de usuario
+    public String folderByUserType(){
+        switch(this.citizenTypeId.getId()){
+            case "ADMGEN":
+                return "/generalAdministration";
+                
+            case "ADMDEP":
+                return "/departmentalAdministration";
+                
+            case "EMRNPN":
+                return "/employeeRnpn";
+                
+            case "PREJRV":
+                return "/jrvPresident";
+                
+            default:
+                return "";
+        }
+    }
+    
+    public boolean isCitizen(){
+        return this.citizenTypeId.getId().equals("CITIZN");
     }
 }

@@ -25,7 +25,6 @@ import javax.naming.Context;
 import sv.edu.udb.www.Entities.Jrv;
 import sv.edu.udb.www.Entities.CitizenTypes;
 import sv.edu.udb.www.Entities.JrvCitizen;
-import sv.edu.udb.www.Entities.JrvCitizenTypes;
 import sv.edu.udb.www.Model.CitizenModel;
 import sv.edu.udb.www.Model.JrvCitizenModel;
 import sv.edu.udb.www.Model.JrvCitizenTypesModel;
@@ -45,6 +44,7 @@ import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.j2ee.servlets.ImageServlet;
 import org.apache.commons.codec.digest.DigestUtils;
+import sv.edu.udb.www.Entities.JrvCitizenTypes;
 import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Model.CitizenTypesModel;
@@ -79,7 +79,8 @@ public class JrvBean implements Serializable {
     private Citizens citizen;
     private int idCitizen;
     private int idType;
-
+    private JrvCitizen jrvCitizen;
+    
     public Jrv getJrv() {
         return jrv;
     }
@@ -87,6 +88,16 @@ public class JrvBean implements Serializable {
     public Citizens getCitizen() {
         return citizen;
     }
+
+    public JrvCitizen getJrvCitizen() {
+        return jrvCitizen;
+    }
+
+    public void setJrvCitizen(JrvCitizen jrvCitizen) {
+        this.jrvCitizen = jrvCitizen;
+    }
+
+    
 
     public void setCitizen(Citizens citizen) {
         this.citizen = citizen;
@@ -117,6 +128,12 @@ public class JrvBean implements Serializable {
      */
     public JrvBean() {
         this.jrv = new Jrv();
+    }
+    
+    public void loadCirinez(int idCitenez, int idJrv, int idJrvCitizen){
+        this.citizen = this.citizenModel.getCitizen(idCitenez);
+        this.jrv = this.jrvModel.getJrv(idJrv);
+        this.jrvCitizen = this.jrvCitizenModel.getJrvCitizen(idJrvCitizen);
     }
 
     public void save() {
@@ -192,11 +209,11 @@ public class JrvBean implements Serializable {
         this.jrv = this.jrvModel.getJrv(id);
     }
 
-    public void addCitenez() {
-        JrvCitizen jvrCitenez = new JrvCitizen();
-        jvrCitenez.setCitizenId(this.citizenModel.getCitizen(Integer.parseInt(Utilities.getRequestValue("frm:idCitizen"))));
+    public void changeRolCitenez() {
+        JrvCitizen jvrCitenez = this.jrvCitizenModel.getJrvCitizen(Integer.parseInt(Utilities.getRequestValue("frm:idJrvCitizenRol")));
+        jvrCitenez.setCitizenId(this.citizenModel.getCitizen(Integer.parseInt(Utilities.getRequestValue("frm:idCitizenRol"))));
         jvrCitenez.setJrvCitizenTypeId(this.jrvCitizenTypesModel.getJrvCitizenTypes(Integer.parseInt(Utilities.getRequestValue("frm:idType"))));
-        jvrCitenez.setJrvId(this.jrvModel.getJrv(Integer.parseInt(Utilities.getRequestValue("frm:idJvrCitinez"))));
+        jvrCitenez.setJrvId(this.jrvModel.getJrv(Integer.parseInt(Utilities.getRequestValue("frm:idJvrRol"))));
 
         // revisamos si es el prisidente
         if (jvrCitenez.getJrvCitizenTypeId().getId() == 1){
@@ -206,8 +223,8 @@ public class JrvBean implements Serializable {
             this.citizenModel.editCitizen(jvrCitenez.getCitizenId());
         }
         
-        if (this.jrvCitizenModel.insertJrvCitizen(jvrCitenez)) {
-            Utilities.addMessageFlash("exito", "se ha añadido un nuevo ciudadano");
+        if (this.jrvCitizenModel.editJrvCitizen(jvrCitenez)) {
+            Utilities.addMessageFlash("exito", "se ha modificado el rol un nuevo ciudadano");
         } else {
             Utilities.addMessageFlash("error", "No se ha podido añadir el nuevo ciudadano");
         }

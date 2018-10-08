@@ -129,7 +129,7 @@ public class LoginFilter implements Filter {
                 if (url.contains("logout.xhtml")) { // Si desea cerrar session
                     req.removeAttribute("auth");
                     res.sendRedirect(req.getContextPath() + "/faces/login.xhtml");
-                } else if (url.contains("login.xhtml")) // En caso que desee ir al login
+                } else if (url.contains("login.xhtml") || (!url.contains(auth.folderByType())) && !url.contains("/faces/home.xhtml") ) // En caso que desee ir al login
                     res.sendRedirect(req.getContextPath() + "/faces/home.xhtml");
                 else // En caso que desee otra pagina lo puede 
                     chain.doFilter(request, response);

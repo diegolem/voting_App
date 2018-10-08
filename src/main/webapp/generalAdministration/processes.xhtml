@@ -28,14 +28,30 @@
                                 <div class="col-md-4 col-sm-4 col-xs-12">
                                     <div class="x_panel tile fixed_height_320">
                                         <div class="x_title">
-                                            <a class="name label label-default" href="#{ request.contextPath }/faces/generalAdministration/editProcess.xhtml?id=#{electoral.id}" style="font-size: 1.5em; margin-top: 2px" >#{ electoral.name }</a>
+
+                                            <h2 class="name">#{ electoral.name }<small>#{ electoral.electoralProcessStatusId.description }</small></h2>
 
                                             <h:panelGroup rendered="#{ electoral.avalible() }">
                                                 <ul class="nav navbar-right panel_toolbox">
                                                     <li>
-                                                        <h:commandLink onclick="$('#mdlEliminar').modal('show');" style="font-size: 1em;" >
-                                                            Eliminar <i class="fa fa-remove"></i>
+                                                        <a href="#{ request.contextPath }/faces/generalAdministration/editProcess.xhtml?id=#{electoral.id}"><i class="fa fa-wrench"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <h:commandLink onclick="$('#mdlEliminar').modal('show');" >
+                                                            <i class="fa fa-remove"></i>
                                                             <p:ajax update=":frm:pnlEliminar" listener="#{ electoralProcessBean.defineElectoralId(electoral.id) }" />
+                                                        </h:commandLink>
+                                                    </li>
+                                                    <li>
+                                                        <h:commandLink onclick="$('#mdlCambiarSede').modal('show');" >
+                                                            <i class="fa fa-university"></i>
+                                                            <p:ajax update=":frm:pnlCambiarSede" listener="#{ electoralProcessBean.defineElectoralId(electoral.id) }" />
+                                                        </h:commandLink>
+                                                    </li>
+                                                    <li>
+                                                        <h:commandLink onclick="$('#mdlReset').modal('show');" >
+                                                            <i class="fa fa-retweet"></i>
+                                                            <p:ajax update=":frm:pnlReset" listener="#{ electoralProcessBean.defineElectoralId(electoral.id) }" />
                                                         </h:commandLink>
                                                     </li>
                                                 </ul>
@@ -54,13 +70,17 @@
                                                 </ul>
 
                                                 <div class="sidebar-widget">
-                                                    <h4>Profile Completion</h4>
-                                                    <canvas width="150" height="80" id="chart_gauge_01" class="" style="width: 160px; height: 100px;"></canvas>
-                                                    <div class="goal-wrapper">
-                                                        <span id="gauge-text" class="gauge-value pull-left">0</span>
-                                                        <span class="gauge-value pull-left">%</span>
-                                                        <span id="goal-text" class="goal-value pull-right">100%</span>
-                                                    </div>
+                                                    <center>
+                                                        <div id="img_bar_#{electoral.id}" 
+                                                             data-type="fill"
+                                                             data-img="#{request.contextPath}/faces/resources/images/#{ electoral.iconStep() }"
+                                                             data-img-size="100,100"
+                                                             data-value="#{ electoral.porcentage() }"
+                                                             ></div>
+                                                        <script>
+                                                            new ldBar("#img_bar_#{electoral.id}");
+                                                        </script>
+                                                    </center>
                                                 </div>
                                             </div>
                                         </div>
@@ -80,7 +100,7 @@
                                     <div class="modal-body bg-primary text-info">
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                         ¿Esta seguro que desea eliminar el proceso #{ electoralProcessBean.electoralProcess.name }?
-                                        
+
                                         <h:inputHidden id="electoralProcessId" value="#{ electoralProcessBean.electoralProcess.id }" />
                                     </div>
                                     <!-- dialog buttons -->
@@ -90,18 +110,86 @@
                                 </h:panelGroup>
                             </div>
                         </div>
-                    </div> 
+                    </div>
+
+                    <div id="mdlReset" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <h:panelGroup id="pnlReset" >
+                                    #{ electoralProcessBean.onIdHeadquarter() }
+                                    <!-- dialog body -->
+                                    <div class="modal-body bg-primary text-info">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <center>
+                                            ¿Esta seguro que desea reorganizar los participantes del proceso #{ electoralProcessBean.electoralProcess.name }?
+                                            <p><h5>Sede: #{ electoralProcessBean.electoralProcess.nameHeadquarter() }</h5></p>
+                                            <p><small>Se perderan toda la informacion de los ciudadanos</small></p>
+                                        </center>
+                                        <h:inputHidden id="headquarterResetActual" value="#{ electoralProcessBean.idHeadquarterActual }" />
+                                        <h:inputHidden id="electoralResetProcessId" value="#{ electoralProcessBean.electoralProcess.id }" />
+                                    </div>
+                                    <!-- dialog buttons -->
+                                    <div class="modal-footer">
+                                        <h:commandButton value="Recargar" class="btn btn-primary" type="submit" actionListener="#{ electoralProcessBean.reloadJrv() }" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mdlCambiarSede" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <h:panelGroup id="pnlCambiarSede" >
+                                    <!-- dialog body -->
+                                    <div class="modal-body bg-primary text-info">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        ¿Esta seguro que desea cambiar la sede del proceso #{ electoralProcessBean.electoralProcess.name }?
+                                        <center>
+                                            <p><h5>#{ electoralProcessBean.electoralProcess.nameHeadquarter() }</h5></p>
+                                        </center>
+
+                                        #{ electoralProcessBean.onIdHeadquarter() }
+                                        <h:inputHidden id="headquarterActual" value="#{ electoralProcessBean.idHeadquarterActual }" />
+
+                                        <div class="form-horizontal form-label-left data-parsley-validate">
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="headquarterNow" value="Sede"> <span class="required">*</span></h:outputLabel>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <h:selectOneMenu rendered="true" requiredMessage="La sede es requerida" id="headquarterNow" value="#{ electoralProcessBean.idHeadquarter }" class="form-control col-md-7 col-xs-12" >
+                                                        <f:selectItems value="#{ headquartersBean.listHeadquarterWithoutElectoralProcess() }" var="headquarter" itemValue="#{ headquarter.id }" itemLabel="#{ headquarter.name }" />
+                                                    </h:selectOneMenu>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h:inputHidden id="electoralProcessHeadId" value="#{ electoralProcessBean.electoralProcess.id }" />
+                                    </div>
+                                    <!-- dialog buttons -->
+                                    <div class="modal-footer">
+                                        <h:commandButton value="Cambiar sede" class="btn btn-success" type="submit" actionListener="#{ electoralProcessBean.changeJRV() }" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
 
                 </h:form>
             </ui:define>
 
             <ui:define name="body_scripts">
                 <script>
-                    var monkeyList = new List('test-list', {
-                        valueNames: ['name'],
-                        page: 3,
-                        pagination: true
+                    $(document).ready(function () {
+
+                        var monkeyList = new List('test-list', {
+                            valueNames: ['name'],
+                            page: 3,
+                            pagination: true
+                        });
+
                     });
+
+
                 </script>
             </ui:define>
 

@@ -7,8 +7,10 @@ package sv.edu.udb.www.Entities;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -104,7 +106,7 @@ public class ElectoralProcess implements Serializable {
     @JoinColumn(name = "electoral_process_types_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private ElectoralProcessTypes electoralProcessTypesId;
-
+    
     public ElectoralProcess() {
     }
 
@@ -274,7 +276,7 @@ public class ElectoralProcess implements Serializable {
     public boolean avalible() {
         return Utilities.isEquealOrAfterNow(this.processDate);
     }
-    
+
     public boolean startProcess() {
         return Utilities.isEquealOrBerofeNow(this.processDate);
     }
@@ -287,24 +289,81 @@ public class ElectoralProcess implements Serializable {
         return Utilities.isEquealOrAfterNow(this.getProcessDate());
     }
 
-    public boolean stepEndInscription(){
+    public boolean stepEndInscription() {
         return this.electoralProcessStatusId.getId() == 2;
     }
-    
-    public boolean startProcessByType(){
+
+    public boolean startProcessByType() {
         return this.electoralProcessTypesId.getId() == 2;
     }
-    
+
     @Override
     public String toString() {
         return "sv.edu.udb.www.Entities.ElectoralProcess[ id=" + id + " ]";
     }
-    
-    public boolean typePresidential(){
+
+    public boolean typePresidential() {
         return this.electoralProcessTypesId.getId() == 1;
     }
-    
-    public boolean typeDepartamental(){
+
+    public boolean typeDepartamental() {
         return this.electoralProcessTypesId.getId() == 2;
+    }
+
+    public int porcentage() {
+        return this.electoralProcessStatusId.getId() * 25;
+    }
+
+    public String iconStep() {
+        switch (this.electoralProcessStatusId.getId()) {
+            case 1:
+                return "clipboard.svg";
+            case 2:
+                return "politician.svg";
+            case 3:
+                return "vote.svg";
+            case 4:
+                return "star.svg";
+            default:
+                return "";
+        }
+    }
+
+    public String nameHeadquarter() {
+        if (this.jrvCollection != null && this.jrvCollection.size() > 0) {
+
+            List sedes;
+
+            if (this.jrvCollection instanceof List) {
+                sedes = (List) this.jrvCollection;
+            } else {
+                sedes = new ArrayList(this.jrvCollection);
+            }
+
+            Jrv jrv = (Jrv) sedes.get(sedes.size() - 1);
+            
+            return jrv.getHeadquarterId().getName();
+        }
+        
+        return "";
+    }
+    
+    public int idHeadquarter() {
+        if (this.jrvCollection != null && this.jrvCollection.size() > 0) {
+
+            List sedes;
+
+            if (this.jrvCollection instanceof List) {
+                sedes = (List) this.jrvCollection;
+            } else {
+                sedes = new ArrayList(this.jrvCollection);
+            }
+
+            Jrv jrv = (Jrv) sedes.get(sedes.size() - 1);
+            
+            return jrv.getHeadquarterId().getId();
+        }
+        
+        return 0;
     }
 }

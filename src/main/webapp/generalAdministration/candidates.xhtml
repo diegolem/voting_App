@@ -52,7 +52,8 @@
                                                                 </p>
                                                             </h:panelGroup>
                                                             <h:panelGroup rendered="#{ candidate.hasProcessElectoral() }">
-                                                                Esta en medio de un proceso electoral
+                                                                <h:outputText value="Posee un proceso presidencial" rendered="#{ candidate.hasProcessElectoralPresidential() }" />
+                                                                <h:outputText value="Posee un proceso departamental" rendered="#{ candidate.hasProcessElectoralDepartamental() }" />
                                                             </h:panelGroup>
                                                         </div>
                                                     </div>

@@ -87,6 +87,28 @@ public class JrvModel {
         }
     }
 
+    public List<Jrv> listJrvByProcessAndHeadquarter(int idHeadquarter, int idProcess) {
+        Query query = em.createQuery("SELECT j FROM Jrv j WHERE j.headquarterId.id = :idHeadquarter and j.electoralProcessId.id = :idProcess");
+        query.setParameter("idHeadquarter", idHeadquarter);
+        query.setParameter("idProcess", idProcess);
+
+        return query.getResultList();
+    }
+
+    public boolean delete(int idHeadquarter, int idProcess) {
+        try {
+
+            Query query = em.createQuery("DELETE FROM Jrv j WHERE j.headquarterId.id = :idHeadquarter and j.electoralProcessId.id = :idProcess");
+            query.setParameter("idHeadquarter", idHeadquarter);
+            query.setParameter("idProcess", idProcess);
+
+            return query.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean editJrv(Jrv jrvcity) {
         try {
             Jrv enti = em.find(Jrv.class, jrvcity.getId());

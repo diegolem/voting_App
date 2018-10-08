@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,13 +27,17 @@ import javax.faces.context.Flash;
 import javax.servlet.ServletContext;
 import static javax.servlet.SessionTrackingMode.URL;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import sv.edu.udb.www.managed_beans.Auth;
 
 /**
  *
  * @author pc
  */
 public class Utilities {
-    public static void addMessageError(String tag, String msg){
+
+    public static void addMessageError(String tag, String msg) {
         FacesMessage fm = new FacesMessage(msg, tag);
         fm.setSeverity(FacesMessage.SEVERITY_ERROR);
         FacesContext.getCurrentInstance().addMessage(null, fm);
@@ -53,14 +58,14 @@ public class Utilities {
                 .toLocalDate();
     }
 
-    public static boolean validateMayorEdad(Date fechaC) throws ParseException{
+    public static boolean validateMayorEdad(Date fechaC) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         LocalDate now = LocalDate.now();
-        
+
         return now.compareTo(convertToLocalDateViaInstant(fechaC)) >= 18 && now.compareTo(convertToLocalDateViaInstant(fechaC)) <= 120;
     }
-    
-    public static boolean isEquealOrAfterNow(Date date){
+
+    public static boolean isEquealOrAfterNow(Date date) {
         LocalDate now = LocalDate.now();
         LocalDate target = convertToLocalDateViaInstant(date);
         return target.isAfter(now) || target.isEqual(now);
@@ -109,8 +114,42 @@ public class Utilities {
         Flash messages = FacesContext.getCurrentInstance().getExternalContext().getFlash();
         messages.put(name, message);
     }
-    
-    public static String getRequestValue(String name){
+
+    public static String getRequestValue(String name) {
         return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(name);
+    }
+
+    public static Auth getUserAuth() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+        HttpServletRequest req = (HttpServletRequest) ec.getRequest();
+
+        HttpSession session = req.getSession(false);
+
+        if (session != null) {
+            return (Auth) session.getAttribute("Auth");// Obtenemos la variable de session
+        } else {
+            return null;
+        }
+    }
+
+    public static LocalDate now() {
+        return LocalDate.now();
+    }
+
+    public static String createStringRandom(int lenght) {
+
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        
+        Random random = new Random();
+        StringBuilder buffer = new StringBuilder(lenght);
+        
+        for (int i = 0; i < lenght; i++) {
+            int randomLimitedInt = leftLimit + (int) (random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+        
+        return buffer.toString();
     }
 }

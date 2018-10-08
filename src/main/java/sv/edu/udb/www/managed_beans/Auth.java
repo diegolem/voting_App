@@ -117,4 +117,7 @@ public class Auth implements Serializable {
         return new Jrv();
     }
 
+    public String folderByType(){
+        return (this.citizen.isEmpty()) ? "" : this.citizen.folderByUserType();
+    }
 }

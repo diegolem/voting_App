@@ -58,13 +58,25 @@ public class JrvCitizenTypesBean implements Serializable {
         if (jrv == null)
             return typesFinal;
         
+        int vocalSize = 3;
+        
         for(JrvCitizenTypes type: types){
             if (type.unique()) {
                 boolean exist = false;
+                int vocalCount = 0;
                 for(JrvCitizen jrvCitizen : jrv.getJrvCitizenCollection()){
                     if(jrvCitizen.getJrvCitizenTypeId().equals(type)){
-                        exist = true;
-                        break;
+                        if (type.getId() == 3) {
+                            vocalCount++;
+                            
+                            if (vocalCount == vocalSize){
+                                exist = true;
+                                break;
+                            }
+                        } else {
+                            exist = true;
+                            break;
+                        }
                     }
                 }
                 if (!exist)

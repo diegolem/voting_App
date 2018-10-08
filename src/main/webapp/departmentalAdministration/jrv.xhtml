@@ -40,27 +40,14 @@
                                                 <td class="a-center last">
 
                                                     <h:panelGroup rendered="#{ jrv.electoralProcessId.typeDepartamental() }">
-
                                                         <h:outputLabel rendered="#{ !jrv.electoralProcessId.avalibleUpdate() }" value="No se puede realizar acciones sobre la junta" />
 
-                                                        <h:commandLink onclick="$('#mdlEdit').modal('show');" rendered="#{ jrv.electoralProcessId.avalibleUpdate() }" style="font-size: 1.3em" >
-                                                            <i class="fa fa-edit"></i>
-                                                            <p:ajax event="click" update=":frm:pnlEdit" listener="#{ jrvBean.selectJrv(jrv.id) }" />
-                                                        </h:commandLink>
-
-                                                        <h:commandLink onclick="$('#mdlDelete').modal('show');" rendered="#{ jrv.electoralProcessId.avalibleUpdate() }" style="font-size: 1.3em" >
-                                                            <i class="fa fa-eraser"></i>
-                                                            <p:ajax event="click" update=":frm:pnlDelete" listener="#{ jrvBean.selectJrv(jrv.id) }" />
-                                                        </h:commandLink>
-
-                                                        <h:commandLink onclick="$('#mdlCitinez').modal('show');" rendered="#{ jrv.electoralProcessId.avalibleUpdate() }" style="font-size: 1.3em" >
+                                                        <h:commandLink onclick="$('#pnlCitinezInfo').removeClass('hide');" rendered="#{ jrv.electoralProcessId.avalibleUpdate() }" style="font-size: 1.3em" >
                                                             <i class="fa fa-users"></i>
                                                             <p:ajax event="click" update=":frm:pnlCitinez" listener="#{ jrvBean.selectJrv(jrv.id) }" />
                                                         </h:commandLink>
                                                     </h:panelGroup>
-                                                    
                                                     <h:outputLabel rendered="#{ !jrv.electoralProcessId.typeDepartamental() }" value="Esta junta esta relacionada al tipo presidencial" />
-
                                                 </td>
                                             </tr>
 
@@ -70,176 +57,101 @@
                                 </table>
                             </div>
 
-                            <h:outputScript rendered="#{ flash.error.length() gt 0 }" >
-                                alertify.error('#{ flash.error }');
-                            </h:outputScript>
+                            <h:panelGroup id="pnlMsgFlash">
+                                <h:outputScript rendered="#{ flash.error.length() gt 0 }" >
+                                    alertify.error('#{ flash.error }');
+                                </h:outputScript>
 
-                            <h:outputScript rendered="#{ flash.exito.length() gt 0 }" >
-                                alertify.success('#{ flash.exito }');
-                            </h:outputScript>
+                                <h:outputScript rendered="#{ flash.exito.length() gt 0 }" >
+                                    alertify.success('#{ flash.exito }');
+                                </h:outputScript>
+                            </h:panelGroup>
 
-                            <div id="mdlEdit" class="modal fade">
+                            <div id="pnlCitinezInfo" class="hide">
+                                <h:panelGroup id="pnlCitinez" >
+                                    <div class="panel panel-danger">
+                                        <!-- Default panel contents -->
+                                        <div class="panel-heading">
+                                            <a onclick="$('#pnlCitinezInfo').addClass('hide');" ><i class="fa fa-close"></i></a>
+                                            Junta #{ jrvBean.jrv.code }
+                                        </div>
+                                        <div class="panel-body">
+
+                                            <h:inputHidden id="idJvrCitinez" value="#{ jrvBean.jrv.id }" />
+
+                                            <table class="table table-striped jambo_table bulk_action">
+                                                <thead>
+                                                    <tr class="headings">
+                                                        <th class="column-title">Ciudadano</th>
+                                                        <th class="column-title">Dui</th>
+                                                        <th class="column-title">Cargo</th>
+                                                        <th class="column-title">Opciones</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    <p:repeat value="#{ jrvBean.jrv.jrvCitizenCollection }" var="citinez">
+
+                                                        <tr class="even pointer">
+                                                            <td class=" ">#{ citinez.citizenId.name } #{ citinez.citizenId.lastname }</td>
+                                                            <td class=" ">#{ citinez.citizenId.dui }</td>
+                                                            <td class=" ">#{ citinez.jrvCitizenTypeId.name }</td>
+                                                            <td class=" ">
+                                                                <h:commandButton onclick="$('#mdlRol').modal('show');" immediate="true" class="btn btn-primary" type="submit" value="Cambiar cargo" >
+                                                                    <p:ajax event="click" update=":frm:pnlRol" listener="#{ jrvBean.loadCirinez(citinez.citizenId.id, jrvBean.jrv.id, citinez.id) }" />
+                                                                </h:commandButton>
+                                                            </td>
+                                                        </tr>
+
+                                                    </p:repeat>
+
+                                                </tbody>
+                                            </table>
+
+                                            <h:commandButton class="btn btn-warning" id="CommandPDF" value="generar PDF" action="#{ jrvBean.generateReport() }" immediate="true" />
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+
+                            <div id="mdlRol" class="modal fade">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <h:panelGroup id="pnlEdit" >
-                                            <!-- dialog body -->
-                                            <div class="modal-body bg-primary text-info">
+                                        <h:panelGroup id="pnlRol">
+                                            <div class="modal-body bg-success text-info">
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                Codigo #{ jrvBean.jrv.code }
+                                                Miembro: #{ jrvBean.citizen.name } #{ jrvBean.citizen.lastname }
                                             </div>
-                                            <!-- dialog buttons -->
+
                                             <div class="modal-footer">
-
-                                                <h:inputHidden id="idEdit" value="#{ jrvBean.jrv.id }" />
-                                                <h:inputHidden id="codeEdit" value="#{ jrvBean.jrv.code }" />
-
                                                 <div class="form-horizontal form-label-left data-parsley-validate">
-                                                    <div class="form-group">
-                                                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="headquarter" value="Sede electoral:"> <span class="required">*</span></h:outputLabel>
-                                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                                            <h:selectOneMenu requiredMessage="La sede es oblighatoria" id="headquarter" value="#{ jrvBean.jrv.headquarterId.id }" class="form-control col-md-7 col-xs-12" >
-                                                                <f:selectItems value="#{ headquartersBean.listHeadquarter() }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name } [ #{ item.cityId.name } ]" />
-                                                            </h:selectOneMenu>
-                                                        </div>
-                                                    </div>
+                                                    <h:inputHidden id="idJvrRol" value="#{ jrvBean.jrv.id }" />
+                                                    <h:inputHidden id="idCitizenRol" value="#{ jrvBean.citizen.id }" />
+                                                    <h:inputHidden id="idJrvCitizenRol" value="#{ jrvBean.jrvCitizen.id }" />
 
                                                     <div class="form-group">
-                                                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="process" value="proceso electoral"> <span class="required">*</span></h:outputLabel>
+                                                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="idType" value="Rol"> <span class="required">*</span></h:outputLabel>
                                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                                            <h:selectOneMenu requiredMessage="El proceso es requerido" value="#{ jrvBean.jrv.electoralProcessId.id }" id="process" class="form-control col-md-7 col-xs-12" >
-                                                                <f:selectItems value="#{ electoralProcessBean.allElectoralProcessByEndDateDepartamental() }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name } [ #{ item.electoralProcessTypesId.description } ]" />
+                                                            <h:selectOneMenu value="#{ jrvBean.idType }" id="idType" class="form-control col-md-7 col-xs-12" >
+                                                                <f:selectItems value="#{ jrvCitizenTypesBean.listWithoutUsing(jrvBean.jrv.id) }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name }" />
                                                             </h:selectOneMenu>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <h:commandButton onclick="$('#mdlEdit').modal('hide');" class="btn btn-danger" style="font-size: 1.3em" value="Actualizar" >
-                                                    <f:ajax render="@form" listener="#{ jrvBean.update() }" />
+                                                <h:commandButton onclick="$('#mdlRol').modal('hide');" class="btn btn-success" style="font-size: 1.3em" value="Cambiar rol" >
+                                                    <p:ajax event="click" update=":frm:pnlCitinez :frm:pnlMsgFlash" listener="#{ jrvBean.changeRolCitenez() }" />
                                                 </h:commandButton>
                                             </div>
                                         </h:panelGroup>
                                     </div>
                                 </div>
                             </div>
-
-                            <div id="mdlDelete" class="modal fade">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <h:panelGroup id="pnlDelete" >
-                                            <!-- dialog body -->
-                                            <div class="modal-body bg-primary text-info">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                ¿Esta seguro que desea eliminar ña junta con el codigo #{ jrvBean.jrv.code }?
-                                            </div>
-                                            <!-- dialog buttons -->
-                                            <div class="modal-footer">
-
-                                                <h:inputHidden id="idDelete" value="#{ jrvBean.jrv.id }" />
-
-                                                <h:commandButton onclick="$('#mdlDelete').modal('hide');" class="btn btn-danger" style="font-size: 1.3em" value="Eliminar" >
-                                                    <f:ajax render="@form" listener="#{ jrvBean.delete() }" />
-                                                </h:commandButton>
-                                            </div>
-                                        </h:panelGroup>
-                                    </div>
-                                </div>
-                            </div>
-
 
                             <script>
                                 $('#tblInformation').DataTable();
                             </script>
                         </h:panelGroup>
-                    </div>
-
-                    <div id="mdlCitinez" class="modal fade">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <h:panelGroup id="pnlCitinez" >
-                                    <!-- dialog body -->
-                                    <div class="modal-body bg-primary text-info">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        Junta #{ jrvBean.jrv.code }
-                                    </div>
-                                    <!-- dialog buttons -->
-                                    <div class="modal-footer">
-
-                                        <div class="form-horizontal form-label-left data-parsley-validate">
-                                            <h:inputHidden id="idJvrCitinez" value="#{ jrvBean.jrv.id }" />
-                                            <h:inputHidden id="idsJvrCitinez" />
-
-                                            <div class="form-group">
-                                                <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="idCitizen" value="Ciudadano"> <span class="required">*</span></h:outputLabel>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <h:selectOneMenu id="idCitizen" value="#{ jrvBean.idCitizen }" class="form-control col-md-7 col-xs-12" >
-                                                        <f:selectItems value="#{ citizenBean.citinezForDepartmentJrvUnique(jrvBean.jrv.headquarterId.cityId.deparmentId.id)}" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name }" />
-                                                    </h:selectOneMenu>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="idType" value="Rol"> <span class="required">*</span></h:outputLabel>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <h:selectOneMenu value="#{ jrvBean.idType }" id="idType" class="form-control col-md-7 col-xs-12" >
-                                                        <f:selectItems value="#{ jrvCitizenTypesBean.listWithoutUsing(jrvBean.jrv.id) }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name }" />
-                                                    </h:selectOneMenu>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <h:commandButton onclick="$('#mdlCitinez').modal('hide');" class="btn btn-success" style="font-size: 1.3em" value="Añadir" >
-                                            <p:ajax event="click" update=":frm:sedesRows" listener="#{ jrvBean.addCitenez() }" />
-                                        </h:commandButton>
-
-                                        <table class="table table-striped jambo_table bulk_action">
-                                            <thead>
-                                                <tr class="headings">
-                                                    <th class="column-title">Ciudadano</th>
-                                                    <th class="column-title">Cargo</th>
-                                                    <th>
-                                                        eliminar
-                                                    </th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <p:repeat value="#{ jrvBean.jrv.jrvCitizenCollection }" var="citinez">
-
-                                                    <tr class="even pointer">
-                                                        <td class=" ">#{ citinez.citizenId.name } #{ citinez.citizenId.lastname }</td>
-                                                        <td class=" ">#{ citinez.jrvCitizenTypeId.name }</td>
-                                                        <td class="a-center ">
-                                                            <input type="checkbox" onclick="changeIDSelect('#{ citinez.id }');" class="flat" name="table_records" />
-                                                        </td>
-                                                    </tr>
-
-                                                </p:repeat>
-
-                                            </tbody>
-                                        </table>
-
-                                        <h:commandButton onclick="$('#mdlCitinez').modal('hide');" class="btn btn-danger" style="font-size: 1.3em" value="Eliminar seleccionados" >
-                                            <p:ajax event="click" update=":frm:sedesRows" listener="#{ jrvBean.removeCitenez() }" />
-                                        </h:commandButton>
-
-
-                                        <h:commandButton class="btn btn-warning" id="CommandPDF" value="generar PDF" action="#{ jrvBean.generateReport() }" immediate="true" />
-                                    </div>
-
-                                    <script>
-
-                                        function changeIDSelect(id) {
-                                            var key = id + ',';
-                                            if (document.getElementById('frm:idsJvrCitinez').value.indexOf(key) !== -1)
-                                                document.getElementById('frm:idsJvrCitinez').value = document.getElementById('frm:idsJvrCitinez').value.replace(key, '');
-                                            else
-                                                document.getElementById('frm:idsJvrCitinez').value = document.getElementById('frm:idsJvrCitinez').value + key;
-                                        }
-
-                                    </script>
-                                </h:panelGroup>
-                            </div>
-                        </div>
                     </div>
 
                 </h:form>

@@ -73,4 +73,14 @@ public class JrvCitizenModel {
             return false;
         }
     }
+    public boolean deleteJrvCitizenByJrv(int id){
+        try{
+            Query query = this.em.createQuery("DELETE FROM JrvCitizen j WHERE j.jrvId.id = :id");
+            query.setParameter("id", id);
+            return query.executeUpdate() > 0;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

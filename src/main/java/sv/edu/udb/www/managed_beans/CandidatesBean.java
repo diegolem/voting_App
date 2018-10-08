@@ -33,7 +33,9 @@ import sv.edu.udb.www.Model.PoliticGroupsModel;
 import sv.edu.udb.www.Utilities;
 import sv.edu.udb.www.Validacion;
 import sv.edu.udb.www.Entities.CandidatesForCities;
+import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Entities.PresidencialCandidates;
+import sv.edu.udb.www.Model.ElectoralProcessModel;
 import sv.edu.udb.www.Model.PresidencialCandidatesModel;
 
 /**
@@ -44,6 +46,8 @@ import sv.edu.udb.www.Model.PresidencialCandidatesModel;
 @ViewScoped
 public class CandidatesBean implements Serializable {
 
+    @EJB
+    private ElectoralProcessModel electoralProcessModel;
     @EJB
     private PresidencialCandidatesModel presidencialCandidatesModel;
     @EJB
@@ -61,6 +65,8 @@ public class CandidatesBean implements Serializable {
 
     // ///////////////////////
     private int idPoliticGroup;
+
+    private int idElectoralProcess;
 
     private boolean editProcees;
     // /////////////////////////////////////////
@@ -170,6 +176,33 @@ public class CandidatesBean implements Serializable {
         }
     }
 
+    private boolean saveCandidateByProcessess(Auth auth, Candidates candidate, int idProcessElectoral) {
+        ElectoralProcess process = this.electoralProcessModel.getElectoralProcess(idProcessElectoral);
+
+        if (process != null) {
+            if (auth.isDepartmentAdministration()) {
+
+                CandidatesForCities city = new CandidatesForCities();
+                city.setCandidateId(candidate);
+                city.setElectoralProcessId(process);
+                city.setCityId(this.headquartersModel.getHeadquarter(candidate.getCitizenId().getHeadquarterId().getId()).getCityId());
+
+                return this.candidatesForCitiesModel.insertCandidatesCities(city);
+
+            } else if (auth.isGeneralAdministration()) {
+
+                PresidencialCandidates presidencialCandidate = new PresidencialCandidates();
+                presidencialCandidate.setCandidatesId(candidate);
+                presidencialCandidate.setElectoralProcessId(process);
+
+                return this.presidencialCandidatesModel.insertPresidencialCandidate(presidencialCandidate);
+
+            }
+        }
+
+        return false;
+    }
+
     public void deleteCadidateProcessesPresidential() {
         if (!this.presidencialCandidatesModel.deletePresidencialCandidate(this.presidencialCandidates.getId())) {
             Utilities.addMessageFlash("error", "No se ha podido retira del proceso presidencial.");
@@ -204,8 +237,9 @@ public class CandidatesBean implements Serializable {
             } else {
                 Utilities.addMessageFlash("error", "El candidato esta en medio de un proceso electoral");
             }
-        } else
+        } else {
             Utilities.addMessageFlash("error", "El candidato esta en medio de un proceso electoral");
+        }
     }
 
     public void saveId(int id) {
@@ -276,55 +310,66 @@ public class CandidatesBean implements Serializable {
     }
 
     public void save() {
-        this.folder = Utilities.getPath("/resources/images");
+        Auth auth = Utilities.getUserAuth();
 
-        if (Validacion.esDui(this.citizens.getDui())) {
-            if (!this.citizenModel.existsWithDui(citizens)) {
-                if (Utilities.getYears(this.citizens.getBirthdate()) > 18) {
+        if (auth != null) {
+            this.folder = Utilities.getPath("/resources/images");
 
-                    boolean errorPhoto = false;
+            if (Validacion.esDui(this.citizens.getDui())) {
+                if (!this.citizenModel.existsWithDui(citizens)) {
+                    if (Utilities.getYears(this.citizens.getBirthdate()) > 18) {
 
-                    if (uploadedFile != null) {
-                        try (InputStream input = uploadedFile.getInputStream()) {
-                            String fileName = uploadedFile.getSubmittedFileName();
-                            Files.copy(input, new File(folder, fileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
-                            this.candidates.setPhoto(fileName);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            errorPhoto = true;
-                            Utilities.addMessageError("Error", "No se ha podido registrar el cantitado");
+                        boolean errorPhoto = false;
+
+                        if (uploadedFile != null) {
+                            try (InputStream input = uploadedFile.getInputStream()) {
+                                String fileName = uploadedFile.getSubmittedFileName();
+                                Files.copy(input, new File(folder, fileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                                this.candidates.setPhoto(fileName);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                errorPhoto = true;
+                                Utilities.addMessageError("Error", "No se ha podido registrar el cantitado");
+                            }
+                        } else {
+                            this.candidates.setPhoto("Default-user.png");
                         }
-                    } else {
-                        this.candidates.setPhoto("Default-user.png");
-                    }
 
-                    if (!errorPhoto) {
-                        this.citizens.setPassword(this.citizens.getDui());
-                        this.citizens.setCitizenTypeId(this.citizenTypesModel.getCitizenTypes("CITIZN"));
-                        this.citizens.setId(null);
+                        if (!errorPhoto) {
+                            this.citizens.setPassword(this.citizens.getDui());
+                            this.citizens.setCitizenTypeId(this.citizenTypesModel.getCitizenTypes("CITIZN"));
+                            this.citizens.setId(null);
 
-                        if (this.citizenModel.insertCitizen(this.citizens)) {
-                            this.candidates.setCitizenId(this.citizens);
-                            if (this.candidatesModel.insertCandidates(candidates)) {
-                                Utilities.redirect("/faces/generalAdministration/candidates.xhtml");
+                            if (this.citizenModel.insertCitizen(this.citizens)) {
+                                this.candidates.setCitizenId(this.citizens);
+                                if (this.candidatesModel.insertCandidates(candidates)) {
+                                    if (this.saveCandidateByProcessess(auth, candidates, this.idElectoralProcess)) {
+                                        Utilities.addMessageFlash("exito", "Se ha añadido un nuevo candidato");
+                                        Utilities.redirect("/faces" + auth.folderByType() + "/candidates.xhtml");
+                                    } else {
+                                        Utilities.addMessageError("Error", "Error al establecer el proceso electoral");
+                                    }
+                                } else {
+                                    Utilities.addMessageError("Error", "No se ha podido registrar el candidato");
+                                }
                             } else {
-                                Utilities.addMessageError("Error", "No se ha podido registrar el candidato");
+                                Utilities.addMessageError("Error", "No se ha podido registrar el ciudadano");
                             }
                         } else {
                             Utilities.addMessageError("Error", "No se ha podido registrar el ciudadano");
                         }
-                    } else {
-                        Utilities.addMessageError("Error", "No se ha podido registrar el ciudadano");
-                    }
 
+                    } else {
+                        Utilities.addMessageError("Error", "El cantidado debe de ser mayor de edad");
+                    }
                 } else {
-                    Utilities.addMessageError("Error", "El cantidado debe de ser mayor de edad");
+                    Utilities.addMessageError("Error", "El dui ya existe");
                 }
             } else {
-                Utilities.addMessageError("Error", "El dui ya existe");
+                Utilities.addMessageError("Error", "Debe de ingresar alfun dui valido");
             }
         } else {
-            Utilities.addMessageError("Error", "Debe de ingresar alfun dui valido");
+            Utilities.addMessageError("Error", "Error al obtener el usuario");
         }
     }
 
@@ -411,5 +456,13 @@ public class CandidatesBean implements Serializable {
 
     public void setPresidencialCandidates(PresidencialCandidates presidencialCandidates) {
         this.presidencialCandidates = presidencialCandidates;
+    }
+
+    public int getIdElectoralProcess() {
+        return idElectoralProcess;
+    }
+
+    public void setIdElectoralProcess(int idElectoralProcess) {
+        this.idElectoralProcess = idElectoralProcess;
     }
 }

@@ -38,6 +38,8 @@
         <h:outputStylesheet name="css/alertify.css" />
 
         <h:outputStylesheet name="css/datatables.css" />
+        
+        <h:outputStylesheet name="css/loading-bar.css" />
 
         <!-- jQuery -->
         <script
@@ -51,6 +53,7 @@
 
         <h:outputScript name="js/datatables.min.js" />
 
+        <h:outputScript name="js/loading-bar.js"/>
 
         <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
         <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
@@ -133,7 +136,6 @@
                                         </li>
                                         <li><a><i class="fa fa-users"></i>JRV<span class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/addJrv.xhtml">Añadir Junta</a></li>
                                                 <li><a href="#{ request.contextPath }/faces/generalAdministration/jrv.xhtml">Ver Juntas</a></li>
                                             </ul>
                                         </li>
@@ -147,18 +149,17 @@
                                         </li>
                                     </h:panelGroup>
                                     <h:panelGroup rendered="#{ Auth.departmentAdministration }">
-                                        <li><a><i class="fa fa-users"></i>JRV<span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/departmentalAdministration/headquarters.xhtml">Sedes</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/departmentalAdministration/addJrv.xhtml">Añadir Junta</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/departmentalAdministration/jrv.xhtml">Ver Juntas</a></li>
-                                            </ul>
-                                        </li>
                                         <li><a><i class="fa fa-child"></i>candidatos<span class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
                                                 <li><a href="#{ request.contextPath }/faces/departmentalAdministration/addCandidates.xhtml">Registrar</a></li>
                                                 <li><a href="#{ request.contextPath }/faces/departmentalAdministration/candidates.xhtml">Buscar</a></li>
                                                 <li><a href="#{ request.contextPath }/faces/departmentalAdministration/definitionProcesses.xhtml">Procesos electorales</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a><i class="fa fa-users"></i>JRV<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li><a href="#{ request.contextPath }/faces/departmentalAdministration/headquarters.xhtml">Sedes</a></li>
+                                                <li><a href="#{ request.contextPath }/faces/departmentalAdministration/jrv.xhtml">Ver Juntas</a></li>
                                             </ul>
                                         </li>
                                         <li><a><i class="fa fa-bars"></i>Type JRV<span class="fa fa-chevron-down"></span></a>
@@ -345,6 +346,7 @@
 
         <!--Alertify-->
         <h:outputScript name="js/alertify.js"/>
+       
 
         <ui:insert name="body_scripts"></ui:insert>
 

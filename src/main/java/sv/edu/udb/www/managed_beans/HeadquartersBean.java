@@ -6,6 +6,7 @@
 package sv.edu.udb.www.managed_beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -16,6 +17,7 @@ import javax.faces.bean.ViewScoped;
 import sv.edu.udb.www.Entities.Cities;
 import sv.edu.udb.www.Entities.Departments;
 import sv.edu.udb.www.Entities.Headquarters;
+import sv.edu.udb.www.Entities.Jrv;
 import sv.edu.udb.www.Model.CitiesModel;
 import sv.edu.udb.www.Model.DepartmentsModel;
 import sv.edu.udb.www.Model.HeadquartersModel;
@@ -111,6 +113,29 @@ public class HeadquartersBean  implements Serializable {
     }
     public List<Headquarters> listHeadquarter(){
         return headquarterModel.listHeadquarters();
+    }
+    public List<Headquarters> listHeadquarterWithoutElectoralProcess(){
+        List<Headquarters> headquarters = new ArrayList();
+        
+        for(Headquarters headquarter: headquarterModel.listHeadquarters()){
+            if (!headquarter.getJrvCollection().isEmpty()){
+                List jrvs;
+                
+                if (headquarter.getJrvCollection() instanceof List)
+                    jrvs = (List)headquarter.getJrvCollection();
+                else
+                    jrvs = new ArrayList(headquarter.getJrvCollection());
+                
+                Jrv jrv = (Jrv)jrvs.get(jrvs.size() - 1);
+                
+                if (jrv.getElectoralProcessId().end())
+                    headquarters.add(headquarter);
+                
+            } else
+                headquarters.add(headquarter);
+        }
+        
+        return headquarters;
     }
     
     public void deleteMap(){

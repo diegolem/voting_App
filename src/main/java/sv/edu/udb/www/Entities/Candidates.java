@@ -206,9 +206,9 @@ public class Candidates implements Serializable {
         return "sv.edu.udb.www.Entities.Candidates[ id=" + id + " ]";
     }
 
-    public boolean hasProcessElectoral() {
+    public boolean hasProcessElectoralDepartamental() {
 
-        if (this.candidatesForCitiesCollection.size() > 0) {
+        if (this.candidatesForCitiesCollection != null && this.candidatesForCitiesCollection.size() > 0) {
 
             List cities;
             
@@ -224,5 +224,29 @@ public class Candidates implements Serializable {
         }
 
         return false;
+    }
+    
+    public boolean hasProcessElectoralPresidential() {
+
+        if (this.presidencialCandidatesCollection != null && this.presidencialCandidatesCollection.size() > 0) {
+
+            List presidential;
+            
+            if (this.presidencialCandidatesCollection instanceof List) {
+                presidential = (List) this.presidencialCandidatesCollection;
+            } else {
+                presidential = new ArrayList(this.presidencialCandidatesCollection);
+            }
+
+            PresidencialCandidates process = (PresidencialCandidates)presidential.get(presidential.size() - 1);
+            
+            return process.getElectoralProcessId().getElectoralProcessStatusId().getId() != 4;
+        }
+
+        return false;
+    }
+    
+    public boolean hasProcessElectoral() {
+        return hasProcessElectoralDepartamental() || hasProcessElectoralPresidential();
     }
 }

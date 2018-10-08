@@ -38,6 +38,15 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="headquarter" value="Sede"> <span class="required">*</span></h:outputLabel>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h:selectOneMenu rendered="true" requiredMessage="La sede es requerida" id="headquarter" value="#{ electoralProcessBean.idHeadquarter }" class="form-control col-md-7 col-xs-12" >
+                                <f:selectItems value="#{ headquartersBean.listHeadquarterWithoutElectoralProcess() }" var="headquarter" itemValue="#{ headquarter.id }" itemLabel="#{ headquarter.name }" />
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="initDate" value="Fecha Inicio"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <h:inputText id="initDate" validatorMessage="Formato de fecha de inicio es incorrecta" requiredMessage="La fecha de inicio es requerida" value="#{ electoralProcessBean.electoralProcess.initDate }" class="form-control col-md-7 col-xs-12" required="true" title="fechaNacimiento" converterMessage="Inicio" a:type="date">

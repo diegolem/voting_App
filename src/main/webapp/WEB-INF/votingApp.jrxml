@@ -108,7 +108,7 @@ jrv.`id` = $P!{id}]]>
 				<text><![CDATA[JRV EL SALVADOR]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="acb7af84-29f7-4275-a0cb-cf42e7c05c75" x="99" y="46" width="164" height="22"/>
+				<reportElement uuid="acb7af84-29f7-4275-a0cb-cf42e7c05c75" x="0" y="46" width="263" height="22"/>
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="18"/>
 				</textElement>

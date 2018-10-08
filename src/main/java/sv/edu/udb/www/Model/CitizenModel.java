@@ -33,6 +33,14 @@ public class CitizenModel {
         return query.getResultList();
     }
     
+    public List<Citizens> listCitizenForJRV(int idHeadquarter, int min, int max){
+        Query query = em.createNamedQuery("Citizens.findByHeadquarter");
+        query.setParameter("idHeadquarter", idHeadquarter);
+        query.setFirstResult(min);
+        query.setMaxResults(max);
+        return query.getResultList();
+    }
+    
     public List<Citizens> listCitizenByDepartament(int idDept){
         Query query = em.createNamedQuery("Citizens.findAllByDepartament");
         query.setParameter("id", idDept);
