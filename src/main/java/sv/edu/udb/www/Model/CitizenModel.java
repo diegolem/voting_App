@@ -5,6 +5,9 @@
  */
 package sv.edu.udb.www.Model;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import javax.ejb.Stateless;
 import java.util.List;
 import java.util.logging.Level;
@@ -12,8 +15,10 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 import org.apache.commons.codec.digest.DigestUtils;
 import sv.edu.udb.www.Entities.Citizens;
+import sv.edu.udb.www.Entities.Jrv;
 /**
  *
  * @author Diego Lemus
@@ -91,6 +96,38 @@ public class CitizenModel {
             return null;
         }
     }
+    public boolean verificarProcesosActivos(Citizens citizen){
+        try{
+            Date date = Calendar.getInstance().getTime();
+            Query query = em.createQuery("SELECT j FROM JrvCitizen j WHERE j.jrvId.electoralProcessId.endDate > :hoy AND j.jrvId.electoralProcessId.initDate < :antes AND j.citizenId.dui = :dui");
+            query.setParameter("hoy", date,TemporalType.TIMESTAMP);
+            query.setParameter("antes", date,TemporalType.TIMESTAMP);
+            query.setParameter("dui", citizen.getDui());
+            if(!query.getResultList().isEmpty()){
+                return true;
+            }
+        }catch(Exception ex){
+            return false;
+        }
+        return false;
+    }
+    public Citizens getLoginCitizenAdmin(String dui,String pass){
+        try{
+            Query query = em.createQuery("SELECT c FROM Citizens c WHERE c.dui = :dui AND c.password = :pass");
+            query.setParameter("dui", dui);
+            query.setParameter("pass", DigestUtils.sha256Hex(pass));
+            
+            Citizens enti = (Citizens) query.getResultList().get(0);
+            
+            if(enti != null){
+                return enti;
+            }
+            return null;
+        }catch(Exception e){
+            return null;
+        }
+    }
+    
     public void pullForDui(Citizens citizen){
         try {
             Query query = em.createQuery("SELECT c FROM Citizens c where c.dui = :dui AND c.password = :pass");
@@ -159,6 +196,28 @@ public class CitizenModel {
             return false;
         }
     }
+    public boolean isPresident(Citizens citizen){
+        try {
+            Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui AND c.citizenTypeId.id = :idtype");
+            query.setParameter("dui", citizen.getDui());
+            query.setParameter("idtype", citizen.getCitizenTypeId().getId());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
+            return false;
+        }
+    }
+    
+    public boolean verifyCitizen (Citizens citizen){
+        try {
+            Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui AND c.password = :pass");
+            query.setParameter("dui", citizen.getDui());
+            query.setParameter("pass", citizen.getPassword());
+            return ((long)query.getSingleResult())== 1l;
+        } catch(Exception error){
+            return false;
+        }
+    }
+    
     public boolean exists (Citizens citizen){
         try {
             Query query = em.createQuery("SELECT count(c) FROM Citizens c where c.dui = :dui AND c.password = :pass");

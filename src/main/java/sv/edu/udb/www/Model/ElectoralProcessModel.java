@@ -11,6 +11,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import sv.edu.udb.www.Entities.ElectoralProcess;
+import sv.edu.udb.www.Entities.PoliticGroups;
+import sv.edu.udb.www.Entities.PresidencialCandidates;
 import sv.edu.udb.www.Utilities;
 
 /**
@@ -40,7 +42,60 @@ public class ElectoralProcessModel {
         Query query = em.createNamedQuery("ElectoralProcess.findAllByEndDateNowPresidential");
         return query.getResultList();
     }
-    
+    public ElectoralProcess getElectoralProcess(String codigo){
+        try{
+            Query query = em.createQuery("SELECT e FROM ElectoralProcess e where e.code = :code");
+            query.setParameter("code", codigo);
+            
+            ElectoralProcess enti = (ElectoralProcess)query.getResultList().get(0);
+            
+            if(enti != null){
+                return enti;
+            }
+            return null;
+        }catch(Exception e){
+            return null;
+        }
+    }
+    public List<ElectoralProcess> getPresidencialCandidates(ElectoralProcess electoralpro){
+        try{
+            Query query = em.createQuery("SELECT e FROM ElectoralProcess e where e.id = :id");
+            
+            query.setParameter("id", electoralpro.getId());
+            
+            if(query.getResultList() != null){
+                return query.getResultList();
+            }
+            return null;
+        }catch(Exception e){
+            return null;
+        }
+    }
+    public List<PoliticGroups> getPoliticGroupPresidencial(ElectoralProcess ele){
+        try{
+            Query query = em.createQuery("SELECT p.candidatesId.politicGroupId FROM PresidencialCandidates p WHERE p.electoralProcessId.id = :id");
+            query.setParameter("id", ele.getId());
+            
+            if(query.getResultList() != null){
+                return query.getResultList();
+            }
+            return null;
+        }catch(Exception e){
+            return null;
+        }
+    }
+    public List<PoliticGroups> getPoliticGroupCities(ElectoralProcess ele){
+        try{
+            Query query = em.createQuery("SELECT p.candidateId.politicGroupId FROM CandidatesForCities p WHERE p.electoralProcessId.id = :id");
+            query.setParameter("id", ele.getId());
+            if(query.getResultList() != null){
+                return query.getResultList();
+            }
+            return null;
+        }catch(Exception e){
+            return null;
+        }
+    }
     public boolean insertElectoralProcess(ElectoralProcess electoralpro){
         try{
             em.persist(electoralpro);
