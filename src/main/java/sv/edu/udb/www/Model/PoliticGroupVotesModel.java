@@ -53,6 +53,8 @@ public class PoliticGroupVotesModel {
                 em.merge(enti);
                 em.flush();
                 return true;
+            }else if(enti == null){
+                
             }
             return false;
         }catch(Exception e){

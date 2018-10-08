@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -50,6 +51,10 @@ public class PoliticGroupVotes implements Serializable {
     @JoinColumn(name = "politic_group_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private PoliticGroups politicGroupId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "status")
+    private short status;
     @Transient
     private double porcentage;
     
@@ -131,6 +136,14 @@ public class PoliticGroupVotes implements Serializable {
     @Override
     public String toString() {
         return "sv.edu.udb.www.Entities.PoliticGroupVotes[ id=" + id + " ]";
+    }
+
+    public short getStatus() {
+        return status;
+    }
+
+    public void setStatus(short status) {
+        this.status = status;
     }
     
 }

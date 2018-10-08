@@ -38,6 +38,7 @@ public class CitizenVotes implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
     @Column(name = "status")
     private Short status;
     @JoinColumn(name = "citizen_id", referencedColumnName = "id")
