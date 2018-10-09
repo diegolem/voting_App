@@ -74,11 +74,20 @@ public class ElectoralProcessRest {
             citiVotes.setElectoralProcessId(jrvAdmin.getJrvId().getElectoralProcessId());
             citiVotes.setJrvId(jrvAdmin.getJrvId());
 
-            citiVotes.setStatus((short) (vote ? (short) 1 : null));
+            citiVotes.setStatus((short) (vote ? (short) 1 : 0));
 
-            PoliticGroupVotes politicVotes = citizenVotesModel.countVote(politic, jrvAdmin.getJrvId().getId(), jrvAdmin.getJrvId().getElectoralProcessId().getId());
+            PoliticGroupVotes politicVotes = null;
+            
+            for(PoliticGroupVotes politicVote : jrvAdmin.getJrvId().getPoliticGroupVotesCollection()){
+                if (politicVote.getPoliticGroupId().getId() == politic){
+                    politicVotes = politicVote;
+                    break;
+                }
+            }
+            
+            //citizenVotesModel.countVote(politic, jrvAdmin.getJrvId().getId(), jrvAdmin.getJrvId().getElectoralProcessId().getId());
 
-            if (vote == true) {
+            if (politicVotes != null && vote == true) {
                 int vot = politicVotes.getVotes() + 1;
                 politicVotes.setVotes(vot);
             }

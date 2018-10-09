@@ -62,10 +62,11 @@ public class PoliticGroupVotesModel {
                 em.flush();
                 return true;
             }else if(enti == null){
-                
+                System.out.println("Error entity es null");
             }
             return false;
         }catch(Exception e){
+            e.printStackTrace();
             return false;
         }
     }
