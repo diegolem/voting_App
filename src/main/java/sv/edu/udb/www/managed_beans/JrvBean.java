@@ -50,6 +50,7 @@ import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Model.CitizenTypesModel;
 import sv.edu.udb.www.Model.ElectoralProcessModel;
 import sv.edu.udb.www.Model.ElectoralProcessStatusModel;
+import sv.edu.udb.www.Model.PoliticGroupVotesModel;
 import sv.edu.udb.www.Validacion;
 
 /**
@@ -60,6 +61,8 @@ import sv.edu.udb.www.Validacion;
 @ViewScoped
 public class JrvBean implements Serializable {
 
+    @EJB
+    private PoliticGroupVotesModel politicGroupVotesModel;
     @EJB
     private ElectoralProcessModel electoralProcessModel;
     @EJB
@@ -329,9 +332,10 @@ public class JrvBean implements Serializable {
             ElectoralProcess process = jrv.getElectoralProcessId();
             
             process.setElectoralProcessStatusId(this.electoralProcessStatusModel.getElectoralProcessStatus(3));
-            this.electoralProcessModel.editElectoralProcess(process);
-            
-            Utilities.addMessageFlash("exito", "cambios realizados");
+            if (this.electoralProcessModel.editElectoralProcess(process)){
+                Utilities.addMessageFlash("exito", "cambios realizados");
+            } else
+                Utilities.addMessageFlash("error", "No se ha podido finalizar la junta");
         } else
              Utilities.addMessageFlash("error", "No se ha podido localizar la junta");
     }
@@ -345,9 +349,11 @@ public class JrvBean implements Serializable {
             ElectoralProcess process = jrv.getElectoralProcessId();
             
             process.setElectoralProcessStatusId(this.electoralProcessStatusModel.getElectoralProcessStatus(4));
-            this.electoralProcessModel.editElectoralProcess(process);
-            
-            Utilities.addMessageFlash("exito", "El proceso ha finalizado");
+            if (this.electoralProcessModel.editElectoralProcess(process)){
+                this.politicGroupVotesModel.changeStatus(jrv.getId());
+                Utilities.addMessageFlash("exito", "El proceso ha finalizado");
+            } else
+                Utilities.addMessageFlash("error", "No se ha podido modificar la junta");
         } else
              Utilities.addMessageFlash("error", "No se ha podido localizar la junta");
     }

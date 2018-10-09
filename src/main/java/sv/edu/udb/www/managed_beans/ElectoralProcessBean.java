@@ -24,11 +24,16 @@ import org.primefaces.event.CloseEvent;
 import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Entities.Jrv;
 import sv.edu.udb.www.Entities.JrvCitizen;
+import sv.edu.udb.www.Entities.PoliticGroupVotes;
+import sv.edu.udb.www.Entities.PoliticGroups;
+import sv.edu.udb.www.Entities.PresidencialCandidates;
 import sv.edu.udb.www.Model.CitizenModel;
 import sv.edu.udb.www.Model.HeadquartersModel;
 import sv.edu.udb.www.Model.JrvCitizenModel;
 import sv.edu.udb.www.Model.JrvCitizenTypesModel;
 import sv.edu.udb.www.Model.JrvModel;
+import sv.edu.udb.www.Model.PoliticGroupVotesModel;
+import sv.edu.udb.www.Model.PoliticGroupsModel;
 
 /**
  *
@@ -38,6 +43,10 @@ import sv.edu.udb.www.Model.JrvModel;
 @ViewScoped
 public class ElectoralProcessBean implements Serializable {
 
+    @EJB
+    private PoliticGroupsModel politicGroupsModel;
+    @EJB
+    private PoliticGroupVotesModel politicGroupVotesModel;
     @EJB
     private JrvCitizenTypesModel jrvCitizenTypesModel;
     @EJB
@@ -104,11 +113,50 @@ public class ElectoralProcessBean implements Serializable {
     public List<ElectoralProcess> allElectoralProcessByEndDateDepartamental() {
         return this.electoralProcessModel.listElectoralProcessByEndDateDepartamental();
     }
+    
+    public List<ElectoralProcess> allElectoralProcessByEndDateDepartamental(int idPoliticGroup) {
+        List<ElectoralProcess> electoral = this.electoralProcessModel.listElectoralProcessByEndDateDepartamental();
+        List<ElectoralProcess> processes = new ArrayList();
+        
+        for (ElectoralProcess process : electoral){
+    
+            if (process.getPresidencialCandidatesCollection().size() > 0)
+                for(PresidencialCandidates presidencialCandidate : process.getPresidencialCandidatesCollection()){
+                    if (presidencialCandidate.getCandidatesId().getPoliticGroupId().getId() != idPoliticGroup)
+                        processes.add(process);
+                }
+            else
+                processes.add(process);
+        
+        }
+        
+        return processes;
+    }
 
     public List<ElectoralProcess> allElectoralProcessByEndDatePresidential() {
         return this.electoralProcessModel.listElectoralProcessByEndDatePresidential();
     }
 
+    public List<ElectoralProcess> allElectoralProcessByEndDatePresidential(int idPoliticGroup) {
+        List<ElectoralProcess> electoral = this.electoralProcessModel.listElectoralProcessByEndDatePresidential();
+        List<ElectoralProcess> processes = new ArrayList();
+        
+        for (ElectoralProcess process : electoral){
+    
+            if (process.getPresidencialCandidatesCollection().size() > 0)
+                for(PresidencialCandidates presidencialCandidate : process.getPresidencialCandidatesCollection()){
+                    if (presidencialCandidate.getCandidatesId().getPoliticGroupId().getId() != idPoliticGroup)
+                        processes.add(process);
+                }
+            else
+                processes.add(process);
+        
+        }
+        
+        return processes;
+    }
+
+    
     public void reloadJrv() {
         Auth auth = Utilities.getUserAuth();
 
@@ -178,6 +226,18 @@ public class ElectoralProcessBean implements Serializable {
         }
     }
 
+    private void addPoliticGroupJrv(Jrv jrvId){
+        for(PoliticGroups politic : this.politicGroupsModel.listPoliticGroups()){
+            PoliticGroupVotes vote = new PoliticGroupVotes();
+            vote.setJrvId(jrvId);
+            vote.setPoliticGroupId(politic);
+            vote.setElectoralProcessId(jrvId.getElectoralProcessId());
+            vote.setVotes(new Integer(0));
+            
+            this.politicGroupVotesModel.insertPoliticGroupVotes(vote);
+        }
+    }
+    
     public boolean creatJRV(Auth auth, ElectoralProcess process, int idHeadquarter) {
         if (auth.isGeneralAdministration()) {
             int min = 0;
@@ -201,6 +261,8 @@ public class ElectoralProcessBean implements Serializable {
                 }
 
                 if (this.jrvModel.insertJrv(jrv)) {
+                    addPoliticGroupJrv(jrv);
+                    
                     for (Citizens citizen : list) {
                         if (citizen.getCandidatesCollection().isEmpty()) {
                             JrvCitizen jrvCitizen = new JrvCitizen();
@@ -235,7 +297,10 @@ public class ElectoralProcessBean implements Serializable {
                     jrv.setCode("EP" + process.getCode() + "_" + Utilities.now().getYear() + auth.getCitizen().getId() + "_" + Utilities.createStringRandom(2));
                 }
 
-                return this.jrvModel.insertJrv(jrv);
+                if (this.jrvModel.insertJrv(jrv)){
+                    addPoliticGroupJrv(jrv);
+                    return true;
+                }
             }
 
             return isOk;

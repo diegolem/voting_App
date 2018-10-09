@@ -25,6 +25,14 @@ public class PoliticGroupVotesModel {
         Query query = em.createQuery("SELECT p FROM PoliticGroupVotes p");
         return query.getResultList();
     }
+    
+    public void changeStatus(int idJrv){
+        Query query = em.createQuery("UPDATE PoliticGroupVotes p SET p.status = :status WHERE p.jrvId.id = :id");
+        query.setParameter("id", idJrv);
+        query.setParameter("status", new Short((short)1));
+        query.executeUpdate();
+    }
+    
     public boolean insertPoliticGroupVotes(PoliticGroupVotes politicGroupVotes){
         try{
             em.persist(politicGroupVotes);
