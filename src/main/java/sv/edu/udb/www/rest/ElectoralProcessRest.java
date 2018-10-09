@@ -63,35 +63,38 @@ public class ElectoralProcessRest {
     @POST
     @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public String sendVote(@FormParam("idPolitic") int politic, @FormParam("dui") String dui, @FormParam("vote") int vote, @FormParam("idadmin") int idAdmin) {
+    public String sendVote(@FormParam("idPolitic") int politic, @FormParam("dui") String dui, @FormParam("vote") boolean vote, @FormParam("idadmin") int idAdmin) {
         Citizens citizen = citizenModel.getCitizen(dui);
-        if (citizenVotesModel.verifyVote(citizen, idAdmin)){
+        if (citizenVotesModel.verifyVote(citizen, idAdmin)) {
+            Citizens _citizen = citizenModel.getCitizen(dui);
+            JrvCitizen jrvAdmin = citizenVotesModel.getJrv(idAdmin);
+
             CitizenVotes citiVotes = new CitizenVotes();
-            JrvCitizen jrv = citizenVotesModel.getJrv(idAdmin);
-//            citiVotes.setCitizenId(citizen);//asigno Ciudadano
-//            citiVotes.setStatus(Short.parseShort("0")); //asigno estado
-//            citiVotes.setJrvId(jrv.getJrvId()); //asigno JRV
-//            citiVotes.setElectoralProcessId(jrv.getJrvId().getElectoralProcessId());//asigno Proceso electoral
-////            if (citizenVotesModel.insertCitizenVotes(citiVotes)) {
-                PoliticGroupVotes politicVotes = citizenVotesModel.countVote(politic, jrv.getJrvId().getId(), jrv.getJrvId().getElectoralProcessId().getId());
-                if(vote < 1){
-                    int vot = politicVotes.getVotes();
-                    politicVotes.setVotes(vot);
-                }else if(vote > 0){
-                    int vot = politicVotes.getVotes() + 1;
-                    politicVotes.setVotes(vot);
-                }
+            citiVotes.setCitizenId(_citizen);
+            citiVotes.setElectoralProcessId(jrvAdmin.getJrvId().getElectoralProcessId());
+            citiVotes.setJrvId(jrvAdmin.getJrvId());
+
+            citiVotes.setStatus((short) (vote ? (short) 1 : null));
+
+            PoliticGroupVotes politicVotes = citizenVotesModel.countVote(politic, jrvAdmin.getJrvId().getId(), jrvAdmin.getJrvId().getElectoralProcessId().getId());
+
+            if (vote == true) {
+                int vot = politicVotes.getVotes() + 1;
+                politicVotes.setVotes(vot);
+            }
+
+            if (citizenVotesModel.insertCitizenVotes(citiVotes)) {
                 if (politicGroupsVotesModel.editPoliticGroupVote(politicVotes)) {
-                    return "Voto Correcto";
-                }else{
-                    return "Voto incorrecto";
+                    return "Bien";
+
+                } else {
+                    return "partido";
                 }
-//                
-//            } else {
-//                return "Tu voto ha sido anulado";
-//            }
-        } else{
-            return "Ya has votado, no puedes volver a votar";
+            } else {
+                return "ciudadano";
+            }
+        } else {
+            return "ya votó";
         }
     }
 }
