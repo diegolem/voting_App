@@ -41,8 +41,7 @@
                                 <h:inputSecret id="password" class="form-control" required="true" requiredMessage="La clave es obligatoria" value="#{ Auth.citizen.password }" />
                             </div>
                             <div>
-                                <h:commandButton value="Ingresar" class="btn btn-primary" action="#{ Auth.login }" />
-                                <h:commandLink class="reset_pass" value="Perdiste tu contraseña?" />
+                                <h:commandButton type="submit" value="Ingresar" class="btn btn-primary" action="#{ Auth.login }" />
                             </div>
 
                             <div class="clearfix"></div>
