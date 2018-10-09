@@ -7,7 +7,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 import sv.edu.udb.www.Entities.Candidates;
 import sv.edu.udb.www.Entities.PoliticGroupVotes;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-10-08T19:28:10")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-10-08T20:56:53")
 @StaticMetamodel(PoliticGroups.class)
 public class PoliticGroups_ { 
 
