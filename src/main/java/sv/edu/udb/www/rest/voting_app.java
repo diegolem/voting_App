@@ -14,5 +14,7 @@ import javax.ws.rs.core.Application;
  */
 @ApplicationPath("api")
 public class voting_app extends Application {
-    
+
+    public voting_app() {
+    }
 }

@@ -99,10 +99,6 @@ public class LoginFilter implements Filter {
      * @exception ServletException if a servlet error occurs
      */
     public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain)throws IOException, ServletException {
-        
-        
-        
-        
         doBeforeProcessing(request, response);
         
         HttpServletRequest req = (HttpServletRequest)request;
