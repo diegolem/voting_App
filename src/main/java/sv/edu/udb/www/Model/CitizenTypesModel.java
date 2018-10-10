@@ -63,9 +63,11 @@ public class CitizenTypesModel {
         try{
             CitizenTypes enti = em.find(CitizenTypes.class, id);
             if(enti != null){
-                em.remove(enti);
-                em.flush();
-                return true;
+                if(enti.getCitizensCollection().isEmpty()){
+                    em.remove(enti);
+                    em.flush();
+                    return true;
+                }
             }
             return false;
         }catch(Exception e){

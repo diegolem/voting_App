@@ -13,47 +13,6 @@
                 Usuarios
             </ui:define>
             <ui:define name="content">
-                <!--
-                <div class="row">
-                    <div class="col-xs-4">
-                        <h:commandButton class="btn btn-link" value="Reiniciar Filtros">
-                            <p:ajax listener="#citizenBean.resetFilter()}" />
-                        </h:commandButton>
-                    </div>
-                    <div class="col-xs-4">
-                        <h:commandButton class="btn btn-default" value="Admin. Departamental">
-                            <f:param name="tipo" value="ADMDEP" />
-                            <p:ajax update="@all" listener="#citizenBean.listUsersForType()}" />
-                        </h:commandButton>
-                    </div>
-                    <div class="col-xs-4">
-                        <h:commandButton class="btn btn-dark" value="Admin. General">
-                            <f:param name="tipo" value="ADMGEN" />
-                            <p:ajax update="@all" listener="#citizenBean.listUsersForType()}" />
-                        </h:commandButton>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-4">
-                        <h:commandButton class="btn btn-info" value="Ciudadanos">
-                            <f:param name="tipo" value="CITIZN" />
-                            <p:ajax update="@all" listener="#citizenBean.listUsersForType()}" />
-                        </h:commandButton>
-                    </div>
-                    <div class="col-xs-4">
-                        <h:commandButton class="btn btn-primary" value="Empleado RNPN">
-                            <f:param name="tipo" value="EMRNPN" />
-                            <p:ajax update="@all" listener="#citizenBean.listUsersForType()}" />
-                        </h:commandButton>
-                    </div>
-                    <div class="col-xs-4">
-                        <h:commandButton class="btn btn-warning" value="Presidente JRV">
-                            <f:param name="tipo" value="PREJRV" />
-                            <p:ajax update="@all" listener="#citizenBean.listUsersForType()}" />
-                        </h:commandButton>
-                    </div>
-                </div>
-                -->
                 <h:form id="fm">
                     <div id="test-list">
                         <div class="form-group">
@@ -73,16 +32,16 @@
                                                     <a href="#{citizenBean.setUser(citizen)}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                                     <ul class="dropdown-menu" role="menu">
                                                         <li>
-                                                            <p:commandLink class="btn btn-default" value="Editar" action="#{citizenBean.redirectUser()}">
+                                                            <p:commandLink styleClass="btn btn-default" value="Editar" action="#{citizenBean.redirectUser()}">
                                                                 <f:param name="codigo" value="#{citizen.id}" />
                                                             </p:commandLink>
                                                         </li>
                                                         <li>
-                                                            <p:commandLink class="btn btn-default" value="Deshabilitar" action="#{citizenBean.enabledCitizensUsers(citizen)}">
+                                                            <p:commandLink styleClass="btn btn-default" value="Deshabilitar" action="#{citizenBean.enabledCitizensUsers(citizen)}">
                                                             </p:commandLink>
                                                         </li>
                                                         <li>
-                                                            <p:commandLink class="btn btn-default" value="Eliminar" action="#{citizenBean.deleteUser(citizen)}">
+                                                            <p:commandLink styleClass="btn btn-default" value="Eliminar" action="#{citizenBean.deleteUser(citizen)}">
                                                             </p:commandLink>
                                                         </li>
                                                     </ul>
@@ -145,8 +104,4 @@
         </ui:composition>
 
     </body>
-    <h:outputScript rendered="#{ not empty flash.exito }">
-        alertify.success('#{ flash.exito }');
-    </h:outputScript>
-    #{citizenBean.eliminateFlash()}
 </html>

@@ -5,7 +5,6 @@
  */
 package sv.edu.udb.www.Model;
 
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import javax.ejb.Stateless;
@@ -18,7 +17,6 @@ import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import org.apache.commons.codec.digest.DigestUtils;
 import sv.edu.udb.www.Entities.Citizens;
-import sv.edu.udb.www.Entities.Jrv;
 /**
  *
  * @author Diego Lemus
@@ -65,7 +63,6 @@ public class CitizenModel {
             System.out.println("Id: " + citizen.getId());
             return true;
         }catch(Exception e){
-            e.printStackTrace();
             Logger.getLogger(CitizenModel.class.getName()).log(Level.SEVERE, null, e);
             return false;
         }
@@ -254,9 +251,14 @@ public class CitizenModel {
         try{
             Citizens enti = em.find(Citizens.class, citizen.getId());
             if(enti != null){
-                em.remove(enti);
-                em.flush();
-                return true;
+                if(enti.getCandidatesCollection().isEmpty()){
+                    if(enti.getJrvCitizenCollection().isEmpty()){
+                        em.remove(enti);
+                        em.flush();
+                        return true;
+                    }
+                }   
+                return false;
             }
             return false;
         }catch(Exception e){

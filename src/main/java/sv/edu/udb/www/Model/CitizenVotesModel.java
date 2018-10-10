@@ -130,9 +130,9 @@ public class CitizenVotesModel {
         try{
             CitizenVotes enti = em.find(CitizenVotes.class, id);
             if(enti != null){
-                em.remove(enti);
-                em.flush();
-                return true;
+                    em.remove(enti);
+                    em.flush();
+                    return true;
             }
             return false;
         }catch(Exception e){

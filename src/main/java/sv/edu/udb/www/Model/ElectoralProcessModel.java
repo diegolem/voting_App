@@ -136,13 +136,20 @@ public class ElectoralProcessModel {
         try{
             ElectoralProcess enti = em.find(ElectoralProcess.class, id);
             if(enti != null){
-                em.remove(enti);
-                em.flush();
-                return true;
+                if(enti.getCandidatesForCitiesCollection().isEmpty()){
+                    if(enti.getCitizenVotesCollection().isEmpty()){
+                        if(enti.getJrvCollection().isEmpty()){
+                            if(enti.getPresidencialCandidatesCollection().isEmpty()){
+                                em.remove(enti);
+                                em.flush();
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
             return false;
         }catch(Exception e){
-            e.printStackTrace();
             return false;
         }
     }

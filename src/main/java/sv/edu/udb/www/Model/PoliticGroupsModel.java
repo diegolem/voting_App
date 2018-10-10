@@ -88,9 +88,13 @@ public class PoliticGroupsModel {
         try{
             PoliticGroups enti = em.find(PoliticGroups.class, politicGroup.getId());
             if(enti != null){
-                em.remove(enti);
-                em.flush();
-                return true;
+                if(enti.getCandidatesCollection().isEmpty()){
+                    if(enti.getPoliticGroupVotesCollection().isEmpty()){
+                        em.remove(enti);
+                        em.flush();
+                        return true;
+                    }
+                }
             }
             return false;
         }catch(Exception e){

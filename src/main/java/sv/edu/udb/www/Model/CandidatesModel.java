@@ -179,9 +179,13 @@ public class CandidatesModel {
         try {
             Candidates enti = em.find(Candidates.class, id);
             if (enti != null) {
-                em.remove(enti);
-                em.flush();
-                return true;
+                if(enti.getCandidatesForCitiesCollection().isEmpty()){
+                    if(enti.getPresidencialCandidatesCollection().isEmpty()){
+                        em.remove(enti);
+                        em.flush();
+                        return true;
+                    }
+                }
             }
             return false;
         } catch (Exception e) {
