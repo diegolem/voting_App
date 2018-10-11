@@ -110,4 +110,8 @@ public class JrvCitizen implements Serializable {
     public String toString() {
         return "sv.edu.udb.www.Entities.JrvCitizen[ id=" + id + " ]";
     }
+    
+    public boolean presidentialType() {
+        return this.jrvCitizenTypeId.getId() == 1 && this.citizenId.getCitizenTypeId().getId().equals("PREJRV");
+    }
 }

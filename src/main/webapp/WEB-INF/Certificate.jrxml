@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Certificate" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="22fa1881-66c2-4141-89cf-10f430ce86a4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     DATE_FORMAT(electoral_process.`init_date`,'%d/%m/%Y') AS electoral_process_init_date,
+     DATE_FORMAT(electoral_process.`end_date`,'%d/%m/%Y') AS electoral_process_end_date,
+     DATE_FORMAT(electoral_process.`process_date`,'%d/%m/%Y') AS electoral_process_process_date,
+     jrv.`code` AS jrv_code,
+     electoral_process.`name` AS electoral_process_name,
+     electoral_process_types.`description` AS electoral_process_types_description,
+     politic_group_votes.`votes` AS politic_group_votes_votes,
+     politic_groups.`name` AS politic_groups_name,
+     politic_groups.`acronym` AS politic_groups_acronym,
+     politic_group_votes.`status` AS politic_group_votes_status,
+     (SELECT
+     count(citizen_votes.`status`) 
+FROM
+     `jrv` jrv2 INNER JOIN `citizen_votes` citizen_votes ON jrv2.`id` = citizen_votes.`jrv_id`
+WHERE
+      jrv.id = $P!{id}) AS votes_total
+FROM
+     `electoral_process` electoral_process INNER JOIN `jrv` jrv ON electoral_process.`id` = jrv.`electoral_process_id`
+     INNER JOIN `electoral_process_types` electoral_process_types ON electoral_process.`electoral_process_types_id` = electoral_process_types.`id`
+     INNER JOIN `politic_group_votes` politic_group_votes ON jrv.`id` = politic_group_votes.`jrv_id`
+     INNER JOIN `politic_groups` politic_groups ON politic_group_votes.`politic_group_id` = politic_groups.`id`
+WHERE
+     jrv.id = $P!{id}]]>
+	</queryString>
+	<field name="electoral_process_init_date" class="java.lang.String"/>
+	<field name="electoral_process_end_date" class="java.lang.String"/>
+	<field name="electoral_process_process_date" class="java.lang.String"/>
+	<field name="jrv_code" class="java.lang.String"/>
+	<field name="electoral_process_name" class="java.lang.String"/>
+	<field name="electoral_process_types_description" class="java.lang.String"/>
+	<field name="politic_group_votes_votes" class="java.lang.Integer"/>
+	<field name="politic_groups_name" class="java.lang.String"/>
+	<field name="politic_groups_acronym" class="java.lang.String"/>
+	<field name="politic_group_votes_status" class="java.lang.Integer"/>
+	<field name="votes_total" class="java.lang.Long"/>
+	<variable name="politic_group_votes_votes_1" class="java.lang.Integer" resetType="Group" resetGroup="Dates" calculation="Sum">
+		<variableExpression><![CDATA[$F{politic_group_votes_votes}]]></variableExpression>
+	</variable>
+	<variable name="citizen_votes_status_1" class="java.lang.Integer" resetType="Group" resetGroup="Dates" calculation="Count">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="citizen_votes_status_2" class="java.lang.Integer" resetType="Group" resetGroup="Dates" calculation="Count">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<group name="Dates">
+		<groupExpression><![CDATA[$F{jrv_code}]]></groupExpression>
+		<groupHeader>
+			<band height="96">
+				<rectangle>
+					<reportElement uuid="1fc9753d-0e77-48cd-92e8-3db0d5b07da5" mode="Opaque" x="0" y="0" width="555" height="96" backcolor="#E6E6E6"/>
+					<graphicElement>
+						<pen lineWidth="0.0" lineStyle="Dotted"/>
+					</graphicElement>
+				</rectangle>
+				<textField>
+					<reportElement uuid="22954422-5a22-4e3a-ba64-0b1e76ea396d" x="19" y="10" width="292" height="18" forecolor="#006699"/>
+					<textElement textAlignment="Left">
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Fecha de inicio: " + $F{electoral_process_init_date}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement uuid="1fed98cd-bb62-4e82-a988-b9a454e6a577" x="19" y="38" width="292" height="18" forecolor="#006699"/>
+					<textElement textAlignment="Left">
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Fecha de final: " + $F{electoral_process_end_date}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement uuid="ec21ec9c-af0f-486e-a72a-1215fc5e34f2" x="19" y="67" width="292" height="18" forecolor="#006699"/>
+					<textElement textAlignment="Left">
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Inicio del proceso: " + $F{electoral_process_process_date}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="Dates">
+					<reportElement uuid="883c2f00-c88a-40de-b4c4-c354c3b7d2e9" x="455" y="28" width="100" height="28" forecolor="#666666"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="20"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{politic_group_votes_votes_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="583759b3-6927-4c56-ad72-17604cc6817a" mode="Opaque" x="455" y="6" width="100" height="22" forecolor="#666666" backcolor="#E6E6E6"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[Total de votos]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="5cd7caef-86c4-457d-9c05-ab1b16fd9f8b" mode="Opaque" x="331" y="6" width="122" height="22" forecolor="#666666" backcolor="#E6E6E6"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[Total de papeletas]]></text>
+				</staticText>
+				<textField evaluationTime="Group" evaluationGroup="Dates">
+					<reportElement uuid="73984488-f930-438a-a856-e6c8a32d9577" x="331" y="28" width="122" height="28" forecolor="#666666"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="20"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{votes_total}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="Group1">
+		<groupHeader>
+			<band height="33">
+				<staticText>
+					<reportElement uuid="3bc1af42-12e5-424e-9a2f-b6809039b720" mode="Opaque" x="0" y="0" width="100" height="32" forecolor="#666666" backcolor="#E6E6E6"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[Votos: ]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="56152d05-9657-46ca-9439-becc34c90d14" mode="Opaque" x="100" y="0" width="455" height="32" forecolor="#006699" backcolor="#E6E6E6"/>
+					<textElement>
+						<font size="24" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Partidos politicos"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="9c3586de-4cfe-4633-b34b-aafd7b26567f" x="-20" y="32" width="595" height="1" forecolor="#666666"/>
+				</line>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement uuid="be658159-e8b8-493a-9679-8621c214ab55" mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699"/>
+				<staticText>
+					<reportElement uuid="dfc60ae1-3ca2-499b-8aed-2af4621968e4" x="20" y="20" width="234" height="43" forecolor="#FFFFFF"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[El Salvador]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="2734de47-16a4-4644-99cc-0460591f7013" x="351" y="43" width="224" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right">
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{jrv_code}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="b51da6dd-2950-49e4-9de0-53ddcee63c4b" x="373" y="63" width="202" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{electoral_process_types_description}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<staticText>
+				<reportElement uuid="124b2938-d78b-4657-8d0e-164174c10f77" mode="Opaque" x="0" y="0" width="183" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proceso electoral]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="b0df5118-8e39-4066-99fb-e490d770ea0b" x="-20" y="20" width="595" height="1" forecolor="#666666"/>
+			</line>
+			<textField>
+				<reportElement uuid="50e0d469-e3f4-4505-906f-69e83217d25e" x="183" y="1" width="372" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{electoral_process_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27">
+			<textField>
+				<reportElement uuid="d18fe879-fad1-4a6f-b4b1-5165bf94c9e4" x="100" y="0" width="455" height="20" forecolor="#006699"/>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{politic_groups_name} + " | " + $F{politic_groups_acronym} + " |"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6ac7636a-99bb-493a-a5d6-71cd5bdda545" x="0" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{politic_group_votes_votes}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement uuid="59fbcf82-7fe4-40db-a39e-c71ac31b5a68" mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="a7337f3d-7e37-4f0b-9c3c-acbdcae086c8" mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="e1eb8111-2e08-4cda-a994-15c2e6453b2f" x="0" y="4" width="100" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

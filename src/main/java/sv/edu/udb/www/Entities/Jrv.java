@@ -184,11 +184,11 @@ public class Jrv implements Serializable {
     }
     
     public boolean hasCandidates(){
-        return this.electoralProcessId.getCandidatesForCitiesCollection().size() > 0;
+        return (this.electoralProcessId.getElectoralProcessTypesId().getId() == 1) ? this.electoralProcessId.getPresidencialCandidatesCollection().size() > 0 : this.electoralProcessId.getCandidatesForCitiesCollection().size() > 0;
     }
     
     public boolean hasCandidatesVoting(){
-        return this.electoralProcessId.getCandidatesForCitiesCollection().size() > 1;
+        return (this.electoralProcessId.getElectoralProcessTypesId().getId() == 1) ? this.electoralProcessId.getPresidencialCandidatesCollection().size() > 1 : this.electoralProcessId.getCandidatesForCitiesCollection().size() > 1;
     }
     
     public boolean startVoting(){
@@ -220,5 +220,15 @@ public class Jrv implements Serializable {
             
         return votes;
         
+    }
+    
+    public int votesUsed(){
+        int total = 0;
+        
+        for(CitizenVotes votes : this.electoralProcessId.getCitizenVotesCollection())
+            if (votes.getStatus() == (short)1)
+                total++;
+        
+        return total;
     }
 }

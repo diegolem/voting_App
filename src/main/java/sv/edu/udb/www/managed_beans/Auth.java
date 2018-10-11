@@ -48,8 +48,13 @@ public class Auth implements Serializable {
             if (Validacion.esDui(this.citizen.getDui())) {
                 if (this.citizenModel.exists(this.citizen)) {
                     this.citizenModel.pullForDui(this.citizen);
-                    this.citizen.setLogged(true);
-                    return "/faces/home.xhtml?faces-redirect=true";
+
+                    if (!this.citizen.isCitizen()) {
+                        this.citizen.setLogged(true);
+                        return "/faces/home.xhtml?faces-redirect=true";
+                    } else {
+                        Utilities.addMessageError("Error_Login", "No se permite el ingreso a los ciudadanos");
+                    }
                 } else {
                     Utilities.addMessageError("Error_Login", "Las credenciales no son correctas");
                 }
@@ -60,7 +65,7 @@ public class Auth implements Serializable {
 
         return "/faces/login.xhtml?faces-redirect=true";
     }
-    
+
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/faces/login.xhtml?faces-redirect=true";
@@ -117,7 +122,7 @@ public class Auth implements Serializable {
         return new Jrv();
     }
 
-    public String folderByType(){
+    public String folderByType() {
         return (this.citizen.isEmpty()) ? "" : this.citizen.folderByUserType();
     }
 }

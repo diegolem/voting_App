@@ -97,9 +97,16 @@
                                                             <td class=" ">#{ citinez.citizenId.dui }</td>
                                                             <td class=" ">#{ citinez.jrvCitizenTypeId.name }</td>
                                                             <td class=" ">
-                                                                <h:commandButton onclick="$('#mdlRol').modal('show');" immediate="true" class="btn btn-primary" type="submit" value="Cambiar cargo" >
-                                                                    <p:ajax event="click" update=":frm:pnlRol" listener="#{ jrvBean.loadCirinez(citinez.citizenId.id, jrvBean.jrv.id, citinez.id) }" />
-                                                                </h:commandButton>
+                                                                <h:panelGroup rendered="#{ !jrvBean.jrv.endProcessStep() }" >
+                                                                    <h:commandButton onclick="$('#mdlRol').modal('show');" immediate="true" class="btn btn-primary" type="submit" value="Cambiar cargo" >
+                                                                        <p:ajax event="click" update=":frm:pnlRol" listener="#{ jrvBean.loadCirinez(citinez.citizenId.id, jrvBean.jrv.id, citinez.id) }" />
+                                                                    </h:commandButton>
+                                                                </h:panelGroup>
+                                                                <h:panelGroup rendered="#{ citinez.presidentialType() }">
+                                                                    <h:commandButton immediate="true" class="btn btn-primary" type="submit" value="Rebocar cargo" >
+                                                                        <p:ajax event="click" update=":frm:pnlRol :frm:pnlCitinez :frm:pnlMsgFlash" listener="#{ jrvBean.changeType(citinez.citizenId.id) }" />
+                                                                    </h:commandButton>
+                                                                </h:panelGroup>
                                                             </td>
                                                         </tr>
 

@@ -64,20 +64,41 @@
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="lazy" style=" width: 100%" >
-                                                            <p:repeat value="#{ Auth.jrvActive().electoralProcessId.candidatesForCitiesCollection }" var="candidate">
+
+                                                            <h:panelGroup rendered="#{ Auth.jrvActive().electoralProcessId.candidatesForCitiesCollection.size() gt 0 }">
+                                                                <p:repeat value="#{ Auth.jrvActive().electoralProcessId.candidatesForCitiesCollection }" var="candidate">
 
 
-                                                                <div class="thumbnail" style="background-color:  transparent;">
-                                                                    <center><span class="label label-default">#{ candidate.candidateId.citizenId.name } #{ candidate.candidateId.citizenId.lastname }</span></center>
-                                                                    <img class="img-thumbnail" src="#{request.contextPath}/faces/resources/images/#{ candidate.candidateId.photo }" style="width: 160px; height: 160px;" />
-                                                                    <div class="caption" style="background-color: transparent; display: flex; justify-content: center;">
-                                                                        <p>
+                                                                    <div class="thumbnail" style="background-color:  transparent;">
+                                                                        <center><span class="label label-default">#{ candidate.candidateId.citizenId.name } #{ candidate.candidateId.citizenId.lastname }</span></center>
+                                                                        <img class="img-thumbnail" src="#{request.contextPath}/faces/resources/images/#{ candidate.candidateId.photo }" style="width: 160px; height: 160px;" />
+                                                                        <div class="caption" style="background-color: transparent; display: flex; justify-content: center;">
+                                                                            <p>
                                                                             #{ candidate.candidateId.politicGroupId.name }
-                                                                        </p>
+                                                                            </p>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
 
-                                                            </p:repeat>
+                                                                </p:repeat>
+                                                            </h:panelGroup>
+
+                                                            <h:panelGroup rendered="#{ Auth.jrvActive().electoralProcessId.presidencialCandidatesCollection.size() gt 0 }">
+                                                                <p:repeat value="#{ Auth.jrvActive().electoralProcessId.presidencialCandidatesCollection }" var="candidate">
+
+
+                                                                    <div class="thumbnail" style="background-color:  transparent;">
+                                                                        <center><span class="label label-default">#{ candidate.candidatesId.citizenId.name } #{ candidate.candidatesId.citizenId.lastname }</span></center>
+                                                                        <img class="img-thumbnail" src="#{request.contextPath}/faces/resources/images/#{ candidate.candidatesId.photo }" style="width: 160px; height: 160px;" />
+                                                                        <div class="caption" style="background-color: transparent; display: flex; justify-content: center;">
+                                                                            <p>
+                                                                            #{ candidate.candidatesId.politicGroupId.name }
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </p:repeat>
+                                                            </h:panelGroup>
+
                                                         </div>
                                                     </div>
 
@@ -206,7 +227,7 @@
                                         </div>
                                         <!-- dialog buttons -->
                                         <div class="modal-footer">
-                                            <h:commandButton onclick="$('#mdlEnStep').modal('hide');" class="btn btn-success" immediate="true" value="Iniciar proceso de votacion" >
+                                            <h:commandButton onclick="$('#mdlEnStep').modal('hide');" class="btn btn-success" immediate="true" value="Finalizar proceso de votacion" >
                                                 <f:ajax render="@form" listener="#{ jrvBean.endProcessElectoral() }" />
                                             </h:commandButton>
                                         </div>
