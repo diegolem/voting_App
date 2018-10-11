@@ -39,7 +39,7 @@
                                                         <a class="btn btn-default" href="#{ request.contextPath }/faces/generalAdministration/editCity.xhtml?id=#{city.id}">Modificar</a> 
                                                     </li>
                                                     <li>
-                                                        <p:commandLink class="btn btn-black" value="Eliminar" action="#{citiesBean.delete(city)}">
+                                                        <p:commandLink styleClass="btn btn-black" value="Eliminar" action="#{citiesBean.delete(city)}">
                                                         </p:commandLink>
 
                                                     </li>
@@ -92,8 +92,4 @@
         </ui:composition>
 
     </body>
-        <h:outputScript rendered="#{ not empty flash.exito }">
-            alertify.success('#{ flash.exito }');
-        </h:outputScript>
-        #{citizenBean.eliminateFlash()}
 </html>

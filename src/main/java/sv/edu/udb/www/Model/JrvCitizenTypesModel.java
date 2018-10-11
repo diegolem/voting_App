@@ -69,9 +69,11 @@ public class JrvCitizenTypesModel {
         try{
             JrvCitizenTypes enti = em.find(JrvCitizenTypes.class, id);
             if(enti != null){
-                em.remove(enti);
-                em.flush();
-                return true;
+                if(enti.getJrvCitizenCollection().isEmpty()){
+                    em.remove(enti);
+                    em.flush();
+                    return true;
+                }
             }
             return false;
         }catch(Exception e){

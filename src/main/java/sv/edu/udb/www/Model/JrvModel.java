@@ -129,13 +129,18 @@ public class JrvModel {
         try {
             Jrv enti = em.find(Jrv.class, id);
             if (enti != null) {
-                em.remove(enti);
-                em.flush();
-                return true;
+                if(enti.getJrvCitizenCollection().isEmpty()){
+                    if(enti.getPoliticGroupVotesCollection().isEmpty()){
+                        if(enti.getCitizenVotesCollection().isEmpty()){
+                            em.remove(enti);
+                            em.flush();
+                            return true;
+                        }
+                    }
+                }
             }
             return false;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }

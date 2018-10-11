@@ -109,9 +109,15 @@ public class CitiesModel {
         try{
             Cities enti = em.find(Cities.class, city.getId());
             if(enti != null){
-                em.remove(enti);
-                em.flush();
-                return true;
+                if(enti.getHeadquartersCollection().isEmpty()){
+                    if(enti.getCandidatesForCitiesCollection().isEmpty()){
+                        em.remove(enti);
+                        em.flush();
+                        return true;
+                    }
+                }else{
+                    return false;
+                }
             }
             return false;
         }catch(Exception e){

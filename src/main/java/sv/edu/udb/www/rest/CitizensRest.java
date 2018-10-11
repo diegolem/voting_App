@@ -5,8 +5,6 @@
  */
 package sv.edu.udb.www.rest;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
@@ -14,10 +12,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import sv.edu.udb.www.Entities.Citizens;
-import sv.edu.udb.www.Entities.JrvCitizen;
 import sv.edu.udb.www.Model.CitizenModel;
-
 /**
  *
  * @author Diego Lemus
@@ -32,11 +29,15 @@ public class CitizensRest {
     @GET
     @Path("/{dui}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Citizens obtenerInformacionCitizens(@PathParam("dui") String dui) {
+    public Response obtenerInformacionCitizens(@PathParam("dui") String dui) {
         Citizens citizen = citizenModel.getCitizen(dui);
-        if (citizenModel.existsDui(citizen)) {
-            return citizen;
+        if (!citizenModel.existsDui(citizen)) {
+            citizen = null;
         }
-        return null;
+        
+        return Response
+            .status(200)
+            .entity(citizen)
+            .build();
     }
 }
