@@ -19,8 +19,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import sv.edu.udb.www.Entities.Citizens;
+import sv.edu.udb.www.Entities.Jrv;
 import sv.edu.udb.www.Entities.JrvCitizen;
 import sv.edu.udb.www.Model.CitizenModel;
+import sv.edu.udb.www.Model.JrvModel;
 
 /**
  *
@@ -32,6 +34,8 @@ public class JrvCitizenRest {
 
     @EJB
     private CitizenModel citizensModel;
+    @EJB
+    private JrvModel jrvModel;
 
     @GET
     @Path("/{dui}")
@@ -46,7 +50,20 @@ public class JrvCitizenRest {
         }
         return null;
     }
-
+    @GET
+    @Path("/jrv/{idjrv}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Citizens> obtenerCitizensForJrv(@PathParam("idjrv") int id){
+        Jrv jrvCitizens = jrvModel.getJrv(id);
+        if(jrvCitizens != null){
+            if(citizensModel.verificarProcesosActivosJrv(jrvCitizens)){
+                List list = new ArrayList(jrvCitizens.getHeadquarterId().getCitizensCollection());
+                return list;            
+            }
+        }
+        return null;
+    }
+    
     @GET
     @Path("/{dui}/{password}")
     @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
