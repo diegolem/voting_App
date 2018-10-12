@@ -128,7 +128,8 @@
                                     <div class="modal-body">
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                         Candidato: #{ candidatesBean.candidates.citizenId.name } #{ candidatesBean.candidates.citizenId.lastname }
-
+                                        #{candidatesBean.candidates.politicGroupId.id}
+                                        
                                         <h:selectBooleanCheckbox style="display: none" id="editProcees" value="#{ candidatesBean.editProcees }" />
 
                                         <div class="row">

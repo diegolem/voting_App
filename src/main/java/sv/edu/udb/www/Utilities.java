@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
@@ -141,15 +143,24 @@ public class Utilities {
 
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
-        
+
         Random random = new Random();
         StringBuilder buffer = new StringBuilder(lenght);
-        
+
         for (int i = 0; i < lenght; i++) {
             int randomLimitedInt = leftLimit + (int) (random.nextFloat() * (rightLimit - leftLimit + 1));
             buffer.append((char) randomLimitedInt);
         }
-        
+
         return buffer.toString();
+    }
+
+    public static Date convertStringToDate(String date) {
+        try {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            return format.parse(date);
+        } catch (ParseException ex) {
+            return null;
+        }
     }
 }

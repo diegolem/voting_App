@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -81,6 +82,7 @@ public class CandidatesBean implements Serializable {
     private Candidates candidates;
     private CandidatesForCities candidatesForCities;
     private PresidencialCandidates presidencialCandidates;
+    private ElectoralProcess selectProcess;
 
     private String folder = "resources/images";
     private String urlPhotoRequest;
@@ -99,6 +101,7 @@ public class CandidatesBean implements Serializable {
         this.citizens.setHeadquarterId(new Headquarters());
         this.candidates = new Candidates();
         this.candidates.setPoliticGroupId(new PoliticGroups());
+        this.selectProcess = new ElectoralProcess();
 
         this.candidatesForCities = new CandidatesForCities();
         this.presidencialCandidates = new PresidencialCandidates();
@@ -107,6 +110,14 @@ public class CandidatesBean implements Serializable {
     // ////////////////////////////
     public List<Candidates> allCandidatesForGroupId() {
         return this.candidatesModel.listCandidatesForPoiliticGroup(this.idPoliticGroup);
+    }
+
+    public ElectoralProcess getSelectProcess() {
+        return selectProcess;
+    }
+
+    public void setSelectProcess(ElectoralProcess selectProcess) {
+        this.selectProcess = selectProcess;
     }
 
     public List<Candidates> allCandidatesForGroupIdWithProccess() {
@@ -232,8 +243,12 @@ public class CandidatesBean implements Serializable {
 
         if (!candidate.hasProcessElectoral()) {
 
-            if (candidate != null && !candidate.hasElectoralProcessActiveProcess() && !candidate.hasPresidencialCandidatesProcessActive()) {
-                this.candidatesModel.deleteCandidates(this.idCandidate);
+            if (!candidate.hasElectoralProcessActiveProcess() && !candidate.hasPresidencialCandidatesProcessActive()) {
+                if (this.candidatesModel.deleteCandidates(this.idCandidate)) {
+                    Utilities.addMessageFlash("exito", "Se ha eliminado el candidato con exito");
+                } else {
+                    Utilities.addMessageFlash("error", "No se ha podido eliminar el candidato");
+                }
             } else {
                 Utilities.addMessageFlash("error", "El candidato esta en medio de un proceso electoral");
             }
@@ -339,8 +354,8 @@ public class CandidatesBean implements Serializable {
                             this.citizens.setPassword(this.citizens.getDui());
                             this.citizens.setCitizenTypeId(this.citizenTypesModel.getCitizenTypes("CITIZN"));
                             this.citizens.setId(null);
-                            this.citizens.setState(new Short((short)1));
-                            
+                            this.citizens.setState(new Short((short) 1));
+
                             if (this.citizenModel.insertCitizen(this.citizens)) {
                                 this.candidates.setCitizenId(this.citizens);
                                 if (this.candidatesModel.insertCandidates(candidates)) {
@@ -466,4 +481,71 @@ public class CandidatesBean implements Serializable {
     public void setIdElectoralProcess(int idElectoralProcess) {
         this.idElectoralProcess = idElectoralProcess;
     }
+
+    public List<ElectoralProcess> allElectoralProcessByEndDateDepartamentalForForm() {
+        List<ElectoralProcess> processes = new ArrayList<ElectoralProcess>();
+
+        try {
+            if (this.candidates != null && this.candidates.getPoliticGroupId().getId() > 0) {
+                List<ElectoralProcess> electoral = this.electoralProcessModel.listElectoralProcessByEndDateDepartamental();
+
+                for (ElectoralProcess process : electoral) {
+                    boolean use = true;
+
+                    for (PresidencialCandidates candidate : process.getPresidencialCandidatesCollection()) {
+                        if (candidate.getCandidatesId().getPoliticGroupId().getId() == this.candidates.getPoliticGroupId().getId()) {
+                            use = false;
+                            break;
+                        }
+                    }
+
+                    if (use) {
+                        processes.add(process);
+                    }
+                }
+            }
+        } catch (Exception error) {
+        }
+
+        return processes;
+    }
+    
+    public List<ElectoralProcess> allElectoralProcessByEndDatePresidentialForForm() {
+        List<ElectoralProcess> processes = this.electoralProcessModel.listElectoralProcessEmpty();
+
+        try {
+            if (this.candidates != null && this.candidates.getPoliticGroupId() != null && this.candidates.getPoliticGroupId().getId() > 0) {
+
+                for (ElectoralProcess process : this.electoralProcessModel.listElectoralProcessByEndDatePresidential()) {
+                    boolean use = true;
+
+                    for (PresidencialCandidates candidate : process.getPresidencialCandidatesCollection()) {
+                        if (candidate.getCandidatesId().getPoliticGroupId().getId() == this.candidates.getPoliticGroupId().getId()) {
+                            use = false;
+                            break;
+                        }
+                    }
+
+                    if (use) {
+                        processes.add(process);
+                    }
+                }
+            }
+        } catch (Exception error) {
+            processes = this.electoralProcessModel.listElectoralProcessEmpty();
+        }
+
+        return processes;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode(); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

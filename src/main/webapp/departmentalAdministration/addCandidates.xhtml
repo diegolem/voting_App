@@ -76,6 +76,7 @@
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <h:selectOneMenu rendered="true" requiredMessage="El tipo de proceso es requerido" id="politic_group_id" value="#{ candidatesBean.candidates.politicGroupId.id }" class="form-control col-md-7 col-xs-12" >
                                     <f:selectItems value="#{ candidatesBean.allPoliticGroups() }" var="politicGroup" itemValue="#{ politicGroup.id }" itemLabel="#{ politicGroup.acronym }" />
+                                    <f:ajax render="process_id" execute="@this" />
                                 </h:selectOneMenu>
                             </div>
                         </div>
@@ -84,7 +85,7 @@
                             <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="process_id" value="proceso electoral"> <span class="required">*</span></h:outputLabel>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <h:selectOneMenu requiredMessage="El proceso es requerido" value="#{ candidatesBean.idElectoralProcess }" id="process_id" class="form-control col-md-7 col-xs-12" >
-                                    <f:selectItems value="#{ electoralProcessBean.allElectoralProcessByEndDateDepartamental() }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name } [ #{ item.electoralProcessTypesId.description } ]" />
+                                    <f:selectItems value="#{ candidatesBean.allElectoralProcessByEndDateDepartamentalForForm() }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name } [ #{ item.electoralProcessTypesId.description } ]" />
                                 </h:selectOneMenu>
                             </div>
                         </div>
@@ -109,9 +110,7 @@
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                 <button class="btn btn-primary" type="reset">Reset</button>
-                                <h:commandButton class="btn btn-success" type="submit" value="Registrar" >
-                                    <f:ajax render="@form" execute="@form" listener="#{ candidatesBean.save() }" />
-                                </h:commandButton>
+                                <h:commandButton class="btn btn-success" type="submit" value="Registrar" actionListener="#{ candidatesBean.save() }" />
                             </div>
                         </div>
 

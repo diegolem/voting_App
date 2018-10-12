@@ -48,8 +48,8 @@ import sv.edu.udb.www.Utilities;
     , @NamedQuery(name = "ElectoralProcess.findByInitDate", query = "SELECT e FROM ElectoralProcess e WHERE e.initDate = :initDate")
     , @NamedQuery(name = "ElectoralProcess.findByEndDate", query = "SELECT e FROM ElectoralProcess e WHERE e.endDate = :endDate")
     , @NamedQuery(name = "ElectoralProcess.findAllByEndDateNow", query = "SELECT e FROM ElectoralProcess e WHERE e.processDate > CURRENT_TIMESTAMP")
-    , @NamedQuery(name = "ElectoralProcess.findAllByEndDateNowPresidential", query = "SELECT e FROM ElectoralProcess e WHERE e.processDate > CURRENT_TIMESTAMP AND e.electoralProcessTypesId.id = 1")
-    , @NamedQuery(name = "ElectoralProcess.findAllByEndDateNowDepartament", query = "SELECT e FROM ElectoralProcess e WHERE e.processDate > CURRENT_TIMESTAMP AND e.electoralProcessTypesId.id = 2")
+    , @NamedQuery(name = "ElectoralProcess.findAllByEndDateNowPresidential", query = "SELECT DISTINCT e FROM ElectoralProcess e WHERE e.processDate > CURRENT_TIMESTAMP AND e.electoralProcessTypesId.id = 1")
+    , @NamedQuery(name = "ElectoralProcess.findAllByEndDateNowDepartament", query = "SELECT DISTINCT e FROM ElectoralProcess e WHERE e.processDate > CURRENT_TIMESTAMP AND e.electoralProcessTypesId.id = 2")
     , @NamedQuery(name = "ElectoralProcess.findActiveByCandidate", query = "SELECT Distinct e FROM ElectoralProcess e Join Fetch e.candidatesForCitiesCollection c WHERE e.processDate > CURRENT_TIMESTAMP AND c.candidateId.id = :idCandidate")
     , @NamedQuery(name = "ElectoralProcess.findByProcessDate", query = "SELECT e FROM ElectoralProcess e WHERE e.processDate = :processDate")})
 public class ElectoralProcess implements Serializable {

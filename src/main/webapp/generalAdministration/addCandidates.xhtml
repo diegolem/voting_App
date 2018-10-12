@@ -15,7 +15,7 @@
             </ui:define>
 
             <ui:define name="content">
-                <h:form id="frm-process" class="form-horizontal form-label-left data-parsley-validate" enctype="multipart/form-data"  prependId="false">
+                <h:form id="frm" class="form-horizontal form-label-left data-parsley-validate" enctype="multipart/form-data"  prependId="false">
                     <h:panelGroup rendered="#{ electoralProcessBean.allElectoralProcessByEndDatePresidential().size() gt 0 }">
                         <div class="form-group">
                             <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="photo" value="Foto"></h:outputLabel>
@@ -31,9 +31,7 @@
                                     <div class="btn btn-default image-preview-input">
                                         <span class="glyphicon glyphicon-folder-open"></span>
                                         <span class="image-preview-input-title">Browse</span>
-                                        <h:inputFile id="input-file-preview" value="#{candidatesBean.uploadedFile}"  >
-                                            <f:ajax listener="#{ candidatesBean.handleFileUpload }" />
-                                        </h:inputFile>
+                                        <h:inputFile id="input-file-preview" value="#{candidatesBean.uploadedFile}" />
                                     </div>
                                 </span>
                             </div><!-- /input-group image-preview [TO HERE]--> 
@@ -63,7 +61,7 @@
                         <div class="form-group">
                             <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="headquarter" value="Sede"> <span class="required">*</span></h:outputLabel>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <h:selectOneMenu rendered="true" requiredMessage="El tipo de proceso es requerido" id="headquarter" value="#{ candidatesBean.citizens.headquarterId.id }" class="form-control col-md-7 col-xs-12" >
+                                <h:selectOneMenu required="true" rendered="true" requiredMessage="La sede del proceso es requerido" id="headquarter" value="#{ candidatesBean.citizens.headquarterId.id }" class="form-control col-md-7 col-xs-12" >
                                     <f:selectItems value="#{ candidatesBean.allHeadquarters() }" var="headquarter" itemValue="#{ headquarter.id }" itemLabel="#{ headquarter.name }" />
                                 </h:selectOneMenu>
                             </div>
@@ -72,17 +70,19 @@
                         <div class="form-group">
                             <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="politic_group_id" value="Gruopo"> <span class="required">*</span></h:outputLabel>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <h:selectOneMenu rendered="true" requiredMessage="El tipo de proceso es requerido" id="politic_group_id" value="#{ candidatesBean.candidates.politicGroupId.id }" class="form-control col-md-7 col-xs-12" >
+                                <h:selectOneMenu required="true" rendered="true" requiredMessage="El tipo de proceso es requerido" id="politic_group_id" value="#{ candidatesBean.candidates.politicGroupId.id }" class="form-control col-md-7 col-xs-12" >
                                     <f:selectItems value="#{ candidatesBean.allPoliticGroups() }" var="politicGroup" itemValue="#{ politicGroup.id }" itemLabel="#{ politicGroup.acronym }" />
+                                    <f:ajax event="change" render="processId"  />
                                 </h:selectOneMenu>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="process_id" value="proceso electoral"> <span class="required">*</span></h:outputLabel>
+                            <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="processId" value="Proceso electoral"> <span class="required">*</span></h:outputLabel>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <h:selectOneMenu requiredMessage="El proceso es requerido" value="#{ candidatesBean.idElectoralProcess }" id="process_id" class="form-control col-md-7 col-xs-12" >
-                                    <f:selectItems value="#{ electoralProcessBean.allElectoralProcessByEndDatePresidential() }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name } [ #{ item.electoralProcessTypesId.description } ]" />
+                                <h:selectOneMenu rendered="true" requiredMessage="La sede es requerida" id="processId" value="#{ candidatesBean.idElectoralProcess }" class="form-control col-md-7 col-xs-12" >
+                                    <f:selectItem itemLabel="Elija la Sede de votación"/>
+                                    <f:selectItems value="#{ candidatesBean.allElectoralProcessByEndDatePresidentialForForm() }" var="head" itemValue="#{ head.id }" itemLabel="#{ head.name }" />
                                 </h:selectOneMenu>
                             </div>
                         </div>
@@ -108,16 +108,15 @@
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                 <a class="btn btn-primary" value="Regresar" href="#{ request.contextPath }/faces/generalAdministration/candidates.xhtml">Regresar</a>
                                 <h:commandButton class="btn btn-success" type="submit" value="Registrar" >
-                                    <f:ajax render="@form" execute="@form" listener="#{ candidatesBean.save() }" />
+                                    <f:ajax render="@form" execute="@form" listener="#{candidatesBean.save()}" />
                                 </h:commandButton>
                             </div>
                         </div>
 
                         <h:messages class="alert alert-danger"></h:messages>
 
-                        <h:outputScript name="js/batman.js" />
                     </h:panelGroup>
-                    
+
                     <h:panelGroup rendered="#{ electoralProcessBean.allElectoralProcessByEndDatePresidential().size() eq 0 }">
                         <div class="jumbotron">
                             <h1>No se puede realizar la operacion</h1>
@@ -125,6 +124,8 @@
                         </div>
                     </h:panelGroup>
                 </h:form>
+
+                <h:outputScript name="js/batman.js" />
             </ui:define>
 
         </ui:composition>

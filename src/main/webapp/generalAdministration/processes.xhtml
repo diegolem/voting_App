@@ -9,7 +9,6 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
-
         <ui:composition template="./../WEB-INF/DashboardTemplate.xhtml">
 
             <ui:define name="tittle">
@@ -109,7 +108,7 @@
                                     </div>
                                     <!-- dialog buttons -->
                                     <div class="modal-footer">
-                                        <h:commandButton value="Eliminar" class="btn btn-primary" type="submit" actionListener="#{ electoralProcessBean.delete() }" />
+                                        <h:commandButton immediate="true" value="Eliminar" class="btn btn-primary" type="submit" actionListener="#{ electoralProcessBean.delete() }" />
                                     </div>
                                 </h:panelGroup>
                             </div>
@@ -134,7 +133,7 @@
                                     </div>
                                     <!-- dialog buttons -->
                                     <div class="modal-footer">
-                                        <h:commandButton value="Recargar" class="btn btn-primary" type="submit" actionListener="#{ electoralProcessBean.reloadJrv() }" />
+                                        <h:commandButton immediate="true" value="Recargar" class="btn btn-primary" type="submit" actionListener="#{ electoralProcessBean.reloadJrv() }" />
                                     </div>
                                 </h:panelGroup>
                             </div>
@@ -171,7 +170,7 @@
                                     </div>
                                     <!-- dialog buttons -->
                                     <div class="modal-footer">
-                                        <h:commandButton value="Cambiar sede" class="btn btn-success" type="submit" actionListener="#{ electoralProcessBean.changeJRV() }" />
+                                        <h:commandButton immediate="true" value="Cambiar sede" class="btn btn-success" type="submit" actionListener="#{ electoralProcessBean.changeJRV() }" />
                                     </div>
                                 </h:panelGroup>
                             </div>
@@ -190,7 +189,6 @@
 
                                         <div class="form-horizontal form-label-left data-parsley-validate">
                                             <h:inputHidden id="idRequest" value="#{ electoralProcessBean.electoralProcess.id }" />
-                                            <h:inputHidden id="idStatus" value="#{ electoralProcessBean.electoralProcess.electoralProcessStatusId.id }" />
 
                                             <div class="form-group">
                                                 <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="code" value="Codigo"> <span class="required">*</span></h:outputLabel>
@@ -243,13 +241,22 @@
                                     <div class="modal-footer">
                                         <div class="form-group">
                                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                <h:commandButton class="btn btn-warning" value="Modificar" >
-                                                    <f:ajax listener="#{ electoralProcessBean.update() }" />
+                                                <h:commandButton onclick="$('#mdlEdit').modal('hide');" class="btn btn-warning" value="Modificar" >
+                                                    <f:ajax render="@form" execute="@form" listener="#{ electoralProcessBean.update() }" />
                                                 </h:commandButton>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <h:outputScript id="scriptError" rendered="#{ flash.error.length() gt 0 }" >
+                                    alertify.error('#{ flash.error }');
+                                </h:outputScript>
+
+                                <h:outputScript id="scriptExito" rendered="#{ flash.exito.length() gt 0 }" >
+                                    alertify.success('#{ flash.exito }');
+                                </h:outputScript>
+
                             </h:panelGroup>
                         </div>
                     </div> 

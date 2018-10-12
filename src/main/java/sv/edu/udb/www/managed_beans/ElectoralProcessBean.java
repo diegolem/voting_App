@@ -6,6 +6,7 @@
 package sv.edu.udb.www.managed_beans;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -28,6 +29,7 @@ import sv.edu.udb.www.Entities.PoliticGroupVotes;
 import sv.edu.udb.www.Entities.PoliticGroups;
 import sv.edu.udb.www.Entities.PresidencialCandidates;
 import sv.edu.udb.www.Model.CitizenModel;
+import sv.edu.udb.www.Model.ElectoralProcessTypesModel;
 import sv.edu.udb.www.Model.HeadquartersModel;
 import sv.edu.udb.www.Model.JrvCitizenModel;
 import sv.edu.udb.www.Model.JrvCitizenTypesModel;
@@ -43,6 +45,8 @@ import sv.edu.udb.www.Model.PoliticGroupsModel;
 @ViewScoped
 public class ElectoralProcessBean implements Serializable {
 
+    @EJB
+    private ElectoralProcessTypesModel electoralProcessTypesModel;
     @EJB
     private PoliticGroupsModel politicGroupsModel;
     @EJB
@@ -122,23 +126,26 @@ public class ElectoralProcessBean implements Serializable {
     public List<ElectoralProcess> allElectoralProcessByEndDateDepartamental() {
         return this.electoralProcessModel.listElectoralProcessByEndDateDepartamental();
     }
-    
+
     public List<ElectoralProcess> allElectoralProcessByEndDateDepartamental(int idPoliticGroup) {
         List<ElectoralProcess> electoral = this.electoralProcessModel.listElectoralProcessByEndDateDepartamental();
         List<ElectoralProcess> processes = new ArrayList();
-        
-        for (ElectoralProcess process : electoral){
-    
-            if (process.getPresidencialCandidatesCollection().size() > 0)
-                for(PresidencialCandidates presidencialCandidate : process.getPresidencialCandidatesCollection()){
-                    if (presidencialCandidate.getCandidatesId().getPoliticGroupId().getId() != idPoliticGroup)
-                        processes.add(process);
+
+        for (ElectoralProcess process : electoral) {
+            boolean use = true;
+
+            for (PresidencialCandidates candidate : process.getPresidencialCandidatesCollection()) {
+                if (candidate.getCandidatesId().getPoliticGroupId().getId() == idPoliticGroup) {
+                    use = false;
+                    break;
                 }
-            else
+            }
+
+            if (use) {
                 processes.add(process);
-        
+            }
         }
-        
+
         return processes;
     }
 
@@ -149,23 +156,25 @@ public class ElectoralProcessBean implements Serializable {
     public List<ElectoralProcess> allElectoralProcessByEndDatePresidential(int idPoliticGroup) {
         List<ElectoralProcess> electoral = this.electoralProcessModel.listElectoralProcessByEndDatePresidential();
         List<ElectoralProcess> processes = new ArrayList();
-        
-        for (ElectoralProcess process : electoral){
-    
-            if (process.getPresidencialCandidatesCollection().size() > 0)
-                for(PresidencialCandidates presidencialCandidate : process.getPresidencialCandidatesCollection()){
-                    if (presidencialCandidate.getCandidatesId().getPoliticGroupId().getId() != idPoliticGroup)
-                        processes.add(process);
+
+        for (ElectoralProcess process : electoral) {
+            boolean use = true;
+
+            for (PresidencialCandidates candidate : process.getPresidencialCandidatesCollection()) {
+                if (candidate.getCandidatesId().getPoliticGroupId().getId() == idPoliticGroup) {
+                    use = false;
+                    break;
                 }
-            else
+            }
+
+            if (use) {
                 processes.add(process);
-        
+            }
         }
-        
+
         return processes;
     }
 
-    
     public void reloadJrv() {
         Auth auth = Utilities.getUserAuth();
 
@@ -176,7 +185,7 @@ public class ElectoralProcessBean implements Serializable {
 
             if (process != null) {
                 int actual = Integer.parseInt(Utilities.getRequestValue("frm:headquarterResetActual"));
-                
+
                 change(auth, process, actual, actual);
             }
         }
@@ -191,6 +200,13 @@ public class ElectoralProcessBean implements Serializable {
         for (Jrv jrv : jrvs) {
             if (jrv.getJrvCitizenCollection().size() > 0) {
                 if (!this.jrvCitizenModel.deleteJrvCitizenByJrv(jrv.getId())) {
+                    isOk = false;
+                    break;
+                }
+            }
+
+            if (jrv.getPoliticGroupVotesCollection().size() > 0) {
+                if (!this.politicGroupVotesModel.deletePoliticGroupVotesByJrv(jrv.getId())) {
                     isOk = false;
                     break;
                 }
@@ -225,7 +241,7 @@ public class ElectoralProcessBean implements Serializable {
                 int now = Integer.parseInt(Utilities.getRequestValue("frm:headquarterNow"));
 
                 change(auth, process, actual, now);
-                
+
             } else {
                 Utilities.addMessageFlash("error", "No se ha podido obtener el proceso actual");
             }
@@ -235,18 +251,18 @@ public class ElectoralProcessBean implements Serializable {
         }
     }
 
-    private void addPoliticGroupJrv(Jrv jrvId){
-        for(PoliticGroups politic : this.politicGroupsModel.listPoliticGroups()){
+    private void addPoliticGroupJrv(Jrv jrvId) {
+        for (PoliticGroups politic : this.politicGroupsModel.listPoliticGroups()) {
             PoliticGroupVotes vote = new PoliticGroupVotes();
             vote.setJrvId(jrvId);
             vote.setPoliticGroupId(politic);
             vote.setElectoralProcessId(jrvId.getElectoralProcessId());
             vote.setVotes(new Integer(0));
-            
+
             this.politicGroupVotesModel.insertPoliticGroupVotes(vote);
         }
     }
-    
+
     public boolean creatJRV(Auth auth, ElectoralProcess process, int idHeadquarter) {
         if (auth.isGeneralAdministration()) {
             int min = 0;
@@ -271,7 +287,7 @@ public class ElectoralProcessBean implements Serializable {
 
                 if (this.jrvModel.insertJrv(jrv)) {
                     addPoliticGroupJrv(jrv);
-                    
+
                     for (Citizens citizen : list) {
                         if (citizen.getCandidatesCollection().isEmpty()) {
                             JrvCitizen jrvCitizen = new JrvCitizen();
@@ -306,7 +322,7 @@ public class ElectoralProcessBean implements Serializable {
                     jrv.setCode("EP" + process.getCode() + "_" + Utilities.now().getYear() + auth.getCitizen().getId() + "_" + Utilities.createStringRandom(2));
                 }
 
-                if (this.jrvModel.insertJrv(jrv)){
+                if (this.jrvModel.insertJrv(jrv)) {
                     addPoliticGroupJrv(jrv);
                     return true;
                 }
@@ -371,32 +387,50 @@ public class ElectoralProcessBean implements Serializable {
     }
 
     public void update() {
-        this.electoralProcess.setId(Integer.parseInt(Utilities.getRequestValue("frm:idRequest")));
-        if (!this.electoralProcessModel.existsCodeWithId(electoralProcess)) {
-            // Primero revisamos la diferencia entre las fechas
-            if (Utilities.isEquealOrAfterNow(this.electoralProcess.getInitDate())) {
-                if (this.electoralProcess.getInitDate().before(this.electoralProcess.getEndDate())) { // En caso que EnDate sea nayor que InitDate
-                    if (this.electoralProcess.getInitDate().before(this.electoralProcess.getProcessDate()) && this.electoralProcess.getEndDate().after(this.electoralProcess.getProcessDate())) { // En caso que el procees este entre el rango de fechas adecuados
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(this.electoralProcess.getProcessDate());
-                        this.electoralProcess.setYear("" + cal.get(Calendar.YEAR));
-                        this.electoralProcess.setElectoralProcessStatusId(electoralProcessStatusModel.getElectoralProcessStatus(Integer.parseInt(Utilities.getRequestValue("frm:idStatus"))));
-                        if (!this.electoralProcessModel.editElectoralProcess(electoralProcess)) {
-                            Utilities.addMessageError("Error_Insert", "No se ha podido modificar el proceso");
+        int id = Integer.parseInt(Utilities.getRequestValue("frm:idRequest"));
+
+        ElectoralProcess process = this.electoralProcessModel.getElectoralProcess(id);
+
+        if (process != null) {
+            if (process.avalible()) {
+
+                process.setCode(Utilities.getRequestValue("frm:code"));
+                process.setName(Utilities.getRequestValue("frm:name"));
+                process.setElectoralProcessTypesId(this.electoralProcessTypesModel.getElectoralProcessTypes(Integer.parseInt(Utilities.getRequestValue("frm:type"))));
+                process.setInitDate(Utilities.convertStringToDate(Utilities.getRequestValue("frm:initDate")));
+                process.setProcessDate(Utilities.convertStringToDate(Utilities.getRequestValue("frm:processDate")));
+                process.setEndDate(Utilities.convertStringToDate(Utilities.getRequestValue("frm:endDate")));
+
+                if (!this.electoralProcessModel.existsCodeWithId(process)) {
+                    // Primero revisamos la diferencia entre las fechas
+                    if (Utilities.isEquealOrAfterNow(process.getInitDate())) {
+                        if (process.getInitDate().before(process.getEndDate())) { // En caso que EnDate sea nayor que InitDate
+                            if (process.getInitDate().before(process.getProcessDate()) && process.getEndDate().after(process.getProcessDate())) { // En caso que el procees este entre el rango de fechas adecuados
+                                Calendar cal = Calendar.getInstance();
+                                cal.setTime(process.getProcessDate());
+                                process.setYear("" + cal.get(Calendar.YEAR));
+                                if (!this.electoralProcessModel.editElectoralProcess(process)) {
+                                    Utilities.addMessageFlash("error", "No se ha podido modificar el proceso");
+                                } else {
+                                    Utilities.addMessageFlash("exito", "El proceso ha sido modificado con exito");
+                                }
+                            } else {
+                                Utilities.addMessageFlash("error", "La fecha de proceso debe de estar entre los intervalos permitidos");
+                            }
                         } else {
-                            Utilities.redirect("/faces/generalAdministration/processes.xhtml");
+                            Utilities.addMessageFlash("error", "La fecha de finalizacion debe de ser posterior a la de inicializacion");
                         }
                     } else {
-                        Utilities.addMessageError("Error_Fecha", "La fecha de proceso debe de estar entre los intervalos permitidos");
+                        Utilities.addMessageFlash("error", "La fecha de inicializacion debe de ser posterior a la fecha actual");
                     }
                 } else {
-                    Utilities.addMessageError("Error_Fecha", "La fecha de finalizacion debe de ser posterior a la de inicializacion");
+                    Utilities.addMessageFlash("error", "El codigo ya existe");
                 }
             } else {
-                Utilities.addMessageError("Error_Fecha", "La fecha de inicializacion debe de ser posterior a la fecha actual");
+                Utilities.addMessageFlash("error", "El proceso no se encuentra habilitado");
             }
         } else {
-            Utilities.addMessageError("Error_Fecha", "El codigo ya existe");
+            Utilities.addMessageFlash("error", "No se ha podido obtener el proceso electoral");
         }
 
     }

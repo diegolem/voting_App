@@ -42,6 +42,18 @@ public class PoliticGroupVotesModel {
             return false;
         }
     }
+    
+    public boolean deletePoliticGroupVotesByJrv(int id){
+        try{
+            Query query = this.em.createQuery("DELETE FROM PoliticGroupVotes p WHERE p.jrvId.id = :id");
+            query.setParameter("id", id);
+            return query.executeUpdate() > 0;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
     public PoliticGroupVotes getPoliticGroupVote(int id){
         try{
             PoliticGroupVotes enti = em.find(PoliticGroupVotes.class, id);
