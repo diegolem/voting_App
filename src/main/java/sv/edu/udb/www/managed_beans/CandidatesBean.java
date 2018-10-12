@@ -339,7 +339,8 @@ public class CandidatesBean implements Serializable {
                             this.citizens.setPassword(this.citizens.getDui());
                             this.citizens.setCitizenTypeId(this.citizenTypesModel.getCitizenTypes("CITIZN"));
                             this.citizens.setId(null);
-
+                            this.citizens.setState(new Short((short)1));
+                            
                             if (this.citizenModel.insertCitizen(this.citizens)) {
                                 this.candidates.setCitizenId(this.citizens);
                                 if (this.candidatesModel.insertCandidates(candidates)) {

@@ -14,14 +14,14 @@
             <ui:define name="tittle">
                 Ciudadanos
             </ui:define>
-            
+
             <ui:define name="content">
-                    #{citizenBean.onloadRequestUser()}
-                    <h:form id="frm-citizens-update" class="form-horizontal form-label-left data-parsley-validate">
-                        <h:inputHidden id="idRequest" value="#{ citizenBean.citizen.id }" />
-                        <h:inputHidden id="idState" value="#{ citizenBean.citizen.state }" />
-                        
-                        <div class="form-group">
+                #{citizenBean.onloadRequestUser()}
+                <h:form id="frm-citizens-update" class="form-horizontal form-label-left data-parsley-validate">
+                    <h:inputHidden id="idRequest" value="#{ citizenBean.citizen.id }" />
+                    <h:inputHidden id="idState" value="#{ citizenBean.citizen.state }" />
+
+                    <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="name" value="Nombres"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <p:inputText id="name" requiredMessage="El nombre es requerido" required="true" value="#{citizenBean.citizen.name}" styleClass="form-control col-md-7 col-xs-12" />
@@ -45,7 +45,7 @@
                             <p:inputText id="direccion" requiredMessage="La dirección es requerida" required="true" value="#{citizenBean.citizen.adress}" styleClass="form-control col-md-7 col-xs-12" />
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="birthday" value="Fecha de Cumpleaños"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -54,7 +54,7 @@
                             </h:inputText>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="typecitizen" value="Tipo de Ciudadano"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -63,7 +63,7 @@
                             </h:selectOneMenu>
                         </div>
                     </div>
-                        
+
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="department" value="Departamento"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -73,7 +73,7 @@
                             </h:selectOneMenu>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="city" value="Municipio"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -84,7 +84,7 @@
                             </h:selectOneMenu>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="headquarter" value="Sede de votación"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -94,19 +94,19 @@
                             </h:selectOneMenu>
                         </div>
                     </div>
-                        
-                        <div class="ln_solid"></div>
-                        <div class="form-group">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                <a class="btn btn-primary" href="#{ request.contextPath }/faces/generalAdministration/User.xhtml">Regresar</a>
-                                <h:commandButton class="btn btn-warning" type="submit" value="Modificar" >
-                                    <f:ajax render="@form" execute="@form" listener="#{ citizenBean.updateUser() }" />
-                                </h:commandButton>
-                            </div>
-                        </div>
 
-                        <h:messages class="alert alert-danger"></h:messages>
-                    </h:form>              
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <a class="btn btn-primary" href="#{ request.contextPath }/faces/generalAdministration/User.xhtml">Regresar</a>
+                            <h:commandButton class="btn btn-warning" type="submit" value="Modificar" >
+                                <f:ajax render="@form" execute="@form" listener="#{ citizenBean.updateUser() }" />
+                            </h:commandButton>
+                        </div>
+                    </div>
+
+                    <h:messages class="alert alert-danger"></h:messages>
+                </h:form>              
             </ui:define>
         </ui:composition>
 

@@ -4,6 +4,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
@@ -34,7 +35,10 @@
                                             <h:panelGroup rendered="#{ electoral.avalible() }">
                                                 <ul class="nav navbar-right panel_toolbox">
                                                     <li>
-                                                        <a href="#{ request.contextPath }/faces/generalAdministration/editProcess.xhtml?id=#{electoral.id}"><i class="fa fa-wrench"></i></a>
+                                                        <h:commandLink onclick="$('#mdlEdit').modal('show');" >
+                                                            <i class="fa fa-wrench"></i>
+                                                            <p:ajax update=":frm:pnlEdit" listener="#{ electoralProcessBean.defineElectoralId(electoral.id) }" />
+                                                        </h:commandLink>
                                                     </li>
                                                     <li>
                                                         <h:commandLink onclick="$('#mdlEliminar').modal('show');" >
@@ -173,6 +177,82 @@
                             </div>
                         </div>
                     </div>
+
+                    <div id="mdlEdit" class="modal fade">
+                        <div class="modal-dialog">
+                            <h:panelGroup id="pnlEdit">
+                                <div class="modal-content">
+                                    <!-- dialog body -->
+                                    <div class="modal-body bg-primary text-info">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h3>#{ electoralProcessBean.electoralProcess.code }</h3>
+                                        <p>Proceso electoral: #{ electoralProcessBean.electoralProcess.name }</p>
+
+                                        <div class="form-horizontal form-label-left data-parsley-validate">
+                                            <h:inputHidden id="idRequest" value="#{ electoralProcessBean.electoralProcess.id }" />
+                                            <h:inputHidden id="idStatus" value="#{ electoralProcessBean.electoralProcess.electoralProcessStatusId.id }" />
+
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="code" value="Codigo"> <span class="required">*</span></h:outputLabel>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <h:inputText id="code" requiredMessage="El Codigo es requerido" required="true" value="#{ electoralProcessBean.electoralProcess.code }" class="form-control col-md-7 col-xs-12" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="name" value="Nombre"> <span class="required">*</span></h:outputLabel>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <h:inputText id="name" requiredMessage="El nombre es requerido" required="true" value="#{ electoralProcessBean.electoralProcess.name }" class="form-control col-md-7 col-xs-12" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="type" value="Tipo"> <span class="required">*</span></h:outputLabel>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <h:selectOneMenu rendered="true" requiredMessage="El tipo de proceso es requerido" id="type" value="#{ electoralProcessBean.electoralProcess.electoralProcessTypesId.id }" class="form-control col-md-7 col-xs-12" >
+                                                        <f:selectItems value="#{ electoralProcessTypesBean.allElectoralProcessTypes() }" var="type" itemValue="#{ type.id }" itemLabel="#{ type.description }" />
+                                                    </h:selectOneMenu>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="initDate" value="Fecha Inicio"> <span class="required">*</span></h:outputLabel>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <h:inputText id="initDate" validatorMessage="Formato de fecha de inicio es incorecta" requiredMessage="La fecha de inicio es requerida" value="#{ electoralProcessBean.electoralProcess.initDate }" class="form-control col-md-7 col-xs-12" required="true" title="fechaNacimiento" converterMessage="Inicio" a:type="date">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                                    </h:inputText>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="endDate" value="Fecha Final"> <span class="required">*</span></h:outputLabel>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <h:inputText id="endDate" validatorMessage="Formato de fecha de finalizacion es incorecta" requiredMessage="La fecha de la finalizacion es requerida" value="#{ electoralProcessBean.electoralProcess.endDate}" class="form-control col-md-7 col-xs-12" required="true" title="fechaNacimiento" converterMessage="Inicio" a:type="date">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                                    </h:inputText>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="processDate" value="Fecha del proceso"> <span class="required">*</span></h:outputLabel>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <h:inputText id="processDate" validatorMessage="Formato de fecha de proceso es incorecta" requiredMessage="La fecha del proceso es requerida" value="#{ electoralProcessBean.electoralProcess.processDate}" class="form-control col-md-7 col-xs-12" required="true" title="fechaNacimiento" converterMessage="Inicio" a:type="date">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                                    </h:inputText>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- dialog buttons -->
+                                    <div class="modal-footer">
+                                        <div class="form-group">
+                                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                                <h:commandButton class="btn btn-warning" value="Modificar" >
+                                                    <f:ajax listener="#{ electoralProcessBean.update() }" />
+                                                </h:commandButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                    </div> 
 
                 </h:form>
             </ui:define>

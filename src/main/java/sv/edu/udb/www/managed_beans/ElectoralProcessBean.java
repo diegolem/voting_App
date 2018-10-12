@@ -66,9 +66,18 @@ public class ElectoralProcessBean implements Serializable {
     @ManagedProperty("#{param.id}")
     private int idRequest;
 
+    private boolean avalibleActualProcess;
     private int idStatus;
     private int idHeadquarter;
     private int idHeadquarterActual;
+
+    public boolean isAvalibleActualProcess() {
+        return avalibleActualProcess;
+    }
+
+    public void setAvalibleActualProcess(boolean avalibleActualProcess) {
+        this.avalibleActualProcess = avalibleActualProcess;
+    }
 
     public int getIdRequest() {
         return idRequest;
@@ -357,11 +366,12 @@ public class ElectoralProcessBean implements Serializable {
 
     public void onloadRequest() {
         this.electoralProcess = this.electoralProcessModel.getElectoralProcess(this.idRequest);
+        this.avalibleActualProcess = this.electoralProcess.avalible();
         this.idStatus = this.electoralProcess.getElectoralProcessStatusId().getId();
     }
 
-    public void update(int status, int id) {
-        this.electoralProcess.setId(id);
+    public void update() {
+        this.electoralProcess.setId(Integer.parseInt(Utilities.getRequestValue("frm:idRequest")));
         if (!this.electoralProcessModel.existsCodeWithId(electoralProcess)) {
             // Primero revisamos la diferencia entre las fechas
             if (Utilities.isEquealOrAfterNow(this.electoralProcess.getInitDate())) {
@@ -370,7 +380,7 @@ public class ElectoralProcessBean implements Serializable {
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(this.electoralProcess.getProcessDate());
                         this.electoralProcess.setYear("" + cal.get(Calendar.YEAR));
-                        this.electoralProcess.setElectoralProcessStatusId(electoralProcessStatusModel.getElectoralProcessStatus(status));
+                        this.electoralProcess.setElectoralProcessStatusId(electoralProcessStatusModel.getElectoralProcessStatus(Integer.parseInt(Utilities.getRequestValue("frm:idStatus"))));
                         if (!this.electoralProcessModel.editElectoralProcess(electoralProcess)) {
                             Utilities.addMessageError("Error_Insert", "No se ha podido modificar el proceso");
                         } else {
