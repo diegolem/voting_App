@@ -51,7 +51,7 @@ public class JrvCitizenRest {
         return null;
     }
     @GET
-    @Path("/jrv/{idjrv}")
+    @Path("/jrv/{idjrv}/citizens")
     @Produces({MediaType.APPLICATION_JSON})
     public List<Citizens> obtenerCitizensForJrv(@PathParam("idjrv") int id){
         Jrv jrvCitizens = jrvModel.getJrv(id);

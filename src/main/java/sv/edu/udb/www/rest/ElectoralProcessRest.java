@@ -5,8 +5,6 @@
  */
 package sv.edu.udb.www.rest;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
@@ -17,12 +15,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import sv.edu.udb.www.Entities.CitizenVotes;
 import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Entities.JrvCitizen;
 import sv.edu.udb.www.Entities.PoliticGroupVotes;
-import sv.edu.udb.www.Entities.PoliticGroups;
 import sv.edu.udb.www.Model.CitizenModel;
 import sv.edu.udb.www.Model.CitizenVotesModel;
 import sv.edu.udb.www.Model.ElectoralProcessModel;
@@ -48,16 +46,17 @@ public class ElectoralProcessRest {
     @GET
     @Path("/{code}")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<PoliticGroups> getPoliticGroupsForElectoraProcess(@PathParam("code") String codigo) {
+    public Response getPoliticGroupsForElectoraProcess(@PathParam("code") String codigo) {
         ElectoralProcess electoral = electoralProcessModel.getElectoralProcess(codigo);
         if (electoralProcessModel.existsCode(electoral)) {
             if (electoral.getElectoralProcessTypesId().getId() == 1) {
-                return electoralProcessModel.getPoliticGroupPresidencial(electoral);
+                return Response.status(Response.Status.OK).entity(electoralProcessModel.getPoliticGroupPresidencial(electoral)).build();
             } else {
-                return electoralProcessModel.getPoliticGroupCities(electoral);
+                return Response.status(Response.Status.OK).entity(electoralProcessModel.getPoliticGroupCities(electoral)).build();
             }
         }
-        return null;
+        
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @POST
@@ -77,16 +76,15 @@ public class ElectoralProcessRest {
             citiVotes.setStatus((short) (vote ? (short) 1 : 0));
 
             PoliticGroupVotes politicVotes = null;
-            
-            for(PoliticGroupVotes politicVote : jrvAdmin.getJrvId().getPoliticGroupVotesCollection()){
-                if (politicVote.getPoliticGroupId().getId() == politic){
+
+            for (PoliticGroupVotes politicVote : jrvAdmin.getJrvId().getPoliticGroupVotesCollection()) {
+                if (politicVote.getPoliticGroupId().getId() == politic) {
                     politicVotes = politicVote;
                     break;
                 }
             }
-            
-            //citizenVotesModel.countVote(politic, jrvAdmin.getJrvId().getId(), jrvAdmin.getJrvId().getElectoralProcessId().getId());
 
+            //citizenVotesModel.countVote(politic, jrvAdmin.getJrvId().getId(), jrvAdmin.getJrvId().getElectoralProcessId().getId());
             if (politicVotes != null && vote == true) {
                 int vot = politicVotes.getVotes() + 1;
                 politicVotes.setVotes(vot);
