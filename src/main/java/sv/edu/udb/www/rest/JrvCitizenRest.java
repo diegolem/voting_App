@@ -47,21 +47,21 @@ public class JrvCitizenRest {
         return null;
     }
 
-    @POST
+    @GET
+    @Path("/{dui}/{password}")
     @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response loginAdminJrv(@FormParam("dui") String dui, @FormParam("pass") String pass) {
-//        Citizens admin = citizensModel.getLoginCitizenAdmin(dui, pass);
-//        if (citizensModel.isPresident(admin)) {
-//            if (citizensModel.verifyCitizen(admin)) {
-//                if (citizensModel.verificarProcesosActivos(admin)) {
-////                    List list = new ArrayList(admin.getJrvCitizenCollection());
-//                    return Response.status(200).entity(admin).build();
-//                }
-//            }
-//        }
+    public Response loginAdminJrv(@PathParam("dui") String dui, @PathParam("password") String pass) {
+        Citizens admin = citizensModel.getLoginCitizenAdmin(dui, pass);
+        if (citizensModel.isPresident(admin)) {
+            if (citizensModel.verifyCitizen(admin)) {
+                if (citizensModel.verificarProcesosActivos(admin)) {
+                    List list = new ArrayList(admin.getJrvCitizenCollection());
+                    return Response.status(Response.Status.OK).entity(list.get(0)).build();
+                }
+            }
+        }
 
-        return Response.status(200).entity(dui).build();
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
-
 }
