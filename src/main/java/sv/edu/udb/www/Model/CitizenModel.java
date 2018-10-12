@@ -17,6 +17,7 @@ import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import org.apache.commons.codec.digest.DigestUtils;
 import sv.edu.udb.www.Entities.Citizens;
+import sv.edu.udb.www.Entities.Jrv;
 /**
  *
  * @author Diego Lemus
@@ -92,6 +93,21 @@ public class CitizenModel {
         }catch(Exception e){
             return null;
         }
+    }
+    public boolean verificarProcesosActivosJrv(Jrv jrv){
+        try{
+            Date date = Calendar.getInstance().getTime();
+            Query query = em.createQuery("SELECT j FROM Jrv j WHERE j.electoralProcessId.endDate > :hoy AND j.electoralProcessId.initDate < :antes AND j.id = :idJrv");
+            query.setParameter("hoy", date,TemporalType.TIMESTAMP);
+            query.setParameter("antes", date,TemporalType.TIMESTAMP);
+            query.setParameter("idJrv", jrv.getId());
+            if(!query.getResultList().isEmpty()){
+                return true;
+            }
+        }catch(Exception ex){
+            return false;
+        }
+        return false;
     }
     public boolean verificarProcesosActivos(Citizens citizen){
         try{
