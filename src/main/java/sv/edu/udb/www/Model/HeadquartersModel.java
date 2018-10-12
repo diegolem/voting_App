@@ -110,9 +110,13 @@ public class HeadquartersModel {
         try{
             Headquarters enti = em.find(Headquarters.class, id);
             if(enti != null){
-                em.remove(enti);
-                em.flush();
-                return true;
+                if(enti.getCitizensCollection().isEmpty()){
+                    if(enti.getJrvCollection().isEmpty()){
+                        em.remove(enti);
+                        em.flush();
+                        return true;
+                    }
+                }
             }
             return false;
         }catch(Exception e){

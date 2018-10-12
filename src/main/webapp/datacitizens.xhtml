@@ -9,7 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <title>Voting_App | Login </title>
+        <title>Voting_App | Consulta de Datos </title>
 
         <!-- Bootstrap -->
         <h:outputStylesheet name="css/bootstrap.min.css" />
@@ -35,42 +35,8 @@
                     </h:form>
                 </div>
                 <!-- /top navigation -->
-                
-            <a class="hiddenanchor" id="signup"></a>
-            <a class="hiddenanchor" id="signin"></a>
-
             <div class="login_wrapper">
-                <div class="animate form login_form">
-                    <section class="login_content">
-                        <h:form>
-                            <h1>Inicia Sesión</h1>
-                            <div>
-                                <h:outputLabel for="dui" value="DUI:" />
-                                <h:inputText id="dui" class="form-control" required="true" requiredMessage="El dui es obligatorio" value="#{ Auth.citizen.dui }" />
-                            </div>
-                            <div>
-                                <h:outputLabel for="password" value="Password" />
-                                <h:inputSecret id="password" class="form-control" required="true" requiredMessage="La clave es obligatoria" value="#{ Auth.citizen.password }" />
-                            </div>
-                            <div>
-                                <h:commandButton type="submit" value="Ingresar" styleClass="btn btn-primary col-xs-9 center" action="#{ Auth.login }" />
-                            </div>
-
-                            <div class="clearfix"></div>
-
-                            <div class="separator">
-                                <div>
-                                    <i class="fa fa-university"></i> <span>Voting App</span>
-                                    <p>©2018 Tribunal Supremo Electoral</p>
-                                </div>
-                            </div>
-                        </h:form>
-                        
-                        <h:messages class="alert alert-danger">
-                            
-                        </h:messages>
-                    </section>
-                </div>
+                
             </div>
         </div>
     </h:body>

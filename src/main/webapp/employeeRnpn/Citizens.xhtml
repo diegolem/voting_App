@@ -36,12 +36,12 @@
                                                 <a href="#{citizenBean.setCitizen(citizen)}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li>
-                                                        <p:commandLink class="btn btn-default" value="Editar" action="#{citizenBean.redirect()}">
+                                                        <p:commandLink styleClass="btn btn-default" value="Editar" action="#{citizenBean.redirect()}">
                                                             <f:param name="codigo" value="#{citizen.id}" />
                                                         </p:commandLink>
                                                     </li>
                                                     <li>
-                                                        <p:commandLink class="btn btn-default" value="Deshabilitar" action="#{citizenBean.enabledCitizens(citizen)}">
+                                                        <p:commandLink styleClass="btn btn-default" value="Deshabilitar" action="#{citizenBean.enabledCitizens(citizen)}">
                                                         </p:commandLink>
                                                     </li>
                                                 </ul>
@@ -100,8 +100,4 @@
         </ui:composition>
 
     </body>
-        <h:outputScript rendered="#{ not empty flash.exito }">
-            alertify.success('#{ flash.exito }');
-        </h:outputScript>
-        #{citizenBean.eliminateFlash()}
 </html>

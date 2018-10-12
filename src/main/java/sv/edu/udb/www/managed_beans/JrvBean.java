@@ -268,6 +268,8 @@ public class JrvBean implements Serializable {
     public void generateReport() {
         int id = Integer.parseInt(Utilities.getRequestValue("frm:idJvrCitinez"));
 
+        Jrv jrv = this.jrvModel.getJrv(id);
+        
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
         HttpServletResponse res = (HttpServletResponse) ec.getResponse();
@@ -296,7 +298,47 @@ public class JrvBean implements Serializable {
             //Tipo de contenido a regresar al cliente
             res.setContentType("application/pdf");
             //Nombre del reporte
-            res.setHeader("Content-disposition", "attachment; filename=jrv.pdf");
+            res.setHeader("Content-disposition", "attachment; filename=jrv_" + jrv.getCode() + ".pdf");
+            
+            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+            FacesContext.getCurrentInstance().responseComplete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void generateReportActa(int id) {
+        Jrv jrv = this.jrvModel.getJrv(id);
+        
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+        HttpServletResponse res = (HttpServletResponse) ec.getResponse();
+        //Devuelve un objeto de la clase ServletOutputStream que modela un flujo de salida que permite la escritura de datos a nivel de bytes
+
+        try {
+            ServletOutputStream out = res.getOutputStream();
+
+            //Obtenemos la conexion del pool de conexiones
+            java.sql.Connection conexion = startConnection();
+
+            if (conexion.isClosed()) {
+                System.out.println("Error conexion cerrada");
+            }
+
+            //Nombre del archivo .jasper
+            String url = ec.getRealPath("/WEB-INF/votingApp.jasper");
+
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(ec.getRealPath("/WEB-INF/Certificate.jasper"));
+
+            //Cargamos parametros del reporte (si tiene).
+            Map parameters = new HashMap();
+            parameters.put("id", id);
+            //Enviamos la ruta del reporte los parametros y la conexion
+            JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, parameters, conexion);
+            //Tipo de contenido a regresar al cliente
+            res.setContentType("application/pdf");
+            //Nombre del reporte
+            res.setHeader("Content-disposition", "attachment; filename=result_jrv_" + jrv.getCode() + ".pdf");
             
             JasperExportManager.exportReportToPdfStream(jasperPrint, out);
             FacesContext.getCurrentInstance().responseComplete();
@@ -376,5 +418,21 @@ public class JrvBean implements Serializable {
                 Utilities.addMessageError("error", "El dui no es valido");
         } else
             Utilities.addMessageError("error", "Ha ingresado su mismo dui");
+    }
+    
+    public void changeType(int id){
+        Citizens citizen = this.citizenModel.getCitizen(id);
+        CitizenTypes type = this.citizenTypesModel.getCitizenTypes("CITIZN");
+        
+        citizen.setCitizenTypeId(type);
+        
+        if (citizen != null && type != null) {
+            if (this.citizenModel.editCitizen(citizen)) {
+                Utilities.addMessageFlash("exito", "se ha rebocado el cargo");
+            } else
+                Utilities.addMessageFlash("error", "no se ha podido rebocar el cargo");
+        } else
+            Utilities.addMessageFlash("error", "no se ha podido rebocar el cargo");
+        
     }
 }

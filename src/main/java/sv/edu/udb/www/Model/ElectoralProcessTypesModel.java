@@ -63,9 +63,11 @@ public class ElectoralProcessTypesModel {
         try{
             ElectoralProcessTypes enti = em.find(ElectoralProcessTypes.class, id);
             if(enti != null){
-                em.remove(enti);
-                em.flush();
-                return true;
+               if(enti.getElectoralProcessCollection().isEmpty()){
+                    em.remove(enti);
+                    em.flush();
+                    return true;
+               }
             }
             return false;
         }catch(Exception e){
