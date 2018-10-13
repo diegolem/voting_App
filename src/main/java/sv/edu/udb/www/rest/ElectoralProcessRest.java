@@ -5,6 +5,8 @@
  */
 package sv.edu.udb.www.rest;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
@@ -21,6 +23,8 @@ import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Entities.JrvCitizen;
 import sv.edu.udb.www.Entities.PoliticGroupVotes;
+import sv.edu.udb.www.Entities.PoliticGroups;
+import sv.edu.udb.www.Entities.PresidencialCandidates;
 import sv.edu.udb.www.Model.CitizenModel;
 import sv.edu.udb.www.Model.CitizenVotesModel;
 import sv.edu.udb.www.Model.ElectoralProcessModel;
@@ -50,12 +54,13 @@ public class ElectoralProcessRest {
         ElectoralProcess electoral = electoralProcessModel.getElectoralProcess(codigo);
         if (electoralProcessModel.existsCode(electoral)) {
             if (electoral.getElectoralProcessTypesId().getId() == 1) {
-                return Response.status(Response.Status.OK).entity(electoralProcessModel.getPoliticGroupPresidencial(electoral)).build();
+                List<PoliticGroups> pre = electoralProcessModel.getPoliticGroupPresidencial(electoral);
+                return Response.status(Response.Status.OK).entity(pre).build();
             } else {
-                return Response.status(Response.Status.OK).entity(electoralProcessModel.getPoliticGroupCities(electoral)).build();
+                List<PoliticGroups> pre = electoralProcessModel.getPoliticGroupCities(electoral);
+                return Response.status(Response.Status.OK).entity(pre).build();
             }
         }
-        
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
