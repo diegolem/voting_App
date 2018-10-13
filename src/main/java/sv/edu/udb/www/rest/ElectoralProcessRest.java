@@ -66,20 +66,21 @@ public class ElectoralProcessRest {
 
     @GET
     @Path("/vote/{idAdmin}/{idGroup}/{dui}/{vote}")
-    @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public String sendVote(@PathParam("idGroup") int politic, @PathParam("dui") String dui, @PathParam("vote") boolean vote, @PathParam("idAdmin") int idAdmin) {
+    public Response sendVote(@PathParam("idAdmin") int idAdmin, @PathParam("idGroup") int politic, @PathParam("dui") String dui, @PathParam("vote") boolean vote) {
         Citizens citizen = citizenModel.getCitizen(dui);
+
         if (citizenVotesModel.verifyVote(citizen, idAdmin)) {
-            Citizens _citizen = citizenModel.getCitizen(dui);
             JrvCitizen jrvAdmin = citizenVotesModel.getJrv(idAdmin);
 
             CitizenVotes citiVotes = new CitizenVotes();
-            citiVotes.setCitizenId(_citizen);
+            citiVotes.setCitizenId(citizen);
             citiVotes.setElectoralProcessId(jrvAdmin.getJrvId().getElectoralProcessId());
             citiVotes.setJrvId(jrvAdmin.getJrvId());
 
-            citiVotes.setStatus((short) (vote ? (short) 1 : 0));
+            if (vote) {
+                citiVotes.setStatus((short) 1);
+            }
 
             PoliticGroupVotes politicVotes = null;
 
@@ -90,24 +91,24 @@ public class ElectoralProcessRest {
                 }
             }
 
-            //citizenVotesModel.countVote(politic, jrvAdmin.getJrvId().getId(), jrvAdmin.getJrvId().getElectoralProcessId().getId());
             if (politicVotes != null && vote == true) {
                 int vot = politicVotes.getVotes() + 1;
                 politicVotes.setVotes(vot);
             }
-
             if (citizenVotesModel.insertCitizenVotes(citiVotes)) {
-                if (politicGroupsVotesModel.editPoliticGroupVote(politicVotes)) {
-                    return "Bien";
 
-                } else {
-                    return "partido";
+                if (politicVotes != null) {
+                    if (!politicGroupsVotesModel.editPoliticGroupVote(politicVotes)) {
+                        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(true).build();
+                    }
                 }
+
+                return Response.status(Response.Status.OK).entity(true).build();
             } else {
-                return "ciudadano";
+                return Response.status(Response.Status.NOT_FOUND).entity(false).build();
             }
         } else {
-            return "ya votó";
+            return Response.status(Response.Status.UNAUTHORIZED).entity(false).build();
         }
     }
 }

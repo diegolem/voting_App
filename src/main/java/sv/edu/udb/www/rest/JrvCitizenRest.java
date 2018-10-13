@@ -50,6 +50,7 @@ public class JrvCitizenRest {
         }
         return null;
     }
+    
     @GET
     @Path("/jrv/{idjrv}/citizens")
     @Produces({MediaType.APPLICATION_JSON})
@@ -66,7 +67,6 @@ public class JrvCitizenRest {
     
     @GET
     @Path("/{dui}/{password}")
-    @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
     public Response loginAdminJrv(@PathParam("dui") String dui, @PathParam("password") String pass) {
         Citizens admin = citizensModel.getLoginCitizenAdmin(dui, pass);
