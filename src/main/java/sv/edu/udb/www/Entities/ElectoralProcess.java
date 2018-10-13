@@ -42,6 +42,7 @@ import sv.edu.udb.www.Utilities;
 @NamedQueries({
     @NamedQuery(name = "ElectoralProcess.findAll", query = "SELECT e FROM ElectoralProcess e")
     , @NamedQuery(name = "ElectoralProcess.findById", query = "SELECT e FROM ElectoralProcess e WHERE e.id = :id")
+    , @NamedQuery(name = "ElectoralProcess.findPresidencialProcessActive", query = "SELECT DISTINCT e FROM ElectoralProcess e INNER JOIN e.presidencialCandidatesCollection p INNER JOIN p.candidatesId c INNER JOIN c.politicGroupId pg WHERE pg.id != :id AND e.processDate > CURRENT_TIMESTAMP AND e.electoralProcessTypesId.id = 1")
     , @NamedQuery(name = "ElectoralProcess.findByCode", query = "SELECT e FROM ElectoralProcess e WHERE e.code = :code")
     , @NamedQuery(name = "ElectoralProcess.findByName", query = "SELECT e FROM ElectoralProcess e WHERE e.name = :name")
     , @NamedQuery(name = "ElectoralProcess.findByYear", query = "SELECT e FROM ElectoralProcess e WHERE e.year = :year")
@@ -49,6 +50,7 @@ import sv.edu.udb.www.Utilities;
     , @NamedQuery(name = "ElectoralProcess.findByEndDate", query = "SELECT e FROM ElectoralProcess e WHERE e.endDate = :endDate")
     , @NamedQuery(name = "ElectoralProcess.findAllByEndDateNow", query = "SELECT e FROM ElectoralProcess e WHERE e.processDate > CURRENT_TIMESTAMP")
     , @NamedQuery(name = "ElectoralProcess.findAllByEndDateNowPresidential", query = "SELECT DISTINCT e FROM ElectoralProcess e WHERE e.processDate > CURRENT_TIMESTAMP AND e.electoralProcessTypesId.id = 1")
+    , @NamedQuery(name = "ElectoralProcess.findAllByEndDateNowPresidentialBeta", query = "SELECT DISTINCT e FROM ElectoralProcess e WHERE e.processDate > CURRENT_TIMESTAMP AND e.electoralProcessTypesId.id = 1 AND :id != 0")
     , @NamedQuery(name = "ElectoralProcess.findAllByEndDateNowDepartament", query = "SELECT DISTINCT e FROM ElectoralProcess e WHERE e.processDate > CURRENT_TIMESTAMP AND e.electoralProcessTypesId.id = 2")
     , @NamedQuery(name = "ElectoralProcess.findActiveByCandidate", query = "SELECT Distinct e FROM ElectoralProcess e Join Fetch e.candidatesForCitiesCollection c WHERE e.processDate > CURRENT_TIMESTAMP AND c.candidateId.id = :idCandidate")
     , @NamedQuery(name = "ElectoralProcess.findByProcessDate", query = "SELECT e FROM ElectoralProcess e WHERE e.processDate = :processDate")})

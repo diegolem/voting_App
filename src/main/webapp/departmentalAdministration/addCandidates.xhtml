@@ -85,7 +85,7 @@
                             <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="process_id" value="proceso electoral"> <span class="required">*</span></h:outputLabel>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <h:selectOneMenu requiredMessage="El proceso es requerido" value="#{ candidatesBean.idElectoralProcess }" id="process_id" class="form-control col-md-7 col-xs-12" >
-                                    <f:selectItems value="#{ candidatesBean.allElectoralProcessByEndDateDepartamentalForForm() }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name } [ #{ item.electoralProcessTypesId.description } ]" />
+                                    <f:selectItems value="#{ electoralProcessBean.allElectoralProcessByEndDateDepartamental() }" var="item" itemValue="#{ item.id }" itemLabel="#{ item.name } [ #{ item.electoralProcessTypesId.description } ]" />
                                 </h:selectOneMenu>
                             </div>
                         </div>

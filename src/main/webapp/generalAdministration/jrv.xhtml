@@ -93,10 +93,12 @@
                                                                         <p:ajax event="click" update=":frm:pnlRol" listener="#{ jrvBean.loadCirinez(citinez.citizenId.id, jrvBean.jrv.id, citinez.id) }" />
                                                                     </h:commandButton>
                                                                 </h:panelGroup>
-                                                                <h:panelGroup rendered="#{ citinez.presidentialType() }">
-                                                                    <h:commandButton immediate="true" class="btn btn-primary" type="submit" value="Rebocar cargo" >
-                                                                        <p:ajax event="click" update=":frm:pnlRol :frm:pnlCitinez :frm:pnlMsgFlash" listener="#{ jrvBean.changeType(citinez.citizenId.id) }" />
-                                                                    </h:commandButton>
+                                                                <h:panelGroup rendered="#{ jrvBean.jrv.endProcessStep() }" >
+                                                                    <h:panelGroup rendered="#{ citinez.presidentialType() }">
+                                                                        <h:commandButton immediate="true" class="btn btn-primary" type="submit" value="Rebocar cargo" >
+                                                                            <p:ajax event="click" update=":frm:pnlRol :frm:pnlCitinez :frm:pnlMsgFlash" listener="#{ jrvBean.changeType(citinez.citizenId.id) }" />
+                                                                        </h:commandButton>
+                                                                    </h:panelGroup>
                                                                 </h:panelGroup>
                                                             </td>
                                                         </tr>

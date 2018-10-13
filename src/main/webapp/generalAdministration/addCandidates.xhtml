@@ -81,8 +81,7 @@
                             <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="processId" value="Proceso electoral"> <span class="required">*</span></h:outputLabel>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <h:selectOneMenu rendered="true" requiredMessage="La sede es requerida" id="processId" value="#{ candidatesBean.idElectoralProcess }" class="form-control col-md-7 col-xs-12" >
-                                    <f:selectItem itemLabel="Elija la Sede de votación"/>
-                                    <f:selectItems value="#{ candidatesBean.allElectoralProcessByEndDatePresidentialForForm() }" var="head" itemValue="#{ head.id }" itemLabel="#{ head.name }" />
+                                    <f:selectItems value="#{ electoralProcessBean.allElectoralProcessByEndDatePresidential() }" var="head" itemValue="#{ head.id }" itemLabel="#{ head.name }" />
                                 </h:selectOneMenu>
                             </div>
                         </div>
@@ -107,9 +106,7 @@
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                 <a class="btn btn-primary" value="Regresar" href="#{ request.contextPath }/faces/generalAdministration/candidates.xhtml">Regresar</a>
-                                <h:commandButton class="btn btn-success" type="submit" value="Registrar" >
-                                    <f:ajax render="@form" execute="@form" listener="#{candidatesBean.save()}" />
-                                </h:commandButton>
+                                <h:commandButton class="btn btn-success" type="submit" value="Registrar" actionListener="#{candidatesBean.save()}" />
                             </div>
                         </div>
 

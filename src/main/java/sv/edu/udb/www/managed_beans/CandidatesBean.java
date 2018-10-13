@@ -509,30 +509,27 @@ public class CandidatesBean implements Serializable {
 
         return processes;
     }
-    
+
+    public List<ElectoralProcess> listElectoralProcessActive() {
+        return this.electoralProcessModel.listPresidentialElectoralProcessByEndDate(this.idPoliticGroup);
+    }
+
     public List<ElectoralProcess> allElectoralProcessByEndDatePresidentialForForm() {
         List<ElectoralProcess> processes = this.electoralProcessModel.listElectoralProcessEmpty();
 
-        try {
-            if (this.candidates != null && this.candidates.getPoliticGroupId() != null && this.candidates.getPoliticGroupId().getId() > 0) {
+        for (ElectoralProcess process : this.electoralProcessModel.listElectoralProcessByEndDatePresidentialBeta(this.idPoliticGroup)) {
+            boolean use = true;
 
-                for (ElectoralProcess process : this.electoralProcessModel.listElectoralProcessByEndDatePresidential()) {
-                    boolean use = true;
-
-                    for (PresidencialCandidates candidate : process.getPresidencialCandidatesCollection()) {
-                        if (candidate.getCandidatesId().getPoliticGroupId().getId() == this.candidates.getPoliticGroupId().getId()) {
-                            use = false;
-                            break;
-                        }
-                    }
-
-                    if (use) {
-                        processes.add(process);
-                    }
+            for (PresidencialCandidates candidate : process.getPresidencialCandidatesCollection()) {
+                if (candidate.getCandidatesId().getPoliticGroupId().getId() == this.idPoliticGroup) {
+                    use = false;
+                    break;
                 }
             }
-        } catch (Exception error) {
-            processes = this.electoralProcessModel.listElectoralProcessEmpty();
+
+            if (use) {
+                processes.add(process);
+            }
         }
 
         return processes;

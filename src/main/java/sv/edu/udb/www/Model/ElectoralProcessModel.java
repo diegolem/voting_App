@@ -39,6 +39,17 @@ public class ElectoralProcessModel {
         return query.getResultList();
     }
     
+    public List<ElectoralProcess> listElectoralProcessByEndDate(int politic){
+        Query query = em.createNamedQuery("ElectoralProcess.findAllByEndDateNow");
+        return query.getResultList();
+    }
+    
+     public List<ElectoralProcess> listPresidentialElectoralProcessByEndDate(int politic){
+        Query query = em.createNamedQuery("ElectoralProcess.findPresidencialProcessActive");
+        query.setParameter("id", politic);
+        return query.getResultList();
+    }
+    
     public List<ElectoralProcess> listElectoralProcessByEndDateDepartamental(){
         Query query = em.createNamedQuery("ElectoralProcess.findAllByEndDateNowDepartament");
         return query.getResultList();
@@ -48,6 +59,13 @@ public class ElectoralProcessModel {
         Query query = em.createNamedQuery("ElectoralProcess.findAllByEndDateNowPresidential");
         return query.getResultList();
     }
+    
+    public List<ElectoralProcess> listElectoralProcessByEndDatePresidentialBeta(int id){
+        Query query = em.createNamedQuery("ElectoralProcess.findAllByEndDateNowPresidentialBeta");
+        query.setParameter("id", id);
+        return query.getResultList();
+    }
+    
     public ElectoralProcess getElectoralProcess(String codigo){
         try{
             Query query = em.createQuery("SELECT e FROM ElectoralProcess e where e.code = :code");
