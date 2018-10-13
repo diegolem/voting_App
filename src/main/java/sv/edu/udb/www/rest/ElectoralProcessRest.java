@@ -59,10 +59,11 @@ public class ElectoralProcessRest {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
-    @POST
+    @GET
+    @Path("/vote/{idAdmin}/{idGroup}/{dui}/{vote}")
     @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public String sendVote(@FormParam("idPolitic") int politic, @FormParam("dui") String dui, @FormParam("vote") boolean vote, @FormParam("idadmin") int idAdmin) {
+    public String sendVote(@PathParam("idGroup") int politic, @PathParam("dui") String dui, @PathParam("vote") boolean vote, @PathParam("idAdmin") int idAdmin) {
         Citizens citizen = citizenModel.getCitizen(dui);
         if (citizenVotesModel.verifyVote(citizen, idAdmin)) {
             Citizens _citizen = citizenModel.getCitizen(dui);
