@@ -45,6 +45,12 @@ public class CitizenModel {
         return query.getResultList();
     }
     
+    public List<Citizens> listCitizenForJRV(int idHeadquarter){
+        Query query = em.createNamedQuery("Citizens.findByHeadquarter");
+        query.setParameter("idHeadquarter", idHeadquarter);
+        return query.getResultList();
+    }
+    
     public List<Citizens> listCitizenByDepartament(int idDept){
         Query query = em.createNamedQuery("Citizens.findAllByDepartament");
         query.setParameter("id", idDept);

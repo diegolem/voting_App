@@ -44,10 +44,12 @@ import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.j2ee.servlets.ImageServlet;
 import org.apache.commons.codec.digest.DigestUtils;
+import sv.edu.udb.www.Entities.CitizenVotes;
 import sv.edu.udb.www.Entities.JrvCitizenTypes;
 import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Model.CitizenTypesModel;
+import sv.edu.udb.www.Model.CitizenVotesModel;
 import sv.edu.udb.www.Model.ElectoralProcessModel;
 import sv.edu.udb.www.Model.ElectoralProcessStatusModel;
 import sv.edu.udb.www.Model.PoliticGroupVotesModel;
@@ -61,6 +63,8 @@ import sv.edu.udb.www.Validacion;
 @ViewScoped
 public class JrvBean implements Serializable {
 
+    @EJB
+    private CitizenVotesModel citizenVotesModel;
     @EJB
     private PoliticGroupVotesModel politicGroupVotesModel;
     @EJB
@@ -83,7 +87,7 @@ public class JrvBean implements Serializable {
     private int idCitizen;
     private int idType;
     private JrvCitizen jrvCitizen;
-    
+
     public Jrv getJrv() {
         return jrv;
     }
@@ -99,8 +103,6 @@ public class JrvBean implements Serializable {
     public void setJrvCitizen(JrvCitizen jrvCitizen) {
         this.jrvCitizen = jrvCitizen;
     }
-
-    
 
     public void setCitizen(Citizens citizen) {
         this.citizen = citizen;
@@ -132,8 +134,8 @@ public class JrvBean implements Serializable {
     public JrvBean() {
         this.jrv = new Jrv();
     }
-    
-    public void loadCirinez(int idCitenez, int idJrv, int idJrvCitizen){
+
+    public void loadCirinez(int idCitenez, int idJrv, int idJrvCitizen) {
         this.citizen = this.citizenModel.getCitizen(idCitenez);
         this.jrv = this.jrvModel.getJrv(idJrv);
         this.jrvCitizen = this.jrvCitizenModel.getJrvCitizen(idJrvCitizen);
@@ -152,7 +154,7 @@ public class JrvBean implements Serializable {
             Utilities.addMessageError("error", "Ya existe una JRV con la informacion especificada");
         }
     }
-    
+
     public void savePresidencial() {
 
         if (!this.jrvModel.existByCode(jrv)) {
@@ -219,13 +221,13 @@ public class JrvBean implements Serializable {
         jvrCitenez.setJrvId(this.jrvModel.getJrv(Integer.parseInt(Utilities.getRequestValue("frm:idJvrRol"))));
 
         // revisamos si es el prisidente
-        if (jvrCitenez.getJrvCitizenTypeId().getId() == 1){
+        if (jvrCitenez.getJrvCitizenTypeId().getId() == 1) {
             CitizenTypes type = this.citizenTypesModel.getCitizenTypes("PREJRV");
             jvrCitenez.getCitizenId().setCitizenTypeId(type);
             jvrCitenez.getCitizenId().setPassword(DigestUtils.sha256Hex(jvrCitenez.getCitizenId().getDui()));
             this.citizenModel.editCitizen(jvrCitenez.getCitizenId());
         }
-        
+
         if (this.jrvCitizenModel.editJrvCitizen(jvrCitenez)) {
             Utilities.addMessageFlash("exito", "se ha modificado el rol un nuevo ciudadano");
         } else {
@@ -242,14 +244,14 @@ public class JrvBean implements Serializable {
                 if (id != null && !id.isEmpty()) {
                     JrvCitizen type = this.jrvCitizenModel.getJrvCitizen(Integer.parseInt(id));
                     Citizens citizen = type.getCitizenId();
-                    
+
                     if (type != null) {
                         if (this.jrvCitizenModel.deleteJrvCitizen(type.getId())) {
-                            if (citizen.getCitizenTypeId().getId().equals("PREJRV")){
+                            if (citizen.getCitizenTypeId().getId().equals("PREJRV")) {
                                 citizen.setCitizenTypeId(this.citizenTypesModel.getCitizenTypes("CITIZN"));
                                 this.citizenModel.editCitizen(citizen);
                             }
-                            
+
                             Utilities.addMessageFlash("exito", "Se ha eliminado todos los miembros del jrv");
                         } else {
                             Utilities.addMessageFlash("error", "No se ha podido eliminar el miembro la junta");
@@ -269,7 +271,7 @@ public class JrvBean implements Serializable {
         int id = Integer.parseInt(Utilities.getRequestValue("frm:idJvrCitinez"));
 
         Jrv jrv = this.jrvModel.getJrv(id);
-        
+
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
         HttpServletResponse res = (HttpServletResponse) ec.getResponse();
@@ -299,17 +301,17 @@ public class JrvBean implements Serializable {
             res.setContentType("application/pdf");
             //Nombre del reporte
             res.setHeader("Content-disposition", "attachment; filename=jrv_" + jrv.getCode() + ".pdf");
-            
+
             JasperExportManager.exportReportToPdfStream(jasperPrint, out);
             FacesContext.getCurrentInstance().responseComplete();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     public void generateReportActa(int id) {
         Jrv jrv = this.jrvModel.getJrv(id);
-        
+
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
         HttpServletResponse res = (HttpServletResponse) ec.getResponse();
@@ -339,7 +341,7 @@ public class JrvBean implements Serializable {
             res.setContentType("application/pdf");
             //Nombre del reporte
             res.setHeader("Content-disposition", "attachment; filename=result_jrv_" + jrv.getCode() + ".pdf");
-            
+
             JasperExportManager.exportReportToPdfStream(jasperPrint, out);
             FacesContext.getCurrentInstance().responseComplete();
         } catch (Exception e) {
@@ -364,46 +366,71 @@ public class JrvBean implements Serializable {
 
         return conn;
     }
-    
-    public void startProcessElectoral(){
-         int id = Integer.parseInt(Utilities.getRequestValue("frm:idJvr"));
-         
-         Jrv jrv = this.jrvModel.getJrv(id);
-         
-         if (jrv != null) {
+
+    public void startProcessElectoral() {
+        int id = Integer.parseInt(Utilities.getRequestValue("frm:idJvr"));
+
+        Jrv jrv = this.jrvModel.getJrv(id);
+
+        if (jrv != null) {
             ElectoralProcess process = jrv.getElectoralProcessId();
-            
-            process.setElectoralProcessStatusId(this.electoralProcessStatusModel.getElectoralProcessStatus(3));
-            if (this.electoralProcessModel.editElectoralProcess(process)){
-                Utilities.addMessageFlash("exito", "cambios realizados");
-            } else
+
+            int sede = process.idHeadquarter();
+            boolean result = true;
+
+            for (Citizens citizen : this.citizenModel.listCitizenForJRV(sede)) {
+                CitizenVotes votes = new CitizenVotes();
+                votes.setCitizenId(citizen);
+                votes.setElectoralProcessId(process);
+                votes.setJrvId(jrv);
+                votes.setStatus(new Short((short) 0));
+
+                if (!this.citizenVotesModel.insertCitizenVotes(votes)) {
+                    result = false;
+                    break;
+                }
+            }
+
+            if (result) {
+                process.setElectoralProcessStatusId(this.electoralProcessStatusModel.getElectoralProcessStatus(3));
+                if (this.electoralProcessModel.editElectoralProcess(process)) {
+                    Utilities.addMessageFlash("exito", "cambios realizados");
+                } else {
+                    Utilities.addMessageFlash("error", "No se ha podido finalizar la junta");
+                }
+            } else {
                 Utilities.addMessageFlash("error", "No se ha podido finalizar la junta");
-        } else
-             Utilities.addMessageFlash("error", "No se ha podido localizar la junta");
+            }
+
+        } else {
+            Utilities.addMessageFlash("error", "No se ha podido localizar la junta");
+        }
     }
-    
-    public void endProcessElectoral(){
-         int id = Integer.parseInt(Utilities.getRequestValue("frm:idJvr"));
-         
-         Jrv jrv = this.jrvModel.getJrv(id);
-         
-         if (jrv != null) {
+
+    public void endProcessElectoral() {
+        int id = Integer.parseInt(Utilities.getRequestValue("frm:idJvr"));
+
+        Jrv jrv = this.jrvModel.getJrv(id);
+
+        if (jrv != null) {
             ElectoralProcess process = jrv.getElectoralProcessId();
-            
+
             process.setElectoralProcessStatusId(this.electoralProcessStatusModel.getElectoralProcessStatus(4));
-            if (this.electoralProcessModel.editElectoralProcess(process)){
+            if (this.electoralProcessModel.editElectoralProcess(process)) {
                 this.politicGroupVotesModel.changeStatus(jrv.getId());
                 Utilities.addMessageFlash("exito", "El proceso ha finalizado");
-            } else
+            } else {
                 Utilities.addMessageFlash("error", "No se ha podido modificar la junta");
-        } else
-             Utilities.addMessageFlash("error", "No se ha podido localizar la junta");
+            }
+        } else {
+            Utilities.addMessageFlash("error", "No se ha podido localizar la junta");
+        }
     }
-    
-    public void verifyCitizens(){
+
+    public void verifyCitizens() {
         String dui = Utilities.getRequestValue("frm:dui");
         String me = Utilities.getRequestValue("frm:meDui");
-        
+
         if (!me.equals(dui)) {
             if (Validacion.esDui(dui)) {
                 Citizens citizen = this.citizenModel.getCitizen(dui);
@@ -412,27 +439,32 @@ public class JrvBean implements Serializable {
 
                     this.citizen = citizen;
 
-                } else
+                } else {
                     Utilities.addMessageError("error", "No se ha encontrado ningun votante con dicho dui");
-            } else
+                }
+            } else {
                 Utilities.addMessageError("error", "El dui no es valido");
-        } else
+            }
+        } else {
             Utilities.addMessageError("error", "Ha ingresado su mismo dui");
+        }
     }
-    
-    public void changeType(int id){
+
+    public void changeType(int id) {
         Citizens citizen = this.citizenModel.getCitizen(id);
         CitizenTypes type = this.citizenTypesModel.getCitizenTypes("CITIZN");
-        
+
         citizen.setCitizenTypeId(type);
-        
+
         if (citizen != null && type != null) {
             if (this.citizenModel.editCitizen(citizen)) {
                 Utilities.addMessageFlash("exito", "se ha rebocado el cargo");
-            } else
+            } else {
                 Utilities.addMessageFlash("error", "no se ha podido rebocar el cargo");
-        } else
+            }
+        } else {
             Utilities.addMessageFlash("error", "no se ha podido rebocar el cargo");
-        
+        }
+
     }
 }

@@ -33,9 +33,7 @@
                                     <div class="btn btn-default image-preview-input">
                                         <span class="glyphicon glyphicon-folder-open"></span>
                                         <span class="image-preview-input-title">Browse</span>
-                                        <h:inputFile id="input-file-preview" value="#{candidatesBean.uploadedFile}"  >
-                                            <f:ajax listener="#{ candidatesBean.handleFileUpload }" />
-                                        </h:inputFile>
+                                        <h:inputFile id="input-file-preview" value="#{candidatesBean.uploadedFile}" />
                                     </div>
                                 </span>
                             </div><!-- /input-group image-preview [TO HERE]--> 
@@ -76,7 +74,6 @@
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <h:selectOneMenu rendered="true" requiredMessage="El tipo de proceso es requerido" id="politic_group_id" value="#{ candidatesBean.candidates.politicGroupId.id }" class="form-control col-md-7 col-xs-12" >
                                     <f:selectItems value="#{ candidatesBean.allPoliticGroups() }" var="politicGroup" itemValue="#{ politicGroup.id }" itemLabel="#{ politicGroup.acronym }" />
-                                    <f:ajax render="process_id" execute="@this" />
                                 </h:selectOneMenu>
                             </div>
                         </div>

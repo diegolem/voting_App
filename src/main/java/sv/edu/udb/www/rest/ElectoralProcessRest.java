@@ -61,6 +61,7 @@ public class ElectoralProcessRest {
                 return Response.status(Response.Status.OK).entity(pre).build();
             }
         }
+
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 

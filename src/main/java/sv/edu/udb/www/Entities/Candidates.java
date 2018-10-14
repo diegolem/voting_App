@@ -206,6 +206,9 @@ public class Candidates implements Serializable {
         return "sv.edu.udb.www.Entities.Candidates[ id=" + id + " ]";
     }
 
+    
+
+    
     public boolean hasProcessElectoralDepartamental() {
 
         if (this.candidatesForCitiesCollection != null && this.candidatesForCitiesCollection.size() > 0) {

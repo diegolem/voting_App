@@ -108,7 +108,7 @@ public class ElectoralProcess implements Serializable {
     @JoinColumn(name = "electoral_process_types_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private ElectoralProcessTypes electoralProcessTypesId;
-    
+
     public ElectoralProcess() {
     }
 
@@ -343,13 +343,13 @@ public class ElectoralProcess implements Serializable {
             }
 
             Jrv jrv = (Jrv) sedes.get(sedes.size() - 1);
-            
+
             return jrv.getHeadquarterId().getName();
         }
-        
+
         return "";
     }
-    
+
     public int idHeadquarter() {
         if (this.jrvCollection != null && this.jrvCollection.size() > 0) {
 
@@ -362,10 +362,33 @@ public class ElectoralProcess implements Serializable {
             }
 
             Jrv jrv = (Jrv) sedes.get(sedes.size() - 1);
-            
+
             return jrv.getHeadquarterId().getId();
         }
-        
+
         return 0;
+    }
+
+    public boolean politicGroupIsFreeByTypeProcess(int politicGroup) {
+
+        boolean use = true;
+
+        if (this.typePresidential()) {
+            for (PresidencialCandidates candidate : this.presidencialCandidatesCollection) {
+                if (candidate.getCandidatesId().getPoliticGroupId().getId() == politicGroup) {
+                    use = false;
+                    break;
+                }
+            }
+        } else {
+            for (CandidatesForCities candidate : this.candidatesForCitiesCollection) {
+                if (candidate.getCandidateId().getPoliticGroupId().getId() == politicGroup) {
+                    use = false;
+                    break;
+                }
+            }
+        }
+
+        return use;
     }
 }
