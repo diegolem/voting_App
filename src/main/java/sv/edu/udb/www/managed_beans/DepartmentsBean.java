@@ -71,7 +71,6 @@ public class DepartmentsBean implements Serializable {
         if(Validacion.esNombrePersona(this.department.getName())){
             if(!this.departmentModel.existDepartment(this.department)){
                 if(this.departmentModel.insertDepartment(this.department)){
-                    Utilities.AddMessage("exito", "El departmento fue ingresado!!");
                     Utilities.redirect("/faces/generalAdministration/Department.xhtml");
                 }else{
                     Utilities.addMessageError("Error_Insert", "El departamento no se pudo insertar");
@@ -86,7 +85,6 @@ public class DepartmentsBean implements Serializable {
     public void update(){
         if(Validacion.esNombrePersona(this.department.getName())){
                 if(this.departmentModel.editDepartment(this.department)){
-                    Utilities.AddMessage("exito", "El departmento fue modificado!!");
                     Utilities.redirect("/faces/generalAdministration/Department.xhtml");
                 }else{
                     Utilities.addMessageError("Error_Insert", "El departamento no se pudo modificar");
@@ -101,10 +99,8 @@ public class DepartmentsBean implements Serializable {
     public void delete(Departments department){
         this.department = department;
         if(this.departmentModel.deleteDepartment(department)){
-            Utilities.AddMessage("exito", "El departamento fue eliminado!!");
             Utilities.redirect("/faces/generalAdministration/Department.xhtml");
         }
-        Utilities.AddMessage("exito", "Ocurrio un error al eliminar!!");
         Utilities.redirect("/faces/generalAdministration/Department.xhtml");
     }
 }

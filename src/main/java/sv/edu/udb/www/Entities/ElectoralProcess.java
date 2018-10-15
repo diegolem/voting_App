@@ -274,7 +274,17 @@ public class ElectoralProcess implements Serializable {
     public String processDateFormat() {
         return new SimpleDateFormat("dd-MM-yyyy").format(this.processDate);
     }
-
+    public String processElectoralAvailable(){
+        Date fecha = new Date();
+        if(this.endDate.compareTo(fecha) > 0 && this.initDate.compareTo(fecha) < 0){
+            return "Proceso en Curso";
+        }else if(this.endDate.compareTo(fecha) < 0 && this.initDate.compareTo(fecha) < 0){
+            return "Proceso finalizado";
+        }else{
+            return "Proceso Invalido";
+        }
+    }
+    
     public boolean avalible() {
         return Utilities.isEquealOrAfterNow(this.processDate);
     }

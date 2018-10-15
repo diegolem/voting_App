@@ -127,7 +127,6 @@ public class PoliticGroupBean implements Serializable {
                     this.doUpload();
                         if (!this.politicGroupModel.existAcronym(politicGroup) && !this.politicGroupModel.existName(politicGroup)) {
                             if (this.politicGroupModel.insertPoliticGroup(this.politicGroup)) {
-                                Utilities.AddMessage("exito", "El Partido politico fue ingresado!!");
                                 Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");
                             } else {
                                 this.eliminateImage(new File(Utilities.getPath("/images/") + "/" + this.politicGroup.getPhoto()));
@@ -165,7 +164,6 @@ public class PoliticGroupBean implements Serializable {
                 if (Validacion.esDireccion(this.politicGroup.getDescription())) {
                             if(this.image == null){
                                 if (this.politicGroupModel.editPoliticGroup(this.politicGroup)) {
-                                Utilities.AddMessage("exito", "El partido politico fue modificado!!");
                                 Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");
                                 } else {
                                     Utilities.addMessageError("Error_Insert", "No se ha podido ingresar el partido politico");
@@ -174,7 +172,6 @@ public class PoliticGroupBean implements Serializable {
                                 this.eliminateImage(new File(Utilities.getPath("/images/") + "/" + this.politicGroup.getPhoto()));
                                 this.doUpload();
                                 if (this.politicGroupModel.editPoliticGroup(this.politicGroup)) {
-                                Utilities.AddMessage("exito", "El partido politico fue modificado!!");
                                 Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");
                                 } else {
                                     Utilities.addMessageError("Error_Insert", "No se ha podido ingresar el partido politico");
@@ -208,7 +205,6 @@ public class PoliticGroupBean implements Serializable {
         this.politicGroup = politicGroup;
         this.eliminateImage(new File(Utilities.getPath("/images/") + "/" + this.politicGroup.getPhoto()));
         if (this.politicGroupModel.deletePoliticGroup(this.politicGroup)) {
-            Utilities.AddMessage("exito", "El partido politico fue eliminado!!");
             Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");
         }
         Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");

@@ -58,8 +58,14 @@ public class JrvCitizenRest {
         Jrv jrvCitizens = jrvModel.getJrv(id);
         if(jrvCitizens != null){
             if(citizensModel.verificarProcesosActivosJrv(jrvCitizens)){
-                List list = new ArrayList(jrvCitizens.getHeadquarterId().getCitizensCollection());
-                return list;            
+                List list = new ArrayList();
+                //Recorrer la lista y obtener solamente los que tengan estado 0
+                for(Citizens _c : jrvCitizens.getHeadquarterId().getCitizensCollection()){
+                    if(_c.getState() == 0){
+                        list.add(_c);
+                    }
+                }
+                return list;         
             }
         }
         return null;

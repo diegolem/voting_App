@@ -9,10 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -24,7 +21,6 @@ import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Entities.JrvCitizen;
 import sv.edu.udb.www.Entities.PoliticGroupVotes;
 import sv.edu.udb.www.Entities.PoliticGroups;
-import sv.edu.udb.www.Entities.PresidencialCandidates;
 import sv.edu.udb.www.Model.CitizenModel;
 import sv.edu.udb.www.Model.CitizenVotesModel;
 import sv.edu.udb.www.Model.ElectoralProcessModel;
@@ -54,10 +50,22 @@ public class ElectoralProcessRest {
         ElectoralProcess electoral = electoralProcessModel.getElectoralProcess(codigo);
         if (electoralProcessModel.existsCode(electoral)) {
             if (electoral.getElectoralProcessTypesId().getId() == 1) {
-                List<PoliticGroups> pre = electoralProcessModel.getPoliticGroupPresidencial(electoral);
+                List<PoliticGroups> pre = null;
+                //Filtrando los partidos que ya estan en el array
+                for(PoliticGroups _pg : electoralProcessModel.getPoliticGroupPresidencial(electoral)){
+                    if(!pre.contains(_pg)){
+                        pre.add(_pg);
+                    }
+                }
                 return Response.status(Response.Status.OK).entity(pre).build();
             } else {
-                List<PoliticGroups> pre = electoralProcessModel.getPoliticGroupCities(electoral);
+                List<PoliticGroups> pre = null;
+                //Filtrando los partidos que ya estan en el array
+                for(PoliticGroups _pg : electoralProcessModel.getPoliticGroupCities(electoral)){
+                    if(!pre.contains(_pg)){
+                        pre.add(_pg);
+                    }
+                }
                 return Response.status(Response.Status.OK).entity(pre).build();
             }
         }
@@ -84,7 +92,7 @@ public class ElectoralProcessRest {
             }
 
             PoliticGroupVotes politicVotes = null;
-
+            
             for (PoliticGroupVotes politicVote : jrvAdmin.getJrvId().getPoliticGroupVotesCollection()) {
                 if (politicVote.getPoliticGroupId().getId() == politic) {
                     politicVotes = politicVote;
@@ -96,7 +104,7 @@ public class ElectoralProcessRest {
                 int vot = politicVotes.getVotes() + 1;
                 politicVotes.setVotes(vot);
             }
-            if (citizenVotesModel.insertCitizenVotes(citiVotes)) {
+            if (citizenVotesModel.editCitizenVotes(citiVotes)) {
 
                 if (politicVotes != null) {
                     if (!politicGroupsVotesModel.editPoliticGroupVote(politicVotes)) {

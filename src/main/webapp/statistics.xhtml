@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <!-- Meta, title, CSS, favicons, etc. -->
@@ -25,18 +27,38 @@
     <h:body class="login">
         <div>
             <!-- top navigation -->
-                <div class="top_nav">
-                    <div class="clearfix"></div>
-                    <h:form>
-                        <h:commandLink styleClass="col-xs-3 btn-default text-center" action="login" ><h4>Voting App</h4></h:commandLink>
-                        <h:commandLink styleClass="col-xs-3 btn-dark text-center" action="statistics" ><h4>Visualizar estadisticas</h4></h:commandLink>
-                        <h:commandLink styleClass="col-xs-3 btn-dark text-center" action="login" ><h4>Login</h4></h:commandLink>
-                        <h:commandLink styleClass="col-xs-3 btn-dark text-center" action="datacitizens" ><h4>Consulta de sede</h4></h:commandLink>
-                    </h:form>
+            <div class="top_nav">
+                <div class="clearfix"></div>
+                <h:form>
+                    <h:commandLink styleClass="col-xs-3 btn-default text-center" action="login" ><h4>Voting App</h4></h:commandLink>
+                    <h:commandLink styleClass="col-xs-3 btn-dark text-center" action="statistics" ><h4>Visualizar estadisticas</h4></h:commandLink>
+                    <h:commandLink styleClass="col-xs-3 btn-dark text-center" action="login" ><h4>Login</h4></h:commandLink>
+                    <h:commandLink styleClass="col-xs-3 btn-dark text-center" action="datacitizens" ><h4>Consulta de sede</h4></h:commandLink>
+                </h:form>
+            </div>
+            <!-- /top navigation -->
+            <div class="content">
+                #{chartsBean.graficaDepartamentos()}
+                <div class="clearfix"></div>
+                <br></br>
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-10 center-block">
+                        <h5>Elija el Proceso electoral del cual quiere ver los resultados</h5>
+                        <h:form id="frm-graphics" class="form-horizontal form-label-left data-parsley-validate">
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <h:selectOneMenu id="graphics" value="#{ chartsBean.idProcess }" class="form-control col-md-7 col-xs-12" >
+                                        <f:selectItems value="#{chartsBean.electoralProcess}" var="process" itemValue="#{ process.id }" itemLabel="#{ process.name } - #{process.endDate.year + 1900} - #{process.processElectoralAvailable()}" />
+                                        <!--
+                                        <f:ajax render="city"  />
+                                        -->
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                        </h:form>
+                    </div>
                 </div>
-                <!-- /top navigation -->
-            <div class="login_wrapper">
-                
             </div>
         </div>
     </h:body>

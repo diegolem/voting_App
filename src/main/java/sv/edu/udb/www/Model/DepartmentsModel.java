@@ -13,7 +13,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import sv.edu.udb.www.Entities.CitizenVotes;
 import sv.edu.udb.www.Entities.Departments;
+import sv.edu.udb.www.Entities.ElectoralProcess;
 
 /**
  *
@@ -101,6 +103,17 @@ public class DepartmentsModel {
             return ((long) query.getSingleResult()) == 1l;
         } catch (Exception error) {
             return false;
+        }
+    }
+    public List<CitizenVotes> listDepartmentCount(ElectoralProcess _pe) {
+        try {
+            Query query = em.createQuery("SELECT c FROM CitizenVotes c WHERE c.electoralProcessId.id = :idPe");
+            query.setParameter("idPe", _pe.getId());
+            
+            return query.getResultList();          
+            
+        } catch (Exception error) {
+            return null;
         }
     }
 

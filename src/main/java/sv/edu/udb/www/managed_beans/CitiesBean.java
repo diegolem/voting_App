@@ -96,7 +96,6 @@ public class CitiesBean  implements Serializable {
             if(!this.citiesModel.existCities(this.city)){
                 this.city.setDeparmentId(this.departmentModel.getDepartment(this.city.getDeparmentId().getId()));
                 if(this.citiesModel.insertCities(this.city)){
-                    Utilities.AddMessage("exito", "El municipio fue ingresado!!");
                     Utilities.redirect("/faces/generalAdministration/City.xhtml");
                 }else{
                     Utilities.addMessageError("Error_Insert", "El municipio no se pudo insertar");
@@ -113,7 +112,6 @@ public class CitiesBean  implements Serializable {
             this.city.setDeparmentId(this.departmentModel.getDepartment(this.city.getDeparmentId().getId()));
             this.city.setId(this.idRequest);
                 if(this.citiesModel.editCities(this.city)){
-                    Utilities.AddMessage("exito", "El municipio fue modificado!!");
                     Utilities.redirect("/faces/generalAdministration/City.xhtml");
                 }else{
                     Utilities.addMessageError("Error_Insert", "El municipio no se pudo modificar");
@@ -128,10 +126,8 @@ public class CitiesBean  implements Serializable {
     public void delete(Cities city){
         this.city = city;
         if(this.citiesModel.deleteCities(this.city)){
-            Utilities.AddMessage("exito", "El municipio fue eliminado!!");
             Utilities.redirect("/faces/generalAdministration/City.xhtml");
         }
-        Utilities.AddMessage("exito", "Ocurrio un error al eliminar!!");
         Utilities.redirect("/faces/generalAdministration/City.xhtml");
     }
 }

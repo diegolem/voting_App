@@ -220,7 +220,6 @@ public class CitizenBean implements Serializable {
                         if (!this.citizen.getBirthdate().after(new Date())) {
                             if (Utilities.validateMayorEdad(this.citizen.getBirthdate())) {
                                 if (this.citizenModel.insertCitizen(citizen)) {
-                                    Utilities.AddMessage("exito", "El Ciudadano fue registrado!!");
                                     Utilities.redirect("/faces/generalAdministration/User.xhtml");
                                 } else {
                                     Utilities.addMessageError("Error_Insert", "No se ha podido registrar al ciudadano");
@@ -260,7 +259,6 @@ public class CitizenBean implements Serializable {
                                 this.citizen.setPassword(DigestUtils.sha256Hex(this.citizen.getDui()));
                             }
                             if (this.citizenModel.editCitizen(citizen)) {
-                                Utilities.AddMessage("exito", "El Ciudadano fue modificado!!");
                                 Utilities.redirect("/faces/generalAdministration/User.xhtml");
                             } else {
                                 Utilities.addMessageError("Error_Insert", "No se ha podido modificar al ciudadano");
@@ -285,7 +283,6 @@ public class CitizenBean implements Serializable {
     public void deleteUser(Citizens citizen) {
         this.citizen = citizen;
         if (this.citizenModel.deleteCitizens(this.citizen)) {
-            Utilities.AddMessage("exito", "El Ciudadano fue eliminado!!");
             Utilities.redirect("/faces/generalAdministration/User.xhtml");
         }
         Utilities.redirect("/faces/generalAdministration/User.xhtml");
@@ -312,7 +309,6 @@ public class CitizenBean implements Serializable {
                             if (!this.citizen.getBirthdate().after(new Date())) {
                                 if (Utilities.validateMayorEdad(this.citizen.getBirthdate())) {
                                     if (this.citizenModel.insertCitizen(citizen)) {
-                                        Utilities.AddMessage("exito", "El Ciudadano fue registrado!!");
                                         Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
                                     } else {
                                         Utilities.addMessageError("Error_Insert", "No se ha podido registrar al ciudadano");
@@ -353,7 +349,6 @@ public class CitizenBean implements Serializable {
                     if (!this.citizen.getBirthdate().after(new Date())) {
                         if (Utilities.validateMayorEdad(this.citizen.getBirthdate())) {
                             if (this.citizenModel.editCitizen(citizen)) {
-                                Utilities.AddMessage("exito", "El Ciudadano fue modificado!!");
                                 Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
                             } else {
                                 Utilities.addMessageError("Error_Insert", "No se ha podido modificar al ciudadano");
@@ -408,7 +403,6 @@ public class CitizenBean implements Serializable {
         this.citizen = citizen;
         this.citizen.setState(Short.valueOf(state));
         if (this.citizenModel.enableCitizen(this.citizen)) {
-            Utilities.AddMessage("exito", "El Ciudadano fue deshabilitado!!");
             Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
         }
         Utilities.redirect("/faces/employeeRnpn/Citizens.xhtml");
@@ -419,7 +413,6 @@ public class CitizenBean implements Serializable {
         this.citizen = citizen;
         this.citizen.setState(Short.valueOf(state));
         if (this.citizenModel.enableCitizen(this.citizen)) {
-            Utilities.AddMessage("exito", "El Ciudadano fue deshabilitado!!");
             Utilities.redirect("/faces/generalAdministration/User.xhtml");
         }
         Utilities.redirect("/faces/generalAdministration/User.xhtml");
