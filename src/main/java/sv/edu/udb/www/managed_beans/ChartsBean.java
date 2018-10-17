@@ -113,16 +113,14 @@ public class ChartsBean implements Serializable {
             
             listaVotos.add(listaVotantes.size());
         }
-        
-        for(Integer _i : listaVotos){
-            System.out.println(_i + "Departamentos cuenta");
+
+        List <Departments> listaD = departmentsModel.getDepartments();
+        for(int i = 0; i < listaVotos.size(); i++){
+            pieD.set(listaD.get(i).getName(), listaVotos.get(i));
         }
-        
-        pieD.set("Brand 1", 540);
-        pieD.set("Brand 2", 325);
-        pieD.set("Brand 3", 702);
-        pieD.set("Brand 4", 421);
-         
+        //
+        //
+
         pieD.setTitle("Votos por departamento");
         pieD.setLegendPosition("w");
         pieD.setShadow(false);
