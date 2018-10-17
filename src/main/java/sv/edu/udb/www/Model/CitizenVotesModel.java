@@ -80,7 +80,7 @@ public class CitizenVotesModel {
     public boolean verifyVote(Citizens citizen,int idAdm){
         try{
             JrvCitizen jrv = this.getJrvVotes(idAdm);
-            Query query = em.createQuery("SELECT c FROM CitizenVotes c where c.jrvId.id = :jrvid AND c.citizenId.id = :idcitizen AND c.electoralProcessId.id = :idprocess");
+            Query query = em.createQuery("SELECT c FROM CitizenVotes c where c.jrvId.id = :jrvid AND c.citizenId.id = :idcitizen AND c.status <> 0 AND c.electoralProcessId.id = :idprocess");
             query.setParameter("jrvid", jrv.getJrvId().getId());
             query.setParameter("idcitizen", citizen.getId());
             query.setParameter("idprocess", jrv.getJrvId().getElectoralProcessId().getId());
@@ -114,14 +114,9 @@ public class CitizenVotesModel {
     }
     public boolean editCitizenVotes(CitizenVotes citizenvotes){
         try{
-            CitizenVotes enti = em.find(CitizenVotes.class, citizenvotes.getId());
-            if(enti != null){
-                enti = citizenvotes;
-                em.merge(enti);
-                em.flush();
-                return true;
-            }
-            return false;
+            em.merge(citizenvotes);
+            em.flush();
+            return true;
         }catch(Exception e){
             return false;
         }

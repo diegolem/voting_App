@@ -115,6 +115,14 @@ public class CitizenModel {
         }
         return false;
     }
+    
+    public List<Citizens> ciudadanosJRV(int jrv_id) {
+        Query _q = em.createQuery("SELECT j.citizenId FROM JrvCitizen j WHERE j.jrvId.id = :jrv_id");
+        _q.setParameter("jrv_id", jrv_id);
+        
+        return _q.getResultList();
+    }
+    
     public boolean verificarProcesosActivos(Citizens citizen){
         try{
             Date date = Calendar.getInstance().getTime();
