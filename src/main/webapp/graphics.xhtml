@@ -41,24 +41,8 @@
                 <div class="row">
                     <div class="col-xs-1"></div>
                     <div class="col-xs-10 center-block">
-                        <h5>Elija el Proceso electoral del cual quiere ver los resultados</h5>
-                        <h:form id="frm-graphics" class="form-horizontal form-label-left data-parsley-validate">
-                            <p:repeat value="#{chartsBean.electoralProcess}" var="process">
-                                <div class="form-group">
-                                    <p>
-                                        <b>Nombre del proceso:</b>
-                                        #{ process.name }
-                                    </p>
-                                <p>
-                                    <b>Año del proceso:</b> #{process.endDate.year + 1900}
-                                </p>
-                                <p>
-                                    <b>Estado del proceso:</b> #{process.processElectoralAvailable()}
-                                </p>
-                                <a class="btn btn-info" href="#{ request.contextPath }/faces/graphics.xhtml?id=#{process.id}">Ver Graficas</a>
-                                </div>
-                            </p:repeat>
-                        </h:form>
+                        <h5>Graficas</h5>
+                        <p:chart type="pie" model="#{chartsBean.pieD}" style="width:400px;height:300px" />
                     </div>
                 </div>
             </div>

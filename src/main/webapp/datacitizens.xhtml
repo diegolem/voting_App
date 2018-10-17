@@ -27,12 +27,10 @@
             <!-- top navigation -->
                 <div class="top_nav">
                     <div class="clearfix"></div>
-                    <h:form>
-                        <h:commandLink styleClass="col-xs-3 btn-default text-center" action="login" ><h4>Voting App</h4></h:commandLink>
-                        <h:commandLink styleClass="col-xs-3 btn-dark text-center" action="statistics" ><h4>Visualizar estadisticas</h4></h:commandLink>
-                        <h:commandLink styleClass="col-xs-3 btn-dark text-center" action="login" ><h4>Login</h4></h:commandLink>
-                        <h:commandLink styleClass="col-xs-3 btn-dark text-center" action="datacitizens" ><h4>Consulta de sede</h4></h:commandLink>
-                    </h:form>
+                    <a class="col-xs-3 btn-default text-center" href="#{request.contextPath}/faces/login.xhtml"><h4>Voting App</h4></a>
+                <a class="col-xs-3 btn-dark text-center" href="#{request.contextPath}/faces/statistics.xhtml"><h4>Visualizar estadisticas</h4></a>
+                <a class="col-xs-3 btn-dark text-center" href="#{request.contextPath}/faces/login.xhtml"><h4>Login</h4></a>
+                <a class="col-xs-3 btn-dark text-center" href="#{request.contextPath}/faces/datacitizens.xhtml"><h4>Consulta de sede</h4></a>
                 </div>
                 <!-- /top navigation -->
             <div class="login_wrapper">

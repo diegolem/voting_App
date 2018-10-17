@@ -8,6 +8,8 @@ package sv.edu.udb.www.Model;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -105,14 +107,19 @@ public class DepartmentsModel {
             return false;
         }
     }
-    public List<CitizenVotes> listDepartmentCount(ElectoralProcess _pe) {
+    public List<CitizenVotes> listDepartmentCount(ElectoralProcess _pe,int idD) {
         try {
-            Query query = em.createQuery("SELECT c FROM CitizenVotes c WHERE c.electoralProcessId.id = :idPe");
+            Query query = em.createQuery("SELECT c FROM CitizenVotes c WHERE c.electoralProcessId.id = :idPe AND c.citizenId.headquarterId.cityId.deparmentId.id = :idD");
+            
             query.setParameter("idPe", _pe.getId());
-            
-            return query.getResultList();          
-            
+            query.setParameter("idD", idD);
+            if(query.getResultList() != null){
+                return query.getResultList();
+            }else{
+                return null;
+            }            
         } catch (Exception error) {
+            Logger.getLogger(DepartmentsModel.class.getName()).log(Level.SEVERE, null, error);
             return null;
         }
     }

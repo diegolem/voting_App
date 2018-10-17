@@ -114,7 +114,7 @@ public class LoginFilter implements Filter {
         String url = req.getRequestURI(); // URL actual
 
         if (url.contains(".xhtml") || url.contains(".jasper") || url.contains(".pdf")) {
-            if (url.contains("statistics.xhtml") || url.contains("datacitizens.xhtml")) {
+            if (url.contains("statistics.xhtml") || url.contains("datacitizens.xhtml") || url.contains("graphics.xhtml")) {
                 chain.doFilter(request, response);
             } else {
                 // Si no ha iniciado session o no esta logeado

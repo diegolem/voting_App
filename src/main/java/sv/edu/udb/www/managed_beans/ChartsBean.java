@@ -5,10 +5,14 @@
  */
 package sv.edu.udb.www.managed_beans;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import org.primefaces.model.chart.PieChartModel;
 import sv.edu.udb.www.Entities.Cities;
 import sv.edu.udb.www.Entities.CitizenVotes;
@@ -16,11 +20,8 @@ import sv.edu.udb.www.Entities.Departments;
 import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Entities.Headquarters;
 import sv.edu.udb.www.Entities.Jrv;
-import sv.edu.udb.www.Model.CitiesModel;
 import sv.edu.udb.www.Model.DepartmentsModel;
 import sv.edu.udb.www.Model.ElectoralProcessModel;
-import sv.edu.udb.www.Model.HeadquartersModel;
-import sv.edu.udb.www.Model.JrvModel;
 
 /**
  *
@@ -28,23 +29,25 @@ import sv.edu.udb.www.Model.JrvModel;
  */
 
 @ManagedBean(name = "chartsBean")
-@RequestScoped
-public class ChartsBean {
+@ViewScoped
+public class ChartsBean implements Serializable {
 
     @EJB
     private ElectoralProcessModel electoralProcessModel;
 
     @EJB
-    private JrvModel jrvModel;
-
-    @EJB
     private DepartmentsModel departmentsModel;
-
-    @EJB
-    private CitiesModel citiesModel;
     
-    @EJB
-    private HeadquartersModel headquarterModel;
+    @ManagedProperty("#{param.id}")
+    private int idRequest;
+
+    public int getIdRequest() {
+        return idRequest;
+    }
+
+    public void setIdRequest(int idRequest) {
+        this.idRequest = idRequest;
+    }
        
     private Cities citi;
     
@@ -53,10 +56,12 @@ public class ChartsBean {
     private Jrv jrv;
     
     private Headquarters headquarter;
-    
-    private int idProcess;
-    
-    private PieChartModel chartDepartment;
+        
+    private PieChartModel pieD;
+
+    public PieChartModel getPieD() {
+        return pieD;
+    }
 
     public Cities getCiti() {
         return citi;
@@ -89,56 +94,53 @@ public class ChartsBean {
     public void setHeadquarter(Headquarters headquarter) {
         this.headquarter = headquarter;
     }
-
-    public int getIdProcess() {
-        return idProcess;
-    }
-
-    public void setIdProcess(int idProcess) {
-        this.idProcess = idProcess;
+    
+    @PostConstruct
+    public void init() {
+        createChart();
     }
     
     public void graficaDepartamentos(){
-//        chartDepartment = new PieChartModel();
-        ElectoralProcess _ep = electoralProcessModel.getElectoralProcess(6);
-        List<CitizenVotes> listaVotantes = departmentsModel.listDepartmentCount(_ep);
-        List<Integer> listaId = null;
-        List<Integer> cuentaV = null;
-        int cuenta = 0;
-        if(!listaVotantes.isEmpty()){
-            //List de los ID de los departamentos
-            for(CitizenVotes _cv : listaVotantes){
-                int id = _cv.getCitizenId().getHeadquarterId().getCityId().getDeparmentId().getId();
-                if(!listaId.contains(id)){
-                    listaId.add(id);
-                }
-            }
-            //List de la cuenta de los votos
-            for(CitizenVotes _cv : listaVotantes){
-                int position = listaId.get(_cv.getCitizenId().getHeadquarterId().getCityId().getDeparmentId().getId());
-                if(cuentaV.get(position) > 0){
-                   //si el index en la position del id es diferente del id se suma
-                   cuentaV.get(position + 1);
-                }else{
-                    //si no se añade la position
-                    cuentaV.add(position, 0);
-                    cuentaV.get(position + 1);
-                }
-                //chartDepartment.set("a", 1);
-            }
-            for(Integer _i : cuentaV){
-                System.out.println(_i + "CUENTA " + (cuenta + 1));
-            }
-//        chartDepartment.setTitle("Estadisticas por departamentos");
-//        chartDepartment.setLegendPosition("w");
-//        chartDepartment.setShadow(false);
+        pieD = new PieChartModel();
+        if(this.idRequest == 0){
+            this.idRequest = 1;
         }
+        ElectoralProcess _ep = electoralProcessModel.getElectoralProcess(this.idRequest);
+        List <Integer> listaVotos = new ArrayList();
+        for(Departments _d : departmentsModel.getDepartments()){
+            List<CitizenVotes> listaVotantes = new ArrayList();
+            listaVotantes = departmentsModel.listDepartmentCount(_ep, _d.getId());
+            
+            listaVotos.add(listaVotantes.size());
+        }
+        
+        for(Integer _i : listaVotos){
+            System.out.println(_i + "Departamentos cuenta");
+        }
+        
+        pieD.set("Brand 1", 540);
+        pieD.set("Brand 2", 325);
+        pieD.set("Brand 3", 702);
+        pieD.set("Brand 4", 421);
+         
+        pieD.setTitle("Votos por departamento");
+        pieD.setLegendPosition("w");
+        pieD.setShadow(false);
     }
+    
     public ChartsBean() {
+        this.citi = new Cities();
+        this.department = new Departments();
+        this.headquarter = new Headquarters();
+        this.jrv = new Jrv();
     }
     
     public List<ElectoralProcess> getElectoralProcess(){
         return electoralProcessModel.listElectoralProcess();
+    }
+
+    private void createChart() {
+        graficaDepartamentos();
     }
     
 }
