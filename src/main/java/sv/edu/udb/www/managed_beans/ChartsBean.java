@@ -170,7 +170,7 @@ public class ChartsBean implements Serializable {
     public void graficaDepartamentos(){
         pieD = new PieChartModel();
         if(this.idRequest == 0){
-            this.idRequest = 1;
+            this.idRequest = 6;
         }
         ElectoralProcess _ep = electoralProcessModel.getElectoralProcess(this.idRequest);
         List <Integer> listaVotos = new ArrayList();
@@ -223,7 +223,7 @@ public class ChartsBean implements Serializable {
         }
         ElectoralProcess _ep = electoralProcessModel.getElectoralProcess(this.idRequest);
         List <Integer> listaVotos = new ArrayList();
-//        Cities _ci = citiesModel.getCities(idC);
+        
         for(Headquarters _h : headquartersModel.listHeadquartersForCity(this.idC)){
             List<CitizenVotes> listaVotantes = new ArrayList();    
             listaVotantes = departmentsModel.listHeadquartersForCitiesCount(_ep, _h.getId());
@@ -239,7 +239,25 @@ public class ChartsBean implements Serializable {
     }
     
     public void graficaJrv(){
+        this.pieJ = new PieChartModel();
+        if(this.idS == 0){
+            this.idS = 1;
+        }
+        ElectoralProcess _ep = electoralProcessModel.getElectoralProcess(this.idRequest);
+        List <Integer> listaVotos = new ArrayList();
         
+        for(Jrv _j : jrvModel.listJrvByHeadquarter(_ep, idS)){
+            List<CitizenVotes> listaVotantes = new ArrayList();    
+            listaVotantes = departmentsModel.listJrvForHeadquartersCount(_ep, _j.getId());
+            listaVotos.add(listaVotantes.size());
+        }
+        List <Jrv> listaJ = jrvModel.listJrvByHeadquarter(_ep, idS);
+        for(int i = 0; i < listaVotos.size(); i++){
+            pieJ.set(listaJ.get(i).getCode(), listaVotos.get(i));
+        }
+        pieJ.setTitle("Votos por Jrv");
+        pieJ.setLegendPosition("w");
+        pieJ.setShadow(false);
     }
     public int votosTotales(){
         ElectoralProcess _ep = electoralProcessModel.getElectoralProcess(this.idRequest);

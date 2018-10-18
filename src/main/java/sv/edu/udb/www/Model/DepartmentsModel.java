@@ -157,6 +157,23 @@ public class DepartmentsModel {
         }
     }
     
+    public List<CitizenVotes> listJrvForHeadquartersCount(ElectoralProcess _pe, int idJ){
+        try{
+            Query query = em.createQuery("SELECT c FROM CitizenVotes c WHERE c.electoralProcessId.id = :idPe AND c.jrvId.id = :idJ AND c.status = 1");
+                        
+            query.setParameter("idPe", _pe.getId());
+            query.setParameter("idJ", idJ);
+            if(query.getResultList() != null){
+                return query.getResultList();
+            }else{
+                return null;
+            }
+        }catch(Exception ex){
+            Logger.getLogger(DepartmentsModel.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
     public List<CitizenVotes> totalCount(ElectoralProcess _pe){
         try{
             Query query = em.createQuery("SELECT c FROM CitizenVotes c WHERE c.electoralProcessId.id = :idPe AND c.status = 1");
