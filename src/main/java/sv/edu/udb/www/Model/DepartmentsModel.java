@@ -109,7 +109,7 @@ public class DepartmentsModel {
     }
     public List<CitizenVotes> listDepartmentCount(ElectoralProcess _pe,int idD) {
         try {
-            Query query = em.createQuery("SELECT c FROM CitizenVotes c WHERE c.electoralProcessId.id = :idPe AND c.citizenId.headquarterId.cityId.deparmentId.id = :idD");
+            Query query = em.createQuery("SELECT c FROM CitizenVotes c WHERE c.electoralProcessId.id = :idPe AND c.citizenId.headquarterId.cityId.deparmentId.id = :idD AND c.status = 1");
             
             query.setParameter("idPe", _pe.getId());
             query.setParameter("idD", idD);
@@ -123,7 +123,56 @@ public class DepartmentsModel {
             return null;
         }
     }
-
+    public List<CitizenVotes> listCitiesForDepartmentsCount(ElectoralProcess _pe, int idC){
+        try{
+            Query query = em.createQuery("SELECT c FROM CitizenVotes c WHERE c.electoralProcessId.id = :idPe AND c.citizenId.headquarterId.cityId.id = :idC AND c.status = 1");
+                        
+            query.setParameter("idPe", _pe.getId());
+            query.setParameter("idC", idC);
+            if(query.getResultList() != null){
+                return query.getResultList();
+            }else{
+                return null;
+            }
+        }catch(Exception ex){
+            Logger.getLogger(DepartmentsModel.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    public List<CitizenVotes> listHeadquartersForCitiesCount(ElectoralProcess _pe, int idH){
+        try{
+            Query query = em.createQuery("SELECT c FROM CitizenVotes c WHERE c.electoralProcessId.id = :idPe AND c.citizenId.headquarterId.id = :idH AND c.status = 1");
+                        
+            query.setParameter("idPe", _pe.getId());
+            query.setParameter("idH", idH);
+            if(query.getResultList() != null){
+                return query.getResultList();
+            }else{
+                return null;
+            }
+        }catch(Exception ex){
+            Logger.getLogger(DepartmentsModel.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    public List<CitizenVotes> totalCount(ElectoralProcess _pe){
+        try{
+            Query query = em.createQuery("SELECT c FROM CitizenVotes c WHERE c.electoralProcessId.id = :idPe AND c.status = 1");
+                        
+            query.setParameter("idPe", _pe.getId());
+            if(query.getResultList() != null){
+                return query.getResultList();
+            }else{
+                return null;
+            }
+        }catch(Exception ex){
+            Logger.getLogger(DepartmentsModel.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
     public boolean deleteDepartment(Departments departments) {
         try {
             Departments enti = em.find(Departments.class, departments.getId());

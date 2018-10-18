@@ -94,7 +94,12 @@ public class JrvModel {
 
         return query.getResultList();
     }
+    public List<Jrv> listJrvByProcess(int idProcess) {
+        Query query = em.createQuery("SELECT j FROM Jrv j WHERE j.electoralProcessId.id = :idProcess");
+        query.setParameter("idProcess", idProcess);
 
+        return query.getResultList();
+    }
     public boolean delete(int idHeadquarter, int idProcess) {
         try {
 
