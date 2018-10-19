@@ -21,6 +21,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.Part;
 import org.primefaces.event.FileUploadEvent;
 import sv.edu.udb.www.Entities.PoliticGroups;
@@ -42,17 +43,16 @@ public class PoliticGroupBean implements Serializable {
     /**
      * Creates a new instance of PoliticGroupBean
      */
-    
-    public List<PoliticGroups> allPositicGroupWithCandidates(){
+    public List<PoliticGroups> allPositicGroupWithCandidates() {
         return this.politicGroupModel.listPoliticGroupsWithCandidates();
     }
-   
+
     private PoliticGroups politicGroup;
-    
+
     private Part image;
-    
+
     private String fileName;
-    
+
     @ManagedProperty("#{param.id}")
     private int idRequest;
 
@@ -63,11 +63,11 @@ public class PoliticGroupBean implements Serializable {
     public void setIdRequest(int idRequest) {
         this.idRequest = idRequest;
     }
-    
+
     public String getFileName() {
         return fileName;
     }
-    
+
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
@@ -79,62 +79,70 @@ public class PoliticGroupBean implements Serializable {
     public void setImage(Part image) {
         this.image = image;
     }
-    
+
     public PoliticGroups getPoliticGroup() {
         return politicGroup;
     }
-    
+
     public void setPoliticGroup(PoliticGroups politicGroup) {
         this.politicGroup = politicGroup;
     }
-    
+
     public PoliticGroupBean() {
         this.politicGroup = new PoliticGroups();
     }
 
     public void onloadRequest() {
         this.politicGroup = this.politicGroupModel.getPoliticGroup(this.idRequest);
-        this.fileName = this.politicGroup.getPhoto();
+        //this.fileName = this.politicGroup.getPhoto();
     }
-    public void doUpload(){
-        try{
-           InputStream in = this.image.getInputStream();
-           if(Validacion.esNombreImagen(this.image.getSubmittedFileName())){
-           File f = new File(Utilities.getPath("/images/") + "/" + this.image.getSubmittedFileName());
-           this.politicGroup.setPhoto(this.image.getSubmittedFileName());
-           f.createNewFile();
-           FileOutputStream out = new FileOutputStream(f);
-           byte[] buffer = new byte[1024];
-           int length;
-           while((length = in.read(buffer)) > 0){
-               out.write(buffer, 0, length);
-           }
-           out.close();
-           in.close();  
-           }else{
-               Utilities.addMessageError("Error_Archivo", "Ingrese un archivo valido");
-           }
-           
-        }catch(IOException ex){
+
+    public void handleFileUpload(AjaxBehaviorEvent event) {
+        System.out.println("file size: " + this.image.getSize());
+        System.out.println("file type: " + this.image.getContentType());
+        System.out.println("file info: " + this.image.getHeader("Content-Disposition"));
+    }
+    
+    public void doUpload() {
+        try {
+            InputStream in = this.image.getInputStream();
+            if (Validacion.esNombreImagen(this.image.getSubmittedFileName())) {
+                File f = new File(Utilities.getPath("/images/") + "/" + this.image.getSubmittedFileName());
+                this.politicGroup.setPhoto(this.image.getSubmittedFileName());
+                f.createNewFile();
+                FileOutputStream out = new FileOutputStream(f);
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, length);
+                }
+                out.close();
+                in.close();
+            } else {
+                Utilities.addMessageError("Error_Archivo", "Ingrese un archivo valido");
+            }
+
+        } catch (IOException ex) {
             ex.printStackTrace();
             Utilities.addMessageError("Error_Archivo", "Ha ocurrido un error con el archivo");
         }
     }
+
     public void save() {
         if (Validacion.esNombreEmpresa(this.politicGroup.getName())) {
             if (this.politicGroup.getAcronym().length() >= 3 && this.politicGroup.getAcronym().length() <= 8) {
                 if (Validacion.esDireccion(this.politicGroup.getDescription())) {
                     this.doUpload();
-                        if (!this.politicGroupModel.existAcronym(politicGroup) && !this.politicGroupModel.existName(politicGroup)) {
-                            if (this.politicGroupModel.insertPoliticGroup(this.politicGroup)) {
-                                Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");
-                            } else {
-                                this.eliminateImage(new File(Utilities.getPath("/images/") + "/" + this.politicGroup.getPhoto()));
-                                Utilities.addMessageError("Error_Insert", "No se ha podido ingresar el partido politico");
-                            }
+                    if (!this.politicGroupModel.existAcronym(politicGroup) && !this.politicGroupModel.existName(politicGroup)) {
+                        if (this.politicGroupModel.insertPoliticGroup(this.politicGroup)) {
+                            Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");
                         } else {
-                            Utilities.addMessageError("Error_Existencia", "El nombre o el acronimo ya existen");
+                            this.eliminateImage(new File(Utilities.getPath("/images/") + "/" + this.politicGroup.getPhoto()));
+                            Utilities.addMessageError("Error_Insert", "No se ha podido ingresar el partido politico");
                         }
+                    } else {
+                        Utilities.addMessageError("Error_Existencia", "El nombre o el acronimo ya existen");
+                    }
                 } else {
                     Utilities.addMessageError("Error_Direccion", "Algunos caracteres no estan permitidos en su descripcion");
                 }
@@ -145,38 +153,42 @@ public class PoliticGroupBean implements Serializable {
             Utilities.addMessageError("Error_Nombre", "El nombre no es valido");
         }
     }
-    
-    public List<PoliticGroups> listPoliticGroups(){
+
+    public List<PoliticGroups> listPoliticGroups() {
         return this.politicGroupModel.listPoliticGroups();
     }
 
-  
-    public void eliminateImage(File fichero){
-        if(!fichero.exists()){
+    public void eliminateImage(File fichero) {
+        if (!fichero.exists()) {
             Utilities.addMessageError("Error_Archivo", "El archivo con nombre " + fichero.getName() + " no existe");
-        }else{
+        } else {
             fichero.delete();
         }
     }
+
     public void update() {
+        boolean state = false;
+        
         if (Validacion.esNombreEmpresa(this.politicGroup.getName())) {
             if (this.politicGroup.getAcronym().length() >= 3 && this.politicGroup.getAcronym().length() <= 8) {
                 if (Validacion.esDireccion(this.politicGroup.getDescription())) {
-                            if(this.image == null){
-                                if (this.politicGroupModel.editPoliticGroup(this.politicGroup)) {
-                                Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");
-                                } else {
-                                    Utilities.addMessageError("Error_Insert", "No se ha podido ingresar el partido politico");
-                                }
-                            }else{
-                                this.eliminateImage(new File(Utilities.getPath("/images/") + "/" + this.politicGroup.getPhoto()));
-                                this.doUpload();
-                                if (this.politicGroupModel.editPoliticGroup(this.politicGroup)) {
-                                Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");
-                                } else {
-                                    Utilities.addMessageError("Error_Insert", "No se ha podido ingresar el partido politico");
-                                }
-                            }
+                    if (this.image == null) {
+                        if (this.politicGroupModel.editPoliticGroup(this.politicGroup)) {
+                            state = true;
+                            Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");
+                        } else {
+                            Utilities.addMessageError("Error_Insert", "No se ha podido ingresar el partido politico");
+                        }
+                    } else {
+                        this.eliminateImage(new File(Utilities.getPath("/images/") + "/" + this.politicGroup.getPhoto()));
+                        this.doUpload();
+                        if (this.politicGroupModel.editPoliticGroup(this.politicGroup)) {
+                            state = true;
+                            Utilities.redirect("/faces/generalAdministration/PoliticGroup.xhtml");
+                        } else {
+                            Utilities.addMessageError("Error_Insert", "No se ha podido ingresar el partido politico");
+                        }
+                    }
                 } else {
                     Utilities.addMessageError("Error_Direccion", "Algunos caracteres no estan permitidos en su descripcion");
                 }
@@ -185,6 +197,11 @@ public class PoliticGroupBean implements Serializable {
             }
         } else {
             Utilities.addMessageError("Error_Nombre", "El nombre no es válido");
+        }
+        
+        if (!state){
+            Utilities.redirect("/faces/generalAdministration/editPoliticGroup.xhtml?id="+this.politicGroup.getId());
+            Utilities.addMessageError("Error_File", "Debe de seleccionar una imagen");
         }
     }
 
@@ -196,7 +213,8 @@ public class PoliticGroupBean implements Serializable {
     public void redirect() {
         Utilities.redirect("/faces/generalAdministration/editPoliticGroup.xhtml");
     }
-    public void asignPhotoPoliticGroup(FileUploadEvent event){
+
+    public void asignPhotoPoliticGroup(FileUploadEvent event) {
         FacesMessage message = new FacesMessage("Exito", event.getFile().getFileName() + "Archivo cargado");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }

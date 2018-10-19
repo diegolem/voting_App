@@ -5,6 +5,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:p="http://primefaces.org/ui">
 
     <body>
@@ -14,12 +15,12 @@
             <ui:define name="tittle">
                 Ciudadanos
             </ui:define>
-            
+
             <ui:define name="content">
-                    #{politicGroupBean.onloadRequest()}
-                    
-                    <h:form enctype="multipart/form-data" id="frm-politic-group" class="form-horizontal form-label-left data-parsley-validate">
-                        <h:inputHidden value="#{politicGroupBean.politicGroup.id}" id="idPoliticGroup" />
+                #{politicGroupBean.onloadRequest()}
+                
+                <h:form enctype="multipart/form-data" id="frm-politic-group" class="form-horizontal form-label-left data-parsley-validate">
+                    <h:inputHidden value="#{politicGroupBean.politicGroup.id}" id="idPoliticGroup" />
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="name" value="Nombre del partido politico"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -39,24 +40,21 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="imagen" value="Foto del partido"> <span class="required">*</span></h:outputLabel>
-                        <h:inputFile value="#{politicGroupBean.image}"
-                                     required="false" requiredMessage="La foto es obligatoria">
+                        <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="imagen" value="Foto del partido" />                        
+                        <h:inputFile id="imagen" required="true" value="#{politicGroupBean.image}">
                         </h:inputFile>
                     </div>
-                        
-                        <div class="ln_solid"></div>
-                        <div class="form-group">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                <a class="btn btn-primary" value="Regresar" href="#{ request.contextPath }/faces/generalAdministration/PoliticGroup.xhtml">Regresar</a>
-                                <h:commandButton class="btn btn-warning" type="submit" value="Modificar" >
-                                    <f:ajax render="@form" execute="@form" listener="#{ politicGroupBean.update() }" />
-                                </h:commandButton>
-                            </div>
-                        </div>
 
-                        <h:messages class="alert alert-danger"></h:messages>
-                    </h:form>              
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <a class="btn btn-primary" value="Regresar" href="#{ request.contextPath }/faces/generalAdministration/PoliticGroup.xhtml">Regresar</a>
+                            <h:commandButton type="submit" class="btn btn-warning" value="Modificar" actionListener="#{ politicGroupBean.update() }" />
+                        </div>
+                    </div>
+
+                    <h:messages id="errors" class="alert alert-danger"></h:messages>
+                </h:form>              
             </ui:define>
         </ui:composition>
 

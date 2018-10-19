@@ -16,9 +16,9 @@
 
             <ui:define name="content">
 
-                #{ candidatesBean.onLoadRequest() }
-
                 <h:form id="frm-process" class="form-horizontal form-label-left data-parsley-validate" enctype="multipart/form-data"  prependId="false">
+                    #{ candidatesBean.onLoadRequest() }
+                    
                     <h:panelGroup rendered="#{ !candidatesBean.candidates.hasProcessElectoral() }">
                         <h:inputHidden id="idRequest" value="#{ candidatesBean.idRequest }" />
                         <h:inputHidden id="urlPhotoRequest" value="#{ candidatesBean.urlPhotoRequest }" />
@@ -38,8 +38,7 @@
                                     <div class="btn btn-default image-preview-input">
                                         <span class="glyphicon glyphicon-folder-open"></span>
                                         <span class="image-preview-input-title">Browse</span>
-                                        <h:inputFile id="input-file-preview" value="#{candidatesBean.uploadedFile}"  >
-                                            <f:ajax listener="#{ candidatesBean.handleFileUpload }" />
+                                        <h:inputFile id="input-file-preview" value="#{candidatesBean.uploadedFile}" >
                                         </h:inputFile>
                                     </div>
                                 </span>

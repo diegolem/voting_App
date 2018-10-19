@@ -38,13 +38,13 @@
         <h:outputStylesheet name="css/alertify.css" />
 
         <h:outputStylesheet name="css/datatables.css" />
-        
+
         <h:outputStylesheet name="css/loading-bar.css" />
 
         <!-- jQuery -->
         <script
-            src="https://code.jquery.com/jquery-2.2.4.js"
-            integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+            src="http://code.jquery.com/jquery-1.9.1.js"
+            integrity="sha256-e9gNBsAcA0DBuRWbm0oZfbiCyhjLrI6bmqAl5o+ZjUA="
         crossorigin="anonymous"></script>
 
         <h:outputScript name="js/bootbox.min.js" />
@@ -63,6 +63,9 @@
         <!--Alertify-->
         <h:outputStylesheet name="css/alertify.core.css" />
         <h:outputStylesheet name="css/alertify.default.css" />
+        
+        <h:outputScript name="jsf.js" library="javax.faces" target="head"/>
+        
         <ui:insert name="head_link"></ui:insert>
     </h:head>
     <h:body class="nav-md">
@@ -276,7 +279,7 @@
 
         <!--Alertify-->
         <h:outputScript name="js/alertify.js"/>
-       
+
 
         <ui:insert name="body_scripts"></ui:insert>
 
@@ -287,5 +290,16 @@
         <h:outputScript id="scriptExito" rendered="#{ flash.exito.length() gt 0 }" >
             alertify.success('#{ flash.exito }');
         </h:outputScript>
+
+        <script>
+            function contains(arr, obj) {
+                var returnVal = false;
+                if (arr !== null) {
+
+
+                }
+                return returnVal;
+            }
+        </script>
     </h:body>
 </html>

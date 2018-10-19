@@ -435,6 +435,20 @@ public class ElectoralProcessBean implements Serializable {
 
     }
 
+    public void deleteAll() {
+        ElectoralProcess electoral = this.electoralProcessModel.getElectoralProcess(Integer.parseInt(Utilities.getRequestValue("frm:electoralProcessId")));
+
+        if (electoral != null) {
+            if (electoral.getCandidatesForCitiesCollection().size() > 0 || electoral.getPresidencialCandidatesCollection().size() > 0 || electoral.getJrvCollection().size() > 0) {
+                Utilities.addMessageFlash("error", "El proceso posee datos relacionados");
+            } else if (!this.electoralProcessModel.deleteElectoralProcess(electoral.getId())) {
+                Utilities.addMessageFlash("error", "Error inesperado");
+            }
+        } else {
+            Utilities.addMessageFlash("error", "No se ha podido eliminar el proceso");
+        }
+    }
+    
     public void delete() {
         ElectoralProcess electoral = this.electoralProcessModel.getElectoralProcess(this.electoralProcess.getId());
 

@@ -18,6 +18,7 @@
             <ui:define name="content">
                     #{citiesBean.onloadRequest()}
                     
+                    
                         <h:form id="frm-cities" class="form-horizontal form-label-left data-parsley-validate">
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="name" value="Nombre del municipio"> <span class="required">*</span></h:outputLabel>
@@ -25,7 +26,7 @@
                             <p:inputText id="name" requiredMessage="El nombre del municipio es requerido" required="true" value="#{citiesBean.city.name}" styleClass="form-control col-md-7 col-xs-12" />
                         </div>
                     </div>   
-                    
+                    <h:inputHidden id="idRequest" value="#{ citiesBean.idRequest }" />
                     <div class="form-group">
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="department" value="Departamento"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">

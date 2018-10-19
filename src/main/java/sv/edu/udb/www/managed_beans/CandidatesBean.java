@@ -105,7 +105,7 @@ public class CandidatesBean implements Serializable {
 
         this.candidatesForCities = new CandidatesForCities();
         this.presidencialCandidates = new PresidencialCandidates();
-        
+
         this.uploadedFile = null;
     }
 
@@ -264,6 +264,8 @@ public class CandidatesBean implements Serializable {
     }
 
     public void update() {
+        boolean result = false;
+
         this.folder = Utilities.getPath("/resources/images");
 
         // Obtenemos el candidato actual
@@ -292,8 +294,7 @@ public class CandidatesBean implements Serializable {
                                 Files.copy(input, new File(folder, fileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
                                 originalCandidates.setPhoto(fileName);
                             } catch (Exception e) {
-                                fileError = true;
-                                Utilities.addMessageError("Error", "No se ha podido registrar el candidato");
+                                originalCandidates.setPhoto(this.urlPhotoRequest);
                             }
                         } else {
                             originalCandidates.setPhoto(this.urlPhotoRequest);
@@ -302,6 +303,7 @@ public class CandidatesBean implements Serializable {
                         if (!fileError) {
                             if (this.citizenModel.editCitizen(originalCandidates.getCitizenId())) {
                                 if (this.candidatesModel.editCandidates(originalCandidates)) {
+                                    result = true;
                                     Utilities.redirect("/faces/generalAdministration/candidates.xhtml");
                                 } else {
                                     Utilities.addMessageError("Error", "No se ha podido modificar el candidato");
@@ -323,6 +325,10 @@ public class CandidatesBean implements Serializable {
             }
         } else {
             Utilities.addMessageError("Error", "El candidato esta en medio de un proceso politico");
+        }
+
+        if (!result) {
+            Utilities.redirect("/faces/generalAdministration/editCandidate.xhtml?id=" + idRequest);
         }
     }
 
@@ -351,9 +357,7 @@ public class CandidatesBean implements Serializable {
                                     Files.copy(input, new File(folder, fileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
                                     this.candidates.setPhoto(fileName);
                                 } catch (IOException e) {
-                                    e.printStackTrace();
-                                    errorPhoto = true;
-                                    Utilities.addMessageError("Error", "No se ha podido registrar el cantitado");
+                                    this.candidates.setPhoto("Default-user.png");
                                 }
                             } else {
                                 this.candidates.setPhoto("Default-user.png");
@@ -430,12 +434,15 @@ public class CandidatesBean implements Serializable {
     }
 
     public void onLoadRequest() {
-        this.candidates = this.candidatesModel.getCandidates(idRequest);
-        this.citizens = this.candidates.getCitizenId();
+        try {
+            this.candidates = this.candidatesModel.getCandidates(idRequest);
+            this.citizens = this.candidates.getCitizenId();
 
-        // Obtenemos los datos importantes
-        this.idRequestCitizens = this.candidates.getCitizenId().getId();
-        this.urlPhotoRequest = this.candidates.getPhoto();
+            // Obtenemos los datos importantes
+            this.idRequestCitizens = this.candidates.getCitizenId().getId();
+            this.urlPhotoRequest = this.candidates.getPhoto();
+        } catch (Exception error) {
+        }
     }
 
     public int getIdRequest() {

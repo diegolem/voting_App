@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -225,7 +226,7 @@ public class CitizenBean implements Serializable {
                                     Utilities.addMessageError("Error_Insert", "No se ha podido registrar al ciudadano");
                                 }
                             } else {
-                                Utilities.addMessageError("Error_Fecha", "El usuario debe ser mayor de edad");
+                                Utilities.addMessageError("Error_Fecha", "El usuario debe de tener una edad aproiada");
                             }
                         } else {
                             Utilities.addMessageError("Error_Fecha", "Ingrese una fecha valida");
@@ -264,7 +265,7 @@ public class CitizenBean implements Serializable {
                                 Utilities.addMessageError("Error_Insert", "No se ha podido modificar al ciudadano");
                             }
                         } else {
-                            Utilities.addMessageError("Error_Fecha", "El usuario debe ser mayor de edad");
+                            Utilities.addMessageError("Error_Fecha", "El usuario debe de poseer una edad apropiada");
                         }
                     } else {
                         Utilities.addMessageError("Error_Fecha", "Ingrese una fecha valida");
