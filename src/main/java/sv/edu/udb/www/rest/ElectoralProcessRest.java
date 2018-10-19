@@ -5,8 +5,6 @@
  */
 package sv.edu.udb.www.rest;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
@@ -20,7 +18,6 @@ import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Entities.JrvCitizen;
 import sv.edu.udb.www.Entities.PoliticGroupVotes;
-import sv.edu.udb.www.Entities.PoliticGroups;
 import sv.edu.udb.www.Model.CitizenModel;
 import sv.edu.udb.www.Model.CitizenVotesModel;
 import sv.edu.udb.www.Model.ElectoralProcessModel;
@@ -50,23 +47,9 @@ public class ElectoralProcessRest {
         ElectoralProcess electoral = electoralProcessModel.getElectoralProcess(codigo);
         if (electoralProcessModel.existsCode(electoral)) {
             if (electoral.getElectoralProcessTypesId().getId() == 1) {
-                List<PoliticGroups> pre = null;
-                //Filtrando los partidos que ya estan en el array
-                for(PoliticGroups _pg : electoralProcessModel.getPoliticGroupPresidencial(electoral)){
-                    if(!pre.contains(_pg)){
-                        pre.add(_pg);
-                    }
-                }
-                return Response.status(Response.Status.OK).entity(pre).build();
+                return Response.status(Response.Status.OK).entity(electoralProcessModel.getPoliticGroupPresidencial(electoral)).build();
             } else {
-                List<PoliticGroups> pre = null;
-                //Filtrando los partidos que ya estan en el array
-                for(PoliticGroups _pg : electoralProcessModel.getPoliticGroupCities(electoral)){
-                    if(!pre.contains(_pg)){
-                        pre.add(_pg);
-                    }
-                }
-                return Response.status(Response.Status.OK).entity(pre).build();
+                return Response.status(Response.Status.OK).entity(electoralProcessModel.getPoliticGroupCities(electoral)).build();
             }
         }
 
@@ -81,18 +64,12 @@ public class ElectoralProcessRest {
 
         if (citizenVotesModel.verifyVote(citizen, idAdmin)) {
             JrvCitizen jrvAdmin = citizenVotesModel.getJrv(idAdmin);
-
-            CitizenVotes citiVotes = new CitizenVotes();
-            citiVotes.setCitizenId(citizen);
-            citiVotes.setElectoralProcessId(jrvAdmin.getJrvId().getElectoralProcessId());
-            citiVotes.setJrvId(jrvAdmin.getJrvId());
-
-            if (vote) {
-                citiVotes.setStatus((short) 1);
-            }
+            
+            CitizenVotes citiVotes = citizenVotesModel.getByCitizenAndJrv(citizen.getId(), jrvAdmin.getJrvId().getId());
+            citiVotes.setStatus( vote ? (short) 1 : null);
 
             PoliticGroupVotes politicVotes = null;
-            
+
             for (PoliticGroupVotes politicVote : jrvAdmin.getJrvId().getPoliticGroupVotesCollection()) {
                 if (politicVote.getPoliticGroupId().getId() == politic) {
                     politicVotes = politicVote;
@@ -104,17 +81,17 @@ public class ElectoralProcessRest {
                 int vot = politicVotes.getVotes() + 1;
                 politicVotes.setVotes(vot);
             }
-            if (citizenVotesModel.editCitizenVotes(citiVotes)) {
 
+            if (citizenVotesModel.editCitizenVotes(citiVotes)) {
                 if (politicVotes != null) {
                     if (!politicGroupsVotesModel.editPoliticGroupVote(politicVotes)) {
-                        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(true).build();
+                        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(false).build();
                     }
                 }
 
                 return Response.status(Response.Status.OK).entity(true).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).entity(false).build();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(false).build();
             }
         } else {
             return Response.status(Response.Status.UNAUTHORIZED).entity(false).build();

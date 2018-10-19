@@ -54,21 +54,16 @@ public class JrvCitizenRest {
     @GET
     @Path("/jrv/{idjrv}/citizens")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Citizens> obtenerCitizensForJrv(@PathParam("idjrv") int id){
+    public Response obtenerCitizensForJrv(@PathParam("idjrv") int id){
         Jrv jrvCitizens = jrvModel.getJrv(id);
+        
         if(jrvCitizens != null){
             if(citizensModel.verificarProcesosActivosJrv(jrvCitizens)){
-                List list = new ArrayList();
-                //Recorrer la lista y obtener solamente los que tengan estado 0
-                for(Citizens _c : jrvCitizens.getHeadquarterId().getCitizensCollection()){
-                    if(_c.getState() == 0){
-                        list.add(_c);
-                    }
-                }
-                return list;         
+                return Response.status(200).entity(citizensModel.ciudadanosJRV(id)).build();
             }
         }
-        return null;
+        
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
     
     @GET

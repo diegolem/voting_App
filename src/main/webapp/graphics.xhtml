@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>Voting_App | Estadisticas </title>
+
+        <!-- Bootstrap -->
+        <h:outputStylesheet name="css/bootstrap.min.css" />
+        <!-- Font Awesome -->
+        <h:outputStylesheet name="css/font-awesome.min.css" />
+        <!-- NProgress -->
+        <h:outputStylesheet name="css/nprogress.css" />
+        <!-- Animate.css -->
+        <h:outputStylesheet name="css/animate.min.css" />
+        <!-- Custom Theme Style -->
+        <h:outputStylesheet name="css/custom.min.css" />
+    </h:head>
+    <h:body class="login">
+        <div>
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="clearfix"></div>
+                <a class="col-xs-3 btn-default text-center" href="#{request.contextPath}/faces/login.xhtml"><h4>Voting App</h4></a>
+                <a class="col-xs-3 btn-dark text-center" href="#{request.contextPath}/faces/statistics.xhtml"><h4>Visualizar estadisticas</h4></a>
+                <a class="col-xs-3 btn-dark text-center" href="#{request.contextPath}/faces/login.xhtml"><h4>Login</h4></a>
+                <a class="col-xs-3 btn-dark text-center" href="#{request.contextPath}/faces/datacitizens.xhtml"><h4>Consulta de sede</h4></a>
+            </div>
+            <!-- /top navigation -->
+            <div class="content">
+                <div class="clearfix"></div>
+                <br></br>
+                <div class="row">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-5">
+                        <h3><b>Votos totales a nivel nacional:</b> #{chartsBean.votosTotales()}</h3>
+                    </div>
+                </div>
+                <br></br>
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-5">
+                        <h5>Graficas</h5>
+                        <p:chart type="pie" model="#{chartsBean.pieD}" style="width:500px;height:500px" />                        
+                    </div>
+                    <div class="col-xs-5">
+                        <h:selectOneMenu id="dep" value="#{ chartsBean.idD }" styleClass="form-control col-xs-8">
+                            <f:selectItems value="#{chartsBean.departmentsC}" var="depart" itemValue="#{ depart.id }" itemLabel="#{ depart.name }" />
+                            <p:ajax event="click" listener="#{chartsBean.graficaMunicipios()}" update="pieC" />
+                        </h:selectOneMenu>
+                        <br></br>
+                        <br></br>
+                        <p:chart id="pieC" type="pie" model="#{chartsBean.pieC}" style="width:500px;height:500px" />
+                    </div>
+                </div>
+                <p:separator />
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-5">
+                        <h:selectOneMenu id="sede" value="#{ chartsBean.idC }" styleClass="form-control col-xs-5">
+                            <f:selectItems value="#{chartsBean.citiesC}" var="city" itemValue="#{ city.id }" itemLabel="#{ city.name }" />
+                            <p:ajax event="click" listener="#{chartsBean.graficaSedes()}" update="pieS" />
+                        </h:selectOneMenu>
+                        <br></br>
+                        <br></br>
+                        <p:chart id="pieS" type="pie" model="#{chartsBean.pieS}" style="width:500px;height:500px" />                        
+                    </div>
+                    <div class="col-xs-5">
+                        <h:selectOneMenu id="jrv" value="#{ chartsBean.idS }" styleClass="form-control col-xs-7">
+                            <f:selectItems value="#{chartsBean.headquarterC}" var="head" itemValue="#{head.id }" itemLabel="#{ head.name}" />
+                            <p:ajax event="click" listener="#{chartsBean.graficaJrv()}" update="pieJ" />
+                        </h:selectOneMenu>
+                        <br></br>
+                        <br></br>
+                        <p:chart id="pieJ" type="pie" model="#{chartsBean.pieJ}" style="width:500px;height:500px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>
