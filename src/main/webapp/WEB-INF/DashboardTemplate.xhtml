@@ -38,7 +38,7 @@
         <h:outputStylesheet name="css/alertify.css" />
 
         <h:outputStylesheet name="css/datatables.css" />
-        
+
         <h:outputStylesheet name="css/loading-bar.css" />
 
         <!-- jQuery -->
@@ -69,146 +69,148 @@
 
         <div class="container body">
             <div class="main_container">
-                <div class="col-md-3 left_col">
-                    <div class="left_col scroll-view">
-                        <div class="navbar nav_title" style="border: 0;">
-                            <a href="#{ request.contextPath }/faces/home.xhtml" class="site_title"><i class="fa fa-university"></i> <span>Voting App</span></a>
-                        </div>
-
-                        <div class="clearfix"></div>
-
-                        <!-- menu profile quick info -->
-                        <div class="profile clearfix">
-                            <div class="profile_pic">
-                                <img src="../resources/images/img.png" alt="..." class="img-circle profile_img" />
+                <h:panelGroup rendered="#{Auth.logged}">
+                    <div class="col-md-3 left_col">
+                        <div class="left_col scroll-view">
+                            <div class="navbar nav_title" style="border: 0;">
+                                <a href="#{ request.contextPath }/faces/home.xhtml" class="site_title"><i class="fa fa-university"></i> <span>Voting App</span></a>
                             </div>
-                            <div class="profile_info">
-                                <span><!--#{ Auth.citizen.citizenTypeId.description }--></span>
-                                <h2>#{ Auth.citizen.name } #{ Auth.citizen.lastname }</h2>
+
+                            <div class="clearfix"></div>
+
+                            <!-- menu profile quick info -->
+                            <div class="profile clearfix">
+                                <div class="profile_pic">
+                                    <img src="../resources/images/img.png" alt="..." class="img-circle profile_img" />
+                                </div>
+                                <div class="profile_info">
+                                    <span><!--#{ Auth.citizen.citizenTypeId.description }--></span>
+                                    <h2>#{ Auth.citizen.name } #{ Auth.citizen.lastname }</h2>
+                                </div>
                             </div>
-                        </div>
-                        <!-- /menu profile quick info -->
+                            <!-- /menu profile quick info -->
 
-                        <br />
+                            <br />
 
-                        <!-- sidebar menu -->
-                        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-                            <div class="menu_section">
-                                <h3>#{ Auth.citizen.citizenTypeId.description}</h3>
-                                <ul class="nav side-menu">
-                                    <h:panelGroup rendered="#{ Auth.generalAdministration }">
-                                        <li><a><i class="fa fa-flag-o"></i>Partidos Politicos<span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/addPoliticGroup.xhtml">Registrar</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/PoliticGroup.xhtml">Buscar</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a><i class="fa fa-map-marker"></i>Departamentos<span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/addDepartment.xhtml">Registrar</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/Department.xhtml">Buscar</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a><i class="fa fa-sitemap"></i>Municipios<span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/addCity.xhtml">Registrar</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/City.xhtml">Buscar</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a><i class="fa fa-users"></i>Usuarios<span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/addUser.xhtml">Registrar</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/User.xhtml">Buscar</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a><i class="fa fa-newspaper-o"></i> Proceso electoral <span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/addProcess.xhtml">Añadir</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/processes.xhtml">Buscar</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a><i class="fa fa-child"></i>Candidatos<span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/addCandidates.xhtml">Registrar</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/candidates.xhtml">Buscar</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/definitionProcesses.xhtml">Procesos electorales</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a><i class="fa fa-users"></i>JRV<span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/generalAdministration/jrv.xhtml">Ver Juntas</a></li>
-                                            </ul>
-                                        </li>
-                                    </h:panelGroup>
-                                    <h:panelGroup rendered="#{ Auth.employeeRnpn }">
-                                        <li><a><i class="fa fa-users"></i>Ciudadanos<span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/employeeRnpn/addCitizens.xhtml">Registrar</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/employeeRnpn/Citizens.xhtml">Buscar</a></li>
-                                            </ul>
-                                        </li>
-                                    </h:panelGroup>
-                                    <h:panelGroup rendered="#{ Auth.departmentAdministration }">
-                                        <li><a><i class="fa fa-child"></i>candidatos<span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/departmentalAdministration/addCandidates.xhtml">Registrar</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/departmentalAdministration/candidates.xhtml">Buscar</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/departmentalAdministration/definitionProcesses.xhtml">Procesos electorales</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a><i class="fa fa-users"></i>JRV<span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/departmentalAdministration/headquarters.xhtml">Sedes</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/departmentalAdministration/jrv.xhtml">Ver Juntas</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a><i class="fa fa-bars"></i>Type JRV<span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#{ request.contextPath }/faces/departmentalAdministration/addTypeJrv.xhtml">Nuevo Tipo</a></li>
-                                                <li><a href="#{ request.contextPath }/faces/departmentalAdministration/typeJrv.xhtml">Tipos</a></li>
-                                            </ul>
-                                        </li>
-                                    </h:panelGroup>
-                                    <h:panelGroup rendered="#{ Auth.presidentJrv }">
-                                        <h:panelGroup rendered="#{ !Auth.jrvActive().endProcessStep() }">
-                                            <h:panelGroup rendered="#{ Auth.jrvActive().startVoting() }">
-                                                <li><a><i class="fa fa-ticket"></i>Votantes<span class="fa fa-chevron-down"></span></a>
-                                                    <ul class="nav child_menu">
-                                                        <li><a href="#{ request.contextPath }/faces/jrvPresident/voters.xhtml">verificar</a></li>
-                                                    </ul>
-                                                </li>
+                            <!-- sidebar menu -->
+                            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                                <div class="menu_section">
+                                    <h3>#{ Auth.citizen.citizenTypeId.description}</h3>
+                                    <ul class="nav side-menu">
+                                        <h:panelGroup rendered="#{ Auth.generalAdministration }">
+                                            <li><a><i class="fa fa-flag-o"></i>Partidos Politicos<span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/addPoliticGroup.xhtml">Registrar</a></li>
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/PoliticGroup.xhtml">Buscar</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a><i class="fa fa-map-marker"></i>Departamentos<span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/addDepartment.xhtml">Registrar</a></li>
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/Department.xhtml">Buscar</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a><i class="fa fa-sitemap"></i>Municipios<span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/addCity.xhtml">Registrar</a></li>
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/City.xhtml">Buscar</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a><i class="fa fa-users"></i>Usuarios<span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/addUser.xhtml">Registrar</a></li>
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/User.xhtml">Buscar</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a><i class="fa fa-newspaper-o"></i> Proceso electoral <span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/addProcess.xhtml">Añadir</a></li>
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/processes.xhtml">Buscar</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a><i class="fa fa-child"></i>Candidatos<span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/addCandidates.xhtml">Registrar</a></li>
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/candidates.xhtml">Buscar</a></li>
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/definitionProcesses.xhtml">Procesos electorales</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a><i class="fa fa-users"></i>JRV<span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+                                                    <li><a href="#{ request.contextPath }/faces/generalAdministration/jrv.xhtml">Ver Juntas</a></li>
+                                                </ul>
+                                            </li>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{ Auth.employeeRnpn }">
+                                            <li><a><i class="fa fa-users"></i>Ciudadanos<span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+                                                    <li><a href="#{ request.contextPath }/faces/employeeRnpn/addCitizens.xhtml">Registrar</a></li>
+                                                    <li><a href="#{ request.contextPath }/faces/employeeRnpn/Citizens.xhtml">Buscar</a></li>
+                                                </ul>
+                                            </li>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{ Auth.departmentAdministration }">
+                                            <li><a><i class="fa fa-child"></i>candidatos<span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+                                                    <li><a href="#{ request.contextPath }/faces/departmentalAdministration/addCandidates.xhtml">Registrar</a></li>
+                                                    <li><a href="#{ request.contextPath }/faces/departmentalAdministration/candidates.xhtml">Buscar</a></li>
+                                                    <li><a href="#{ request.contextPath }/faces/departmentalAdministration/definitionProcesses.xhtml">Procesos electorales</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a><i class="fa fa-users"></i>JRV<span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+                                                    <li><a href="#{ request.contextPath }/faces/departmentalAdministration/headquarters.xhtml">Sedes</a></li>
+                                                    <li><a href="#{ request.contextPath }/faces/departmentalAdministration/jrv.xhtml">Ver Juntas</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a><i class="fa fa-bars"></i>Type JRV<span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+                                                    <li><a href="#{ request.contextPath }/faces/departmentalAdministration/addTypeJrv.xhtml">Nuevo Tipo</a></li>
+                                                    <li><a href="#{ request.contextPath }/faces/departmentalAdministration/typeJrv.xhtml">Tipos</a></li>
+                                                </ul>
+                                            </li>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{ Auth.presidentJrv }">
+                                            <h:panelGroup rendered="#{ !Auth.jrvActive().endProcessStep() }">
+                                                <h:panelGroup rendered="#{ Auth.jrvActive().startVoting() }">
+                                                    <li><a><i class="fa fa-ticket"></i>Votantes<span class="fa fa-chevron-down"></span></a>
+                                                        <ul class="nav child_menu">
+                                                            <li><a href="#{ request.contextPath }/faces/jrvPresident/voters.xhtml">verificar</a></li>
+                                                        </ul>
+                                                    </li>
+                                                </h:panelGroup>
                                             </h:panelGroup>
                                         </h:panelGroup>
-                                    </h:panelGroup>
-                                </ul>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- top navigation -->
-                <div class="top_nav">
-                    <div class="nav_menu">
-                        <nav>
-                            <div class="nav toggle">
-                                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                            </div>
+                    <!-- top navigation -->
+                    <div class="top_nav">
+                        <div class="nav_menu">
+                            <nav>
+                                <div class="nav toggle">
+                                    <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                                </div>
 
-                            <ul class="nav navbar-nav navbar-right">
-                                <li class="">
-                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                        <img src="../resources/images/img.png" alt="" />#{ Auth.citizen.name }
-                                        <span class=" fa fa-angle-down"></span>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                        <li><h:form><h:commandLink value="Log Out" action="#{ Auth.logout() }" ><i class="fa fa-sign-out pull-right"></i></h:commandLink></h:form></li>
-                                    </ul>
-                                </li>
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li class="">
+                                        <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <img src="../resources/images/img.png" alt="" />#{ Auth.citizen.name }
+                                            <span class=" fa fa-angle-down"></span>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                            <li><h:form><h:commandLink value="Log Out" action="#{ Auth.logout() }" ><i class="fa fa-sign-out pull-right"></i></h:commandLink></h:form></li>
+                                        </ul>
+                                    </li>
 
-                            </ul>
-                        </nav>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
-                </div>
+                </h:panelGroup>
                 <!-- /top navigation -->
 
                 <!-- page content -->
@@ -276,7 +278,7 @@
 
         <!--Alertify-->
         <h:outputScript name="js/alertify.js"/>
-       
+
 
         <ui:insert name="body_scripts"></ui:insert>
 

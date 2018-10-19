@@ -15,6 +15,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Entities.Jrv;
 
 /**
@@ -94,7 +95,19 @@ public class JrvModel {
 
         return query.getResultList();
     }
+    public List<Jrv> listJrvByProcess(int idProcess) {
+        Query query = em.createQuery("SELECT j FROM Jrv j WHERE j.electoralProcessId.id = :idProcess");
+        query.setParameter("idProcess", idProcess);
 
+        return query.getResultList();
+    }
+    public List<Jrv> listJrvByHeadquarter(ElectoralProcess _pe,int idHead) {
+        Query query = em.createQuery("SELECT j FROM Jrv j WHERE j.headquarterId.id = :idH AND j.electoralProcessId.id = :idP");
+        query.setParameter("idH", idHead);
+        query.setParameter("idP", _pe.getId());
+
+        return query.getResultList();
+    }
     public boolean delete(int idHeadquarter, int idProcess) {
         try {
 
