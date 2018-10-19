@@ -5,6 +5,7 @@
  */
 package sv.edu.udb.www.Model;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import javax.ejb.Stateless;
@@ -117,7 +118,7 @@ public class CitizenModel {
     }
     
     public List<Citizens> ciudadanosJRV(int jrv_id) {
-        Query _q = em.createQuery("SELECT j.citizenId FROM JrvCitizen j WHERE j.jrvId.id = :jrv_id");
+        Query _q = em.createQuery("SELECT v.citizenId FROM CitizenVotes v WHERE v.status = 0 AND v.jrvId.id = :jrv_id");
         _q.setParameter("jrv_id", jrv_id);
         
         return _q.getResultList();

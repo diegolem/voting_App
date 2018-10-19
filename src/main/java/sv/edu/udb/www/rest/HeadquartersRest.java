@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Entities.Headquarters;
 import sv.edu.udb.www.Model.CitizenModel;
@@ -34,13 +35,12 @@ public class HeadquartersRest {
     @GET
     @Path("/{dui}")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Headquarters> getHeadquart(@PathParam("dui") String dui){
+    public Response getHeadquart(@PathParam("dui") String dui){
         Citizens cit = citizensModel.getCitizen(dui);
         if(citizensModel.existsDui(cit)){
-            return headquartersModel.listHeadForDui(cit);
+            return Response.ok(headquartersModel.listHeadForDui(cit).get(0)).build();
         }
-        return null;
+        
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
-    
-    
 }

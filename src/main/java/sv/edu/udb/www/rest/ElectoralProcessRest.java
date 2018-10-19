@@ -64,15 +64,9 @@ public class ElectoralProcessRest {
 
         if (citizenVotesModel.verifyVote(citizen, idAdmin)) {
             JrvCitizen jrvAdmin = citizenVotesModel.getJrv(idAdmin);
-
-            CitizenVotes citiVotes = new CitizenVotes();
-            citiVotes.setCitizenId(citizen);
-            citiVotes.setElectoralProcessId(jrvAdmin.getJrvId().getElectoralProcessId());
-            citiVotes.setJrvId(jrvAdmin.getJrvId());
-
-            if (vote) {
-                citiVotes.setStatus((short) 1);
-            }
+            
+            CitizenVotes citiVotes = citizenVotesModel.getByCitizenAndJrv(citizen.getId(), jrvAdmin.getJrvId().getId());
+            citiVotes.setStatus( vote ? (short) 1 : null);
 
             PoliticGroupVotes politicVotes = null;
 
