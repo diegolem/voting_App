@@ -23,7 +23,7 @@
 FROM
      `jrv` jrv2 INNER JOIN `citizen_votes` citizen_votes ON jrv2.`id` = citizen_votes.`jrv_id`
 WHERE
-      jrv.id = $P!{id}) AS votes_total
+      jrv2.id = $P!{id}) AS votes_total
 FROM
      `electoral_process` electoral_process INNER JOIN `jrv` jrv ON electoral_process.`id` = jrv.`electoral_process_id`
      INNER JOIN `electoral_process_types` electoral_process_types ON electoral_process.`electoral_process_types_id` = electoral_process_types.`id`

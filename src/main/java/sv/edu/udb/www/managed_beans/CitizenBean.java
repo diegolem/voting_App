@@ -128,6 +128,10 @@ public class CitizenBean implements Serializable {
     public List<CitizenTypes> listTypesCitizens(){
         return this.citizenTypesModel.listCitizenTypes();
     }
+    
+    public List<CitizenTypes> listCitizenTypesWithouPresidentJrv(){
+        return this.citizenTypesModel.listCitizenTypesWithouPresidentJrv();
+    }
 
     public List<Citizens> citinezForDepartmentJrvUnique(int idDep) {
         List<Citizens> citinzens = this.citizenModel.listCitizenByDepartament(idDep);

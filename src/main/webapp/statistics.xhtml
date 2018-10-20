@@ -30,90 +30,88 @@
             <!-- top navigation -->
             <div class="top_nav">
                 <div class="clearfix"></div>
-                <a class="col-xs-3 btn-default text-center" href="#{request.contextPath}/faces/login.xhtml"><h4>Voting App</h4></a>
-                <a class="col-xs-3 btn-dark text-center" href="#{request.contextPath}/faces/statistics.xhtml"><h4>Visualizar estadisticas</h4></a>
-                <a class="col-xs-3 btn-dark text-center" href="#{request.contextPath}/faces/login.xhtml"><h4>Login</h4></a>
-                <a class="col-xs-3 btn-dark text-center" href="#{request.contextPath}/faces/datacitizens.xhtml"><h4>Consulta de sede</h4></a>
+                <a class="col-xs-6 btn-dark text-center" href="#{request.contextPath}/faces/login.xhtml"><h4>Voting App</h4></a>
+                <a class="col-xs-6 btn-default text-center" href="#{request.contextPath}/faces/statistics.xhtml"><h4>Visualizar estadisticas</h4></a>
             </div>
             <ui:composition template="WEB-INF/DashboardTemplate.xhtml">
                 <ui:define name="tittle">
-                Voting App
+                    Voting App
                 </ui:define>
-                
+
                 <ui:define name="content">
                     <div class="clearfix"></div>
-                <br></br>
-                <div class="row">
-                    <div class="col-xs-4"></div>
-                    <div class="col-xs-5">
-                        <h4><b>Elija el Proceso electoral del cual quiere ver los resultados</b></h4>
-                    </div>
-                </div>
-                <!-- INICIO LISTA DE PROCESOS -->
-                <div class="col-xs-1"></div>
-                <h:form styleClass="col-xs-10">
-                    <div id="test-list">
-                        <div class="form-group">
-                            <label for="filter">Buscar</label>
-                            <input id="filter" type="text" class="form-control search" />
+                    <br></br>
+                    <div class="row">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-5">
+                            <h4><b>Elija el Proceso electoral del cual quiere ver los resultados</b></h4>
                         </div>
+                    </div>
+                    <!-- INICIO LISTA DE PROCESOS -->
+                    <div class="col-xs-1"></div>
+                    <h:form styleClass="col-xs-10">
+                        <div id="test-list">
+                            <div class="form-group">
+                                <label for="filter">Buscar</label>
+                                <input id="filter" type="text" class="form-control search" />
+                            </div>
 
-                        <div class="row list" style="display: flex; justify-content: space-between;" >
-                            <p:repeat value="#{ chartsBean.electoralProcess }" var="process">
-                                <!--alv-->
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                <div class="x_panel">
-                                    <div class="x_title">
-                                        <h2 class="name">#{ process.name }<small>Proceso Electoral</small></h2>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="x_content">
-                                        <div class="">
-                                            <ul class="to_do">
-                                                <li>
-                                                    <p>
-                                                        <b>Año del proceso</b> #{process.endDate.year + 1900}</p>
-                                                </li>
-                                                <li>
-                                                    <p>
-                                                        <b>Estado del proceso:</b> #{process.processElectoralAvailable()}
-                                                    </p>
-                                                </li>
-                                                <li>
-                                                    <p>
-                                                        <a class="btn btn-info" href="#{ request.contextPath }/faces/graphics.xhtml?id=#{process.id}">Ver Graficas</a>
-                                                    </p>
-                                                </li>
-                                            </ul>
+                            <div class="row list" style="display: flex; justify-content: space-between;" >
+                                <p:repeat value="#{ chartsBean.electoralProcess }" var="process">
+                                    <!--alv-->
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="x_panel">
+                                            <div class="x_title">
+                                                <h2 class="name">#{ process.name }<small>Proceso Electoral</small></h2>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="x_content">
+                                                <div class="">
+                                                    <ul class="to_do">
+                                                        <li>
+                                                            <p>
+                                                                <b>Año del proceso</b> #{process.endDate.year + 1900}</p>
+                                                        </li>
+                                                        <li>
+                                                            <p>
+                                                                <b>Estado del proceso:</b> #{process.processElectoralAvailable()}
+                                                            </p>
+                                                        </li>
+                                                        <li>
+                                                            <p>
+                                                                <a class="btn btn-info" href="#{ request.contextPath }/faces/graphics.xhtml?id=#{process.id}">Ver Graficas</a>
+                                                            </p>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </p:repeat>
                             </div>
-                            </p:repeat>
+                            <ul class="pagination"></ul>
                         </div>
-                        <ul class="pagination"></ul>
-                    </div>
-                </h:form>    
+                    </h:form>    
                 </ui:define>
-                
+
                 <ui:define name="body_scripts">
-                <script>
-                    var monkeyList = new List('test-list', {
-                        valueNames: ['name'],
-                        page: 3,
-                        pagination: true
-                    });
-                </script>
-            </ui:define>
-                
+                    <script>
+                        var monkeyList = new List('test-list', {
+                            valueNames: ['name'],
+                            page: 3,
+                            pagination: true
+                        });
+                    </script>
+                </ui:define>
+
             </ui:composition>
             <!-- /top navigation -->
         </div>
         <script>
             var monkeyList = new List('test-list', {
-                        valueNames: ['name'],
-                        page: 4,
-                        pagination: true
+                valueNames: ['name'],
+                page: 4,
+                pagination: true
             });
         </script>
     </h:body>

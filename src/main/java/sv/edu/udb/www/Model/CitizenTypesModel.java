@@ -25,6 +25,12 @@ public class CitizenTypesModel {
         Query query = em.createQuery("SELECT c FROM CitizenTypes c");
         return query.getResultList();
     }
+    
+    public List<CitizenTypes> listCitizenTypesWithouPresidentJrv(){
+        Query query = em.createQuery("SELECT c FROM CitizenTypes c where c.id != 'PREJRV'");
+        return query.getResultList();
+    }
+    
     public boolean insertCitizenTypes(CitizenTypes citizentypes){
         try{
             em.persist(citizentypes);

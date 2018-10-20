@@ -55,7 +55,7 @@
                         <h:outputLabel class="control-label col-md-3 col-sm-3 col-xs-12" for="typecitizen" value="Tipo de Ciudadano"> <span class="required">*</span></h:outputLabel>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <h:selectOneMenu rendered="true" requiredMessage="El tipo de Ciudadano es requerido" id="typecitizen" value="#{ citizenBean.citizen.citizenTypeId.id }" class="form-control col-md-7 col-xs-12" >
-                                <f:selectItems value="#{citizenBean.listTypesCitizens()}" var="types" itemValue="#{ types.id }" itemLabel="#{ types.description }" />
+                                <f:selectItems value="#{citizenBean.listCitizenTypesWithouPresidentJrv()}" var="types" itemValue="#{ types.id }" itemLabel="#{ types.description }" />
                             </h:selectOneMenu>
                         </div>
                     </div>
