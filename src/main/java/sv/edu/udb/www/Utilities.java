@@ -14,9 +14,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
@@ -121,6 +124,15 @@ public class Utilities {
         return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(name);
     }
 
+    public static int getRequestIntValue(String name) {
+        try {
+            int value = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(name));
+            return value;
+        } catch(Exception error) {
+            return 0;
+        }
+    }
+    
     public static Auth getUserAuth() {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
@@ -162,5 +174,16 @@ public class Utilities {
         } catch (ParseException ex) {
             return null;
         }
+    }
+    
+    public static List parseCollection(Collection collection){
+        List list;
+        
+        if (collection instanceof List)
+            list = (List)collection;
+        else
+            list = new ArrayList(collection);
+        
+        return list;
     }
 }

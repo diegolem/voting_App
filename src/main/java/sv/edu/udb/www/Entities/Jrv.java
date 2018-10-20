@@ -40,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Jrv.existByCode", query = "SELECT count(j) FROM Jrv j where j.code = :code")
     , @NamedQuery(name = "Jrv.existByAnotherCode", query = "SELECT count(j) FROM Jrv j where j.code = :code AND j.id != :id")
     , @NamedQuery(name = "Jrv.findById", query = "SELECT j FROM Jrv j WHERE j.id = :id")
+    , @NamedQuery(name = "Jrv.findByCitizen", query = "SELECT DISTINCT j FROM Jrv j inner join j.jrvCitizenCollection c where c.citizenId.id = :id and c.jrvCitizenTypeId.id = 1 and j.electoralProcessId.endDate > CURRENT_TIMESTAMP and j.electoralProcessId.electoralProcessStatusId.id != 4")
     , @NamedQuery(name = "Jrv.findByCode", query = "SELECT j FROM Jrv j WHERE j.code = :code")})
 public class Jrv implements Serializable {
 
@@ -68,7 +69,7 @@ public class Jrv implements Serializable {
     private Collection<JrvCitizen> jrvCitizenCollection;
     @Transient
     private int total;
-    
+
     private void defaultJrv() {
         this.electoralProcessId = new ElectoralProcess();
         this.headquarterId = new Headquarters();
@@ -179,56 +180,60 @@ public class Jrv implements Serializable {
         return "sv.edu.udb.www.Entities.Jrv[ id=" + id + " ]";
     }
 
-    public boolean canDelete(){
-        return (this.politicGroupVotesCollection == null  || this.politicGroupVotesCollection.isEmpty() ) && (this.jrvCitizenCollection == null || this.jrvCitizenCollection.isEmpty()) && (this.citizenVotesCollection == null || this.citizenVotesCollection.isEmpty());
+    public boolean canDelete() {
+        return (this.politicGroupVotesCollection == null || this.politicGroupVotesCollection.isEmpty()) && (this.jrvCitizenCollection == null || this.jrvCitizenCollection.isEmpty()) && (this.citizenVotesCollection == null || this.citizenVotesCollection.isEmpty());
     }
-    
-    public boolean hasCandidates(){
+
+    public boolean hasCandidates() {
         return (this.electoralProcessId.getElectoralProcessTypesId().getId() == 1) ? this.electoralProcessId.getPresidencialCandidatesCollection().size() > 0 : this.electoralProcessId.getCandidatesForCitiesCollection().size() > 0;
     }
-    
-    public boolean hasCandidatesVoting(){
+
+    public boolean hasCandidatesVoting() {
         return (this.electoralProcessId.getElectoralProcessTypesId().getId() == 1) ? this.electoralProcessId.getPresidencialCandidatesCollection().size() > 1 : this.electoralProcessId.getCandidatesForCitiesCollection().size() > 1;
     }
-    
-    public boolean startVoting(){
+
+    public boolean startVoting() {
         return this.electoralProcessId.getElectoralProcessStatusId().getId() == 3;
     }
-    
-    public boolean endProcessStep(){
+
+    public boolean endProcessStep() {
         return this.electoralProcessId.getElectoralProcessStatusId().getId() == 4;
     }
-    
-    public boolean endVoting(){
+
+    public boolean endVoting() {
         return this.electoralProcessId.end();
     }
-    
-    public List<PoliticGroupVotes> result(){
-        
+
+    public List<PoliticGroupVotes> result() {
+
         List<PoliticGroupVotes> votes = new ArrayList();
         int idProcess = this.electoralProcessId.getId();
         this.total = 0;
-        
-        for(PoliticGroupVotes vote : this.politicGroupVotesCollection)
-            if (vote.getElectoralProcessId().getId() == idProcess)
+
+        for (PoliticGroupVotes vote : this.politicGroupVotesCollection) {
+            if (vote.getElectoralProcessId().getId() == idProcess) {
                 this.total += vote.getVotes();
-        
-        for(PoliticGroupVotes vote : this.politicGroupVotesCollection){
-            vote.setPorcentage(((double)vote.getVotes() / (double)this.total) * 100);
+            }
+        }
+
+        for (PoliticGroupVotes vote : this.politicGroupVotesCollection) {
+            vote.setPorcentage(((double) vote.getVotes() / (double) this.total) * 100);
             votes.add(vote);
         }
-            
+
         return votes;
-        
+
     }
-    
-    public int votesUsed(){
+
+    public int votesUsed() {
         int total = 0;
-        
-        for(CitizenVotes votes : this.electoralProcessId.getCitizenVotesCollection())
-            if (votes.getStatus() == (short)1)
+
+        for (CitizenVotes votes : this.electoralProcessId.getCitizenVotesCollection()) {
+            if (votes.getStatus() == (short) 1) {
                 total++;
-        
+            }
+        }
+
         return total;
     }
 }

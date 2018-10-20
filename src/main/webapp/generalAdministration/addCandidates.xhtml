@@ -72,7 +72,6 @@
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <h:selectOneMenu required="true" rendered="true" requiredMessage="El tipo de proceso es requerido" id="politic_group_id" value="#{ candidatesBean.candidates.politicGroupId.id }" class="form-control col-md-7 col-xs-12" >
                                     <f:selectItems value="#{ candidatesBean.allPoliticGroups() }" var="politicGroup" itemValue="#{ politicGroup.id }" itemLabel="#{ politicGroup.acronym }" />
-                                    <f:ajax event="change" render="processId"  />
                                 </h:selectOneMenu>
                             </div>
                         </div>

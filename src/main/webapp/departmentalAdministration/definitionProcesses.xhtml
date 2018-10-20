@@ -83,17 +83,17 @@
                                                         </td>
                                                         <td class=" last">
                                                             <h:panelGroup rendered="#{ electoralProcessBean.allElectoralProcessByEndDateDepartamental(candidate.politicGroupId.id).size() gt 0 }">
-                                                            <h:commandLink rendered="#{ candidate.notHasPresidencialCandidatesActive() }" style="font-size: 1.5em;" onclick="$('#mdlAddEdit').modal('show');" >
-                                                                <i class="fa fa-plus-circle"></i>
-                                                                <p:ajax update=":frm:pnlModals :frm:idCandidate :frm:idCandidatesForCities" listener="#{ candidatesBean.addCandidateProcessForId(candidate.id) }" />
-                                                            </h:commandLink>
+                                                                <h:commandLink rendered="#{ candidate.notHasPresidencialCandidatesActive() }" style="font-size: 1.5em;" onclick="$('#mdlAddEdit').modal('show');" >
+                                                                    <i class="fa fa-plus-circle"></i>
+                                                                    <p:ajax update=":frm:pnlModals :frm:idCandidate :frm:idCandidatesForCities" listener="#{ candidatesBean.addCandidateProcessForId(candidate.id) }" />
+                                                                </h:commandLink>
 
-                                                            <h:commandLink rendered="#{ candidate.hasElectoralProcessActiveProcess() }" style="font-size: 1.5em;" onclick="$('#mdlAddEdit').modal('show');" >
-                                                                <i class="fa fa-pencil-square-o"></i>
-                                                                <p:ajax update=":frm:pnlModals :frm:idCandidate :frm:idCandidatesForCities" listener="#{ candidatesBean.editCandidateProcessCityForId(candidate.id, candidate.electoralProcessActive.id) }" />
-                                                            </h:commandLink>
+                                                                <h:commandLink rendered="#{ candidate.hasElectoralProcessActiveProcess() }" style="font-size: 1.5em;" onclick="$('#mdlAddEdit').modal('show');" >
+                                                                    <i class="fa fa-pencil-square-o"></i>
+                                                                    <p:ajax update=":frm:pnlModals :frm:idCandidate :frm:idCandidatesForCities" listener="#{ candidatesBean.editCandidateProcessCityForId(candidate.id, candidate.electoralProcessActive.id) }" />
+                                                                </h:commandLink>
                                                             </h:panelGroup>
-                                                                
+
                                                             <h:commandLink rendered="#{ candidate.hasElectoralProcessActive() }" style="font-size: 1.5em;" onclick="$('#mdlDelete').modal('show');" >
                                                                 <i class="fa fa-minus-circle"></i>
                                                                 <p:ajax update=":frm:pnlModalsDelete :frm:idCandidate :frm:idCandidatesForCities" listener="#{ candidatesBean.editCandidateProcessCityForId(candidate.id, candidate.electoralProcessActive.id) }" />

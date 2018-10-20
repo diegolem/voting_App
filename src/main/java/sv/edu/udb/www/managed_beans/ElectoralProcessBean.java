@@ -22,6 +22,7 @@ import sv.edu.udb.www.Model.ElectoralProcessModel;
 import sv.edu.udb.www.Model.ElectoralProcessStatusModel;
 import sv.edu.udb.www.Utilities;
 import org.primefaces.event.CloseEvent;
+import sv.edu.udb.www.Entities.CandidatesForCities;
 import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Entities.Jrv;
 import sv.edu.udb.www.Entities.JrvCitizen;
@@ -134,8 +135,8 @@ public class ElectoralProcessBean implements Serializable {
         for (ElectoralProcess process : electoral) {
             boolean use = true;
 
-            for (PresidencialCandidates candidate : process.getPresidencialCandidatesCollection()) {
-                if (candidate.getCandidatesId().getPoliticGroupId().getId() == idPoliticGroup) {
+            for (CandidatesForCities candidate : process.getCandidatesForCitiesCollection()) {
+                if (candidate.getCandidateId().getPoliticGroupId().getId() == idPoliticGroup) {
                     use = false;
                     break;
                 }

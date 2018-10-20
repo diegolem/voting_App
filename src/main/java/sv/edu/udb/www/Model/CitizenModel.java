@@ -103,10 +103,10 @@ public class CitizenModel {
     }
     public boolean verificarProcesosActivosJrv(Jrv jrv){
         try{
-            Date date = Calendar.getInstance().getTime();
-            Query query = em.createQuery("SELECT j FROM Jrv j WHERE j.electoralProcessId.endDate > :hoy AND j.electoralProcessId.initDate < :antes AND j.id = :idJrv");
-            query.setParameter("hoy", date,TemporalType.TIMESTAMP);
-            query.setParameter("antes", date,TemporalType.TIMESTAMP);
+            //Date date = Calendar.getInstance().getTime();
+            Query query = em.createQuery("SELECT j FROM Jrv j WHERE j.electoralProcessId.endDate > CURRENT_TIMESTAMP AND j.electoralProcessId.initDate < CURRENT_TIMESTAMP AND j.id = :idJrv");
+            //query.setParameter("hoy", date,TemporalType.TIMESTAMP);
+            //query.setParameter("antes", date,TemporalType.TIMESTAMP);
             query.setParameter("idJrv", jrv.getId());
             if(!query.getResultList().isEmpty()){
                 return true;
@@ -150,6 +150,24 @@ public class CitizenModel {
             if(enti != null){
                 return enti;
             }
+            return null;
+        }catch(Exception e){
+            return null;
+        }
+    }
+    
+    public Citizens getLoginCitizenAdminByPresidencialType(String dui,String pass){
+        try{
+            Query query = em.createQuery("SELECT c FROM Citizens c WHERE c.dui = :dui AND c.password = :pass and c.citizenTypeId.id = 'PREJRV'");
+            query.setParameter("dui", dui);
+            query.setParameter("pass", DigestUtils.sha256Hex(pass));
+            
+            List<Citizens> citizens = query.getResultList();
+            
+            if(citizens.size() == 1){
+                return citizens.get(0);
+            }
+            
             return null;
         }catch(Exception e){
             return null;

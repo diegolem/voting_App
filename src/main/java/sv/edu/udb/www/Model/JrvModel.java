@@ -15,6 +15,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.apache.commons.codec.digest.DigestUtils;
+import sv.edu.udb.www.Entities.Citizens;
 import sv.edu.udb.www.Entities.ElectoralProcess;
 import sv.edu.udb.www.Entities.Jrv;
 
@@ -122,6 +124,23 @@ public class JrvModel {
         }
     }
 
+    public Jrv getJrvActiveByCitizens(Citizens citizen){
+        try{
+            Query query = em.createNamedQuery("Jrv.findByCitizen");
+            query.setParameter("id", citizen.getId());
+            
+            List<Jrv> jrv = query.getResultList();
+            
+            if(jrv.size() > 0){
+                return jrv.get(jrv.size() - 1);
+            }
+            
+            return null;
+        }catch(Exception e){
+            return null;
+        }
+    }
+    
     public boolean editJrv(Jrv jrvcity) {
         try {
             Jrv enti = em.find(Jrv.class, jrvcity.getId());
